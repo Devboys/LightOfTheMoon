@@ -19,7 +19,8 @@ file(GLOB LOTM_sources
 # Add all asset file here (png, json, etc.)
 set(LOTM_assets
 	# write the name of the files below, including their extension. No quotation marks ("") required. One file per line.
-
+	LOTMSprites.png
+	LOTMSprites.json
 	)
 
 # Visual Leak Detector

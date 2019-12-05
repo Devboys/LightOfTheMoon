@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [05/12/19] - Implemented sprite atlas with a sample character animation
  * + Alberto Giudice [05/12/19] - Added game title on the game window
  * + Alberto Giudice [05/12/19] - Basic creation
  */
@@ -14,36 +15,37 @@
 #include "GameObject.hpp"
 #include "SpriteComponent.hpp"
 #include "PhysicsComponent.hpp"
+#include "SpriteAnimationComponent.hpp"
 
 using namespace std;
 using namespace sre;
 
 const glm::vec2 LightOfTheMoon::windowSize(1200, 900);
 
-LightOfTheMoon& LightOfTheMoon::getInstance() {
-	static LightOfTheMoon instance;
+LightOfTheMoon* LightOfTheMoon::instance = nullptr;
+
+LightOfTheMoon* LightOfTheMoon::getInstance() {
 	return instance;
 }
 
 LightOfTheMoon::LightOfTheMoon()
 	:debugDraw(physicsScale)
 {
+	assert(instance == nullptr);
+	instance = this;
+
 	r.setWindowSize(windowSize);
 	r.setWindowTitle("Light of the Moon");
 
-	bool useVsync = true;
-	r.init().withSdlInitFlags(SDL_INIT_EVERYTHING)
-		.withSdlWindowFlags(SDL_WINDOW_OPENGL)
-		.withVSync(useVsync);
+	r.init();
 
 	backgroundColor = { .13f,.13f,.13f,1.0f };
 
-	/* // Sprite Atlas creation
-	spriteAtlas = SpriteAtlas::create("FILE-NAME-HERE.json", Texture::create()
-		.withFile("FILE-NAME-HERE.png")
+	// Sprite Atlas creation
+	spriteAtlas = SpriteAtlas::create("LOTMSprites.json", Texture::create()
+		.withFile("LOTMSprites.png")
 		.withFilterSampling(false)
 		.build());
-	*/
 
 	initLevel();
 
@@ -70,6 +72,42 @@ void LightOfTheMoon::initLevel() {
 	camObj->setPosition(windowSize * 0.5f);
 
 	// Create all the things in the level
+
+	/////////////////////////////////////////////////////////
+	//                                                     //
+	// !!!! SAMPLE CHARACTER ANIMATION TO  BE REMOVED !!!! //
+	//                                                     //
+	/////////////////////////////////////////////////////////
+	auto playerObj = createGameObject();
+	playerObj->name = "Player";
+	playerObj->setPosition({ 0, 0 });
+
+	auto so = playerObj->addComponent<SpriteComponent>(); auto sprite = spriteAtlas->get("cowboy-top-1.png");
+	sprite.setScale({ 0.001f,0.001f });
+	so->setSprite(sprite);
+
+	auto anim = playerObj->addComponent<SpriteAnimationComponent>(); vector<Sprite> spriteAnim({ 
+		spriteAtlas->get("cowboy-right-1.png"), spriteAtlas->get("cowboy-right-2.png"),
+		spriteAtlas->get("cowboy-top-right-1.png"), spriteAtlas->get("cowboy-top-right-2.png"),
+		spriteAtlas->get("cowboy-top-1.png"), spriteAtlas->get("cowboy-top-2.png"),
+		spriteAtlas->get("cowboy-top-left-1.png"), spriteAtlas->get("cowboy-top-left-2.png"),
+		spriteAtlas->get("cowboy-left-1.png"), spriteAtlas->get("cowboy-left-2.png"),
+		spriteAtlas->get("cowboy-down-left-1.png"), spriteAtlas->get("cowboy-down-left-2.png"),
+		spriteAtlas->get("cowboy-down-1.png"), spriteAtlas->get("cowboy-down-2.png"),
+		spriteAtlas->get("cowboy-down-right-1.png"), spriteAtlas->get("cowboy-down-right-2.png"),		
+		});
+	for (auto& s : spriteAnim) {
+		s.setScale({ 0.001f, 0.001f });
+	}
+	anim->setSprites(spriteAnim);
+
+	auto phys = playerObj->addComponent<PhysicsComponent>();
+	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f}, { playerObj->getPosition().x,playerObj->getPosition().y }, 1);
+	/////////////////////////////////////////////////////////
+	//                                                     //
+	// !!!! SAMPLE CHARACTER ANIMATION TO  BE REMOVED !!!! //
+	//                                                     //
+	/////////////////////////////////////////////////////////
 }
 
 void LightOfTheMoon::update(float time) {

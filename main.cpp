@@ -10,6 +10,6 @@
 #include "LightOfTheMoon.hpp"
 
 int main(int argc, char** argv) {
-	LightOfTheMoon::getInstance();
+	LightOfTheMoon();
     return 0;
 }

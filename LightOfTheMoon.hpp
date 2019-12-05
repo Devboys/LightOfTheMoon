@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [05/12/19] - Fixed Singleton implementation to deal with gameloop
  * + Alberto Giudice [05/12/19] - Basic creation
  */
 
@@ -23,7 +24,9 @@ enum class GameState {
 
 class LightOfTheMoon : public b2ContactListener {
 public:
-	static LightOfTheMoon& getInstance();
+	LightOfTheMoon();
+	~LightOfTheMoon();
+	static LightOfTheMoon* getInstance();
 
 	static const glm::vec2 windowSize;
 	static constexpr float32 timeStep = 1.0f / 60.0f;
@@ -33,12 +36,12 @@ public:
 	void BeginContact(b2Contact* contact) override;
 	void EndContact(b2Contact* contact) override;
 
+	// Delete copy equal 
+	LightOfTheMoon(const LightOfTheMoon&) = delete;
+	LightOfTheMoon& operator=(const LightOfTheMoon&) = delete;
+
 private:
-	// Private all constructors in order to make the singleton
-	LightOfTheMoon();
-	~LightOfTheMoon();
-	LightOfTheMoon(const LightOfTheMoon&);
-	LightOfTheMoon& operator=(const LightOfTheMoon&);
+	static LightOfTheMoon* instance;
 
 	sre::SDLRenderer r;
 
@@ -60,7 +63,7 @@ private:
 
 	sre::Color backgroundColor;
 	b2World* world = nullptr;
-	const float physicsScale = 100;
+	const float physicsScale = 0.01f;
 	void registerPhysicsComponent(PhysicsComponent* r);
 	void deregisterPhysicsComponent(PhysicsComponent* r);
 	std::map<b2Fixture*, PhysicsComponent*> physicsComponentLookup;

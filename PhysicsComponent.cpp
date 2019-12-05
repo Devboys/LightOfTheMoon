@@ -14,7 +14,7 @@
 PhysicsComponent::PhysicsComponent(GameObject* gameObject)
 	: Component(gameObject)
 {
-	world = LightOfTheMoon::getInstance().world;
+	world = LightOfTheMoon::getInstance()->world;
 }
 
 PhysicsComponent::~PhysicsComponent() {
@@ -22,8 +22,8 @@ PhysicsComponent::~PhysicsComponent() {
 	delete circle;
 
 	// Check if the destructor is called due to the game being closed, if so the physicsComponentLookup is already cleared
-	if (LightOfTheMoon::getInstance().physicsComponentLookup.size() != 0) {
-		LightOfTheMoon::getInstance().deregisterPhysicsComponent(this);
+	if (LightOfTheMoon::getInstance()->physicsComponentLookup.size() != 0) {
+		LightOfTheMoon::getInstance()->deregisterPhysicsComponent(this);
 		if (body != nullptr && fixture != nullptr) {
 			body->DestroyFixture(fixture);
 			fixture = nullptr;
@@ -76,7 +76,7 @@ void PhysicsComponent::initCircle(b2BodyType type, float radius, glm::vec2 cente
 	fxD.density = density;
 	fixture = body->CreateFixture(&fxD);
 
-	LightOfTheMoon::getInstance().registerPhysicsComponent(this);
+	LightOfTheMoon::getInstance()->registerPhysicsComponent(this);
 }
 
 void PhysicsComponent::initBox(b2BodyType type, glm::vec2 size, glm::vec2 center, float density) {
@@ -97,7 +97,7 @@ void PhysicsComponent::initBox(b2BodyType type, glm::vec2 size, glm::vec2 center
 	fxD.density = density;
 	fixture = body->CreateFixture(&fxD);
 
-	LightOfTheMoon::getInstance().registerPhysicsComponent(this);
+	LightOfTheMoon::getInstance()->registerPhysicsComponent(this);
 }
 
 bool PhysicsComponent::isSensor() {
