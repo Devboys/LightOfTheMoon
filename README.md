@@ -60,5 +60,5 @@ After the pull request will gonna be approved, your branch will be merged with t
 
 ## Credits
 * Alberto Giudice - [algi@itu.dk](algi@itu.dk)
-* Francesco Frassinetti - [fraf@itu.dk](fraf@itu.dk)
+* Francesco Frassineti - [fraf@itu.dk](fraf@itu.dk)
 * Jeppe Faber - [jepf@itu.dk](mailto:jepf@itu.dk)
