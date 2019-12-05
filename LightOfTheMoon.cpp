@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [05/12/19] - Added game title on the game window
  * + Alberto Giudice [05/12/19] - Basic creation
  */
 
@@ -28,6 +29,8 @@ LightOfTheMoon::LightOfTheMoon()
 	:debugDraw(physicsScale)
 {
 	r.setWindowSize(windowSize);
+	r.setWindowTitle("Light of the Moon");
+
 	bool useVsync = true;
 	r.init().withSdlInitFlags(SDL_INIT_EVERYTHING)
 		.withSdlWindowFlags(SDL_WINDOW_OPENGL)
