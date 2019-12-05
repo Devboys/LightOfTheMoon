@@ -21,6 +21,7 @@ set(LOTM_assets
 	# write the name of the files below, including their extension. No quotation marks ("") required. One file per line.
 	LOTMSprites.png
 	LOTMSprites.json
+    level0.json
 	)
 
 # Visual Leak Detector

@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Jeppe Faber     [05/12/19] - Added Level-object to render loop
  * + Alberto Giudice [05/12/19] - Implemented sprite atlas with a sample character animation
  * + Alberto Giudice [05/12/19] - Added game title on the game window
  * + Alberto Giudice [05/12/19] - Basic creation
@@ -73,6 +74,10 @@ void LightOfTheMoon::initLevel() {
 
 	// Create all the things in the level
 
+	// Create Level object
+	currentLevel.loadLevel("level0.json");
+	currentLevel.loadSprites(spriteAtlas);
+
 	/////////////////////////////////////////////////////////
 	//                                                     //
 	// !!!! SAMPLE CHARACTER ANIMATION TO  BE REMOVED !!!! //
@@ -82,7 +87,8 @@ void LightOfTheMoon::initLevel() {
 	playerObj->name = "Player";
 	playerObj->setPosition({ 0, 0 });
 
-	auto so = playerObj->addComponent<SpriteComponent>(); auto sprite = spriteAtlas->get("cowboy-top-1.png");
+	auto so = playerObj->addComponent<SpriteComponent>(); 
+	auto sprite = spriteAtlas->get("cowboy-top-1.png");
 	sprite.setScale({ 0.001f,0.001f });
 	so->setSprite(sprite);
 
@@ -138,6 +144,11 @@ void LightOfTheMoon::render() {
 	auto pos = camera->getGameObject()->getPosition();
 
 	auto spriteBatchBuilder = SpriteBatch::create();
+
+	//render level tiles
+	currentLevel.renderLevel(spriteBatchBuilder);
+
+	//render GameObjects
 	for (auto& go : sceneObjects) {
 		go->renderSprite(spriteBatchBuilder);
 	}

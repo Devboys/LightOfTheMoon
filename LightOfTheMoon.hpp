@@ -13,6 +13,7 @@
 #include "Box2DDebugDraw.hpp"
 #include "GameObject.hpp"
 #include "CameraComponent.hpp"
+#include "Level.hpp"
 
 class PhysicsComponent;
 
@@ -69,6 +70,8 @@ private:
 	std::map<b2Fixture*, PhysicsComponent*> physicsComponentLookup;
 	Box2DDebugDraw debugDraw;
 	bool doDebugDraw = false;
+
+	Level currentLevel;
 
 	friend class PhysicsComponent;
 };
