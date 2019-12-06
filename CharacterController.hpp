@@ -30,6 +30,8 @@ public:
 
     bool onKey(SDL_Event &event) override;
 
+	void onMouse(SDL_Event &event) override;
+
     void onCollisionStart(PhysicsComponent *comp) override;
 
     void onCollisionEnd(PhysicsComponent *comp) override;
@@ -45,10 +47,13 @@ private:
     std::shared_ptr<PhysicsComponent> characterPhysics;
     std::shared_ptr<HealthComponent> characterHealth;
 
+	glm::vec2 direction;
+
 	float maxSpeed = 50.0f;
+
 	float dashSpeed = 200.0f;
 	float dashDuration = 0.1f;
-	float dashTimer;
+	float dashTimer; //Keeps track of the time the character has beeen dashing. If dashTimer = 0 the character is not dashing
 
     bool left = false;
     bool right = false;

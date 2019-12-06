@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Francesco Frassineti [06/12/19] - Mouse Handling
  * + Alberto Giudice [05/12/19] - Basic creation
  */
 
@@ -26,6 +27,10 @@ GameObject* Component::getGameObject() {
 
 bool Component::onKey(SDL_Event& event) {
 	return false;
+}
+
+void Component::onMouse(SDL_Event &event) {
+	
 }
 
 void Component::onCollisionStart(PhysicsComponent* comp) {
