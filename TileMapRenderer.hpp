@@ -2,7 +2,7 @@
  * Created by Jeppe Faber on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
- * + Jeppe Faber [05/12/19] - Basic implementation - Tilemap reads json file for sctructure.
+ * + Jeppe Faber [05/12/19] - Basic implementation - Tilemap reads json file for structure.
  */
 
 #pragma once
@@ -16,9 +16,9 @@ class TileMapRenderer {
 public:
 	explicit TileMapRenderer();
 
-	void loadLevel(std::string filename);
+	void loadMap(std::string filename);
 
-	void renderLevel(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder);
+	void renderMap(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder);
 
 	void loadSprites(std::shared_ptr<sre::SpriteAtlas>);
 

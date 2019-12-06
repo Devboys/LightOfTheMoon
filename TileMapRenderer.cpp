@@ -13,6 +13,11 @@ TileMapRenderer::TileMapRenderer() {
 
 }
 
+
+/* Caches sprites for use in tilemap
+ * 
+ * @param atlas : SpriteAtlas to source sprites from.
+ */
 void TileMapRenderer::loadSprites(std::shared_ptr<sre::SpriteAtlas> atlas) {
 	
 	//cache all sprites for later use
@@ -28,7 +33,11 @@ void TileMapRenderer::loadSprites(std::shared_ptr<sre::SpriteAtlas> atlas) {
 	tileHeight = sprites[0].getSpriteSize().y / 2; //iso sprites are half as tall as they are wide.
 }
 
-void TileMapRenderer::loadLevel(std::string filename) {
+/* Loads the tilemap from a .json file. Tilemaps are read from JSON objects called "tileMap" which must be 2D arrays of integers
+ *
+ * @param filename : The name of a file (must be .json) in the program root directory.
+ */
+void TileMapRenderer::loadMap(std::string filename) {
 
 	using namespace rapidjson;
 	std::ifstream fis(filename);
@@ -47,11 +56,15 @@ void TileMapRenderer::loadLevel(std::string filename) {
 	}
 }
 
-void TileMapRenderer::renderLevel(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder) {
+/* Adds the tilemap to the given spriteBatchBuilder as sprites.
+ *
+ * @param batchBuilder : where to add the sprites
+ */
+void TileMapRenderer::renderMap(sre::SpriteBatch::SpriteBatchBuilder& batchBuilder) {
 
 	sre::Sprite sprite;
 
-	//render 2D array isometrically
+	//render 2D array as isometric tilemap
 	for (int mapX = 0; mapX < tileMap.size(); mapX++) {
 		for (int mapY = 0; mapY < tileMap[mapX].size(); mapY++) {
 
@@ -63,7 +76,7 @@ void TileMapRenderer::renderLevel(sre::SpriteBatch::SpriteBatchBuilder& spriteBa
 			float spriteIsoY = (mapX + mapY) * (tileHeight / 2) * sprite.getScale().y;
 
 			sprite.setPosition(glm::vec2(spriteIsoX, spriteIsoY));
-			spriteBatchBuilder.addSprite(sprite);
+			batchBuilder.addSprite(sprite);
 		}
 	}
 

@@ -10,11 +10,11 @@
  * + Alberto Giudice [05/12/19] - Basic creation
  */
 
+#include "LightOfTheMoon.hpp"
 #include <sre/Inspector.hpp>
 #include "Box2D/Dynamics/Contacts/b2Contact.h"
 #include "sre/RenderPass.hpp"
 #include "sre/Texture.hpp"
-#include "LightOfTheMoon.hpp"
 #include "GameObject.hpp"
 #include "SpriteComponent.hpp"
 #include "PhysicsComponent.hpp"
@@ -87,7 +87,7 @@ void LightOfTheMoon::initLevel() {
 
 	// Create TileMapRenderer object
 	currentTileMap.loadSprites(spriteAtlas);
-	currentTileMap.loadLevel("level0.json");
+	currentTileMap.loadMap("level0.json");
 
 	/////////////////////////////////////////////////////////
 	//                                                     //
@@ -208,7 +208,7 @@ void LightOfTheMoon::render() {
 	auto spriteBatchBuilder = SpriteBatch::create();
 
 	//render level tiles
-	currentTileMap.renderLevel(spriteBatchBuilder);
+	currentTileMap.renderMap(spriteBatchBuilder);
 
 	//render GameObjects
 	for (auto& go : sceneObjects) {
