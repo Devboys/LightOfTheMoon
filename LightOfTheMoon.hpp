@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Francesco Frassineti [06/12/19] - Added CharacterController as a friend class
  * + Alberto Giudice [05/12/19] - Fixed Singleton implementation to deal with gameloop
  * + Alberto Giudice [05/12/19] - Basic creation
  */
@@ -74,4 +75,5 @@ private:
 	Level currentLevel;
 
 	friend class PhysicsComponent;
+	friend class CharacterController;
 };

@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Francesco Frassineti [06/12/19] - Added a temporary object to test the damaging system
  * + Jeppe Faber     [05/12/19] - Added Level-object to render loop
  * + Alberto Giudice [05/12/19] - Implemented sprite atlas with a sample character animation
  * + Alberto Giudice [05/12/19] - Added game title on the game window
@@ -17,6 +18,9 @@
 #include "SpriteComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "SpriteAnimationComponent.hpp"
+#include "CharacterController.hpp"
+#include "HealthComponent.hpp"
+#include "FixedDamageComponent.hpp"
 
 using namespace std;
 using namespace sre;
@@ -107,13 +111,64 @@ void LightOfTheMoon::initLevel() {
 	}
 	anim->setSprites(spriteAnim);
 
+
 	auto phys = playerObj->addComponent<PhysicsComponent>();
 	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f}, { playerObj->getPosition().x,playerObj->getPosition().y }, 1);
+
+	auto characterHealth = playerObj->addComponent <HealthComponent>();
+	float characterHealthAmount = 5;
+	characterHealth->setMaxHealth(characterHealthAmount);
+	characterHealth->setCurrentHealth(characterHealthAmount);
+
+	auto characterController = playerObj->addComponent<CharacterController>();
 	/////////////////////////////////////////////////////////
 	//                                                     //
 	// !!!! SAMPLE CHARACTER ANIMATION TO  BE REMOVED !!!! //
 	//                                                     //
 	/////////////////////////////////////////////////////////
+
+	/////////////////////////////////////////////////////////
+	//                                                     //
+	// TEMP FAKE ENTITY TO TEST DAMAGE ON COLLISION        //
+	//                                                     //
+	/////////////////////////////////////////////////////////
+	auto tempObj = createGameObject();
+	tempObj->name = "Temp";
+	tempObj->setPosition({ 50, 0 });
+
+	auto soTemp = tempObj->addComponent<SpriteComponent>();
+	auto spriteTemp = spriteAtlas->get("cowboy-top-1.png");
+	spriteTemp.setScale({ 0.001f,0.001f });
+	soTemp->setSprite(spriteTemp);
+
+	auto animTemp = tempObj->addComponent<SpriteAnimationComponent>(); vector<Sprite> spriteAnimTemp({
+		spriteAtlas->get("cowboy-right-1.png"), spriteAtlas->get("cowboy-right-2.png"),
+		spriteAtlas->get("cowboy-top-right-1.png"), spriteAtlas->get("cowboy-top-right-2.png"),
+		spriteAtlas->get("cowboy-top-1.png"), spriteAtlas->get("cowboy-top-2.png"),
+		spriteAtlas->get("cowboy-top-left-1.png"), spriteAtlas->get("cowboy-top-left-2.png"),
+		spriteAtlas->get("cowboy-left-1.png"), spriteAtlas->get("cowboy-left-2.png"),
+		spriteAtlas->get("cowboy-down-left-1.png"), spriteAtlas->get("cowboy-down-left-2.png"),
+		spriteAtlas->get("cowboy-down-1.png"), spriteAtlas->get("cowboy-down-2.png"),
+		spriteAtlas->get("cowboy-down-right-1.png"), spriteAtlas->get("cowboy-down-right-2.png"),
+		});
+	for (auto& s : spriteAnimTemp) {
+		s.setScale({ 0.001f, 0.001f });
+	}
+	animTemp->setSprites(spriteAnimTemp);
+
+
+	auto physTemp = tempObj->addComponent<PhysicsComponent>();
+	physTemp->initBox(b2_staticBody, { 2.0f, 4.5f }, { tempObj->getPosition().x,tempObj->getPosition().y }, 1);
+
+	auto damageTemp = tempObj->addComponent<FixedDamageComponent>();
+	damageTemp->setDamage(1);
+
+	/////////////////////////////////////////////////////////
+	//                                                     //
+	// TEMP FAKE ENTITY TO TEST DAMAGE ON COLLISION        //
+	//                                                     //
+	/////////////////////////////////////////////////////////
+
 }
 
 void LightOfTheMoon::update(float time) {
