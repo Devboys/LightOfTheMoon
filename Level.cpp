@@ -11,22 +11,21 @@
 
 Level::Level() {
 
-	//TODO: poll this from json, also figure out what the hell is going on with sprite scale.
-	tileHeight = 64;
-	tileWidth = 128;
 }
 
 void Level::loadSprites(std::shared_ptr<sre::SpriteAtlas> atlas) {
 	
 	//cache all sprites for later use
-	sprites.push_back(atlas->get("fancy-tile-blue.png")); //0
-	sprites.push_back(atlas->get("fancy-tile-cyan.png")); //1
-	sprites.push_back(atlas->get("fancy-tile-gold.png")); //2
+	sprites.push_back(atlas->get("top-tile-blue.png")); //0
+	sprites.push_back(atlas->get("top-tile-cyan.png")); //1
+	sprites.push_back(atlas->get("top-tile-gold.png")); //2
 
 	for (int i = 0; i < sprites.size(); i++) {
 		sprites[i].setScale({ 0.001f, 0.001f });
 	}
 
+	tileWidth = sprites[0].getSpriteSize().x;
+	tileHeight = sprites[0].getSpriteSize().y / 2; //iso sprites are half as tall as they are wide.
 }
 
 void Level::loadLevel(std::string filename) {
@@ -62,6 +61,7 @@ void Level::renderLevel(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder
 			//place tile
 			float spriteIsoX = (mapX - mapY) * (tileWidth / 2) * sprite.getScale().x;
 			float spriteIsoY = (mapX + mapY) * (tileHeight / 2) * sprite.getScale().y;
+
 			sprite.setPosition(glm::vec2(spriteIsoX, spriteIsoY));
 			spriteBatchBuilder.addSprite(sprite);
 		}

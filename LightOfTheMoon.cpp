@@ -79,8 +79,8 @@ void LightOfTheMoon::initLevel() {
 	// Create all the things in the level
 
 	// Create Level object
-	currentLevel.loadLevel("level0.json");
 	currentLevel.loadSprites(spriteAtlas);
+	currentLevel.loadLevel("level0.json");
 
 	/////////////////////////////////////////////////////////
 	//                                                     //
