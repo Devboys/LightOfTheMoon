@@ -1,5 +1,5 @@
 
-#include "Level.hpp"
+#include "TileMapRenderer.hpp"
 #include "LightOfTheMoon.hpp"
 #include "rapidjson/rapidjson.h"
 #include "rapidjson/document.h"
@@ -9,11 +9,11 @@
 //easy debug ;)
 #include "iostream"
 
-Level::Level() {
+TileMapRenderer::TileMapRenderer() {
 
 }
 
-void Level::loadSprites(std::shared_ptr<sre::SpriteAtlas> atlas) {
+void TileMapRenderer::loadSprites(std::shared_ptr<sre::SpriteAtlas> atlas) {
 	
 	//cache all sprites for later use
 	sprites.push_back(atlas->get("top-tile-blue.png")); //0
@@ -28,7 +28,7 @@ void Level::loadSprites(std::shared_ptr<sre::SpriteAtlas> atlas) {
 	tileHeight = sprites[0].getSpriteSize().y / 2; //iso sprites are half as tall as they are wide.
 }
 
-void Level::loadLevel(std::string filename) {
+void TileMapRenderer::loadLevel(std::string filename) {
 
 	using namespace rapidjson;
 	std::ifstream fis(filename);
@@ -47,7 +47,7 @@ void Level::loadLevel(std::string filename) {
 	}
 }
 
-void Level::renderLevel(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder) {
+void TileMapRenderer::renderLevel(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder) {
 
 	sre::Sprite sprite;
 

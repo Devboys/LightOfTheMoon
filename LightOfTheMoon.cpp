@@ -4,7 +4,7 @@
  * +
  * + Francesco Frassineti [06/12/19] - Added mouse handling
  * + Francesco Frassineti [06/12/19] - Added a temporary object to test the damaging system
- * + Jeppe Faber     [05/12/19] - Added Level-object to render loop
+ * + Jeppe Faber     [05/12/19] - Added TileMapRenderer-object to render loop
  * + Alberto Giudice [05/12/19] - Implemented sprite atlas with a sample character animation
  * + Alberto Giudice [05/12/19] - Added game title on the game window
  * + Alberto Giudice [05/12/19] - Basic creation
@@ -44,7 +44,6 @@ LightOfTheMoon::LightOfTheMoon()
 	r.setWindowTitle("Light of the Moon");
 
 	r.init();
-
 
 	SDL_SetWindowGrab(r.getSDLWindow(), SDL_TRUE);
 	SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -86,9 +85,9 @@ void LightOfTheMoon::initLevel() {
 
 	// Create all the things in the level
 
-	// Create Level object
-	currentLevel.loadSprites(spriteAtlas);
-	currentLevel.loadLevel("level0.json");
+	// Create TileMapRenderer object
+	currentTileMap.loadSprites(spriteAtlas);
+	currentTileMap.loadLevel("level0.json");
 
 	/////////////////////////////////////////////////////////
 	//                                                     //
@@ -209,7 +208,7 @@ void LightOfTheMoon::render() {
 	auto spriteBatchBuilder = SpriteBatch::create();
 
 	//render level tiles
-	currentLevel.renderLevel(spriteBatchBuilder);
+	currentTileMap.renderLevel(spriteBatchBuilder);
 
 	//render GameObjects
 	for (auto& go : sceneObjects) {

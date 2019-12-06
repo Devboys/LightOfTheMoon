@@ -12,9 +12,9 @@
 #include "sre/Sprite.hpp"
 #include "sre/SpriteBatch.hpp"
 
-class Level {
+class TileMapRenderer {
 public:
-	explicit Level();
+	explicit TileMapRenderer();
 
 	void loadLevel(std::string filename);
 

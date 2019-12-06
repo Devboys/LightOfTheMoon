@@ -14,7 +14,7 @@
 #include "Box2DDebugDraw.hpp"
 #include "GameObject.hpp"
 #include "CameraComponent.hpp"
-#include "Level.hpp"
+#include "TileMapRenderer.hpp"
 
 class PhysicsComponent;
 
@@ -73,7 +73,7 @@ private:
 	Box2DDebugDraw debugDraw;
 	bool doDebugDraw = false;
 
-	Level currentLevel;
+	TileMapRenderer currentTileMap;
 
 	friend class PhysicsComponent;
 	friend class CharacterController;
