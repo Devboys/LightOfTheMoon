@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Francesco Frassineti [06/12/19] - Added mouse handling
  * + Francesco Frassineti [06/12/19] - Added a temporary object to test the damaging system
  * + Jeppe Faber     [05/12/19] - Added Level-object to render loop
  * + Alberto Giudice [05/12/19] - Implemented sprite atlas with a sample character animation
@@ -44,6 +45,10 @@ LightOfTheMoon::LightOfTheMoon()
 
 	r.init();
 
+
+	SDL_SetWindowGrab(r.getSDLWindow(), SDL_TRUE);
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+
 	backgroundColor = { .13f,.13f,.13f,1.0f };
 
 	// Sprite Atlas creation
@@ -57,6 +62,9 @@ LightOfTheMoon::LightOfTheMoon()
 	// setup callback functions
 	r.keyEvent = [&](SDL_Event& e) {
 		onKey(e);
+	};
+	r.mouseEvent = [&](SDL_Event& e) {
+		onMouse(e);
 	};
 	r.frameUpdate = [&](float deltaTime) {
 		update(deltaTime);
@@ -215,6 +223,14 @@ void LightOfTheMoon::render() {
 		world->DrawDebugData();
 		rp.drawLines(debugDraw.getLines());
 		debugDraw.clear();
+	}
+}
+
+void LightOfTheMoon::onMouse(SDL_Event& event) {
+	for (auto& gameObject : sceneObjects) {
+		for (auto& c : gameObject->getComponents()) {
+			c->onMouse(event);
+		}
 	}
 }
 

@@ -53,6 +53,17 @@ bool CharacterController::onKey(SDL_Event &event) {
     return false;
 }
 
+void CharacterController::onMouse(SDL_Event &event) {
+	direction.x = event.motion.x - LightOfTheMoon::windowSize.x / 2;
+	direction.y = event.motion.y - LightOfTheMoon::windowSize.y / 2;
+	direction = glm::normalize(direction);
+
+	
+	//std::cout << "Direction: (" << direction.x << ", " << direction.y << ")" << std::endl;
+
+	//TODO SHOOT BULLETS towards direction (there's a field called direction)
+}
+
 void CharacterController::update(float deltaTime) {
 
 	if (!characterHealth->isAlive()) {

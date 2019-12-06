@@ -53,6 +53,7 @@ private:
 	void update(float time);
 	void render();
 	void onKey(SDL_Event& event);
+	void onMouse(SDL_Event& event);
 
 	void handleContact(b2Contact* contact, bool begin);
 

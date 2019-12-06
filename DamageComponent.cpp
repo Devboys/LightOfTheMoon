@@ -22,13 +22,10 @@ DamageComponent::~DamageComponent() {
 void DamageComponent::onCollisionStart(PhysicsComponent *comp) {
 	std::shared_ptr<HealthComponent> hp = comp->getGameObject()->getComponent<HealthComponent>();
 
-	/////////////////////////////////////////////////////////
-	//                                                     //
-	// TODO Insert check for hp != null (HOW DO I DO IT???)//
-	//                                                     //
-	/////////////////////////////////////////////////////////
-
-	hp->removeHealth(this->getDamage());
+	if (&(*hp) != nullptr) {
+		hp->removeHealth(this->getDamage());
+	}
+		
 
 }
 
