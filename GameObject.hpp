@@ -30,6 +30,9 @@ public:
     void renderSprite(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder);
     void update(float deltaTime);
 
+	void setActive(bool value);
+	bool isActive();
+
     const glm::vec2 &getPosition() const;
     void setPosition(const glm::vec2 &position);
 
@@ -45,6 +48,7 @@ private:
 
     glm::vec2 position;
     float rotation;
+	bool active = true;
 
     friend class LightOfTheMoon;
 };
