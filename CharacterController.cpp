@@ -13,6 +13,7 @@
 #include "PhysicsComponent.hpp"
 #include "LightOfTheMoon.hpp"
 #include "SpriteComponent.hpp"
+#include "AudioLocator.hpp"
 
 CharacterController::CharacterController(GameObject *gameObject) : Component(gameObject) {
     characterPhysics = gameObject->getComponent<PhysicsComponent>();

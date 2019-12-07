@@ -22,6 +22,7 @@ set(LOTM_assets
 	LOTMSprites.png
 	LOTMSprites.json
     level0.json
+    sound.wav
 	)
 
 # Visual Leak Detector
