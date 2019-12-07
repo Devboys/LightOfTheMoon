@@ -56,8 +56,8 @@ LightOfTheMoon::LightOfTheMoon()
 	backgroundColor = { .13f,.13f,.13f,1.0f };
 
 	// Sprite Atlas creation
-	spriteAtlas = SpriteAtlas::create("LOTMSprites.json", Texture::create()
-		.withFile("LOTMSprites.png")
+	spriteAtlas = SpriteAtlas::create("Assets/Sprites/LOTMSprites.json", Texture::create()
+		.withFile("Assets/Sprites/LOTMSprites.png")
 		.withFilterSampling(false)
 		.build());
 	
@@ -95,7 +95,7 @@ void LightOfTheMoon::initLevel() {
 
 	// Create TileMapRenderer object
 	currentTileMap.loadSprites(spriteAtlas);
-	currentTileMap.loadMap("level0.json");
+	currentTileMap.loadMap("Assets/Levels/level0.json");
 
 	/////////////////////////////////////////////////////////
 	//                                                     //

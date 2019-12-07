@@ -53,7 +53,7 @@ void GameAudio::loadSound(std::string filename) {
 	
 	//print SDL_mixer error if wav-file was not found
 	if (sound == NULL) {
-		printf("Mix_LoadWAV: %s\n", Mix_GetError());
+		printf("Mix_LoadWAV error for '%s': %s \n", &filename[0], Mix_GetError());
 	}
 	else {
 
