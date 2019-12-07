@@ -42,15 +42,27 @@ void GameObject::setRotation(float rotation) {
 }
 
 void GameObject::renderSprite(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder) {
-	for (auto& comp : components) {
-		comp->renderSprite(spriteBatchBuilder);
+	if (active) {
+		for (auto& comp : components) {
+			comp->renderSprite(spriteBatchBuilder);
+		}
 	}
 }
 
 void GameObject::update(float deltaTime) {
-	for (auto& comp : components) {
-		comp->update(deltaTime);
+	if (active) {
+		for (auto& comp : components) {
+			comp->update(deltaTime);
+		}
 	}
+}
+
+void GameObject::setActive(bool value) {
+	active = value;
+}
+
+bool GameObject::isActive() {
+	return active;
 }
 
 const std::vector<std::shared_ptr<Component>>& GameObject::getComponents() {
