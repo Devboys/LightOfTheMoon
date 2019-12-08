@@ -53,6 +53,8 @@ private:
     std::shared_ptr<HealthComponent> characterHealth;
 
 	glm::vec2 direction;
+	float mouseX;
+	float mouseY;
 
 	float maxSpeed = 50.0f;
 

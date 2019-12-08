@@ -5,6 +5,8 @@
  * + Francesco Frassineti [06/12/19] - Basic creation
  */
 
+#define Y_SCALE_FACTOR 0.86602540378f //sqrt(3)/2
+
 #include <SDL_events.h>
 #include <iostream>
 #include "CharacterController.hpp"
@@ -73,8 +75,12 @@ bool CharacterController::onKey(SDL_Event &event) {
 }
 
 void CharacterController::onMouse(SDL_Event &event) {
-	direction.x = event.motion.x - LightOfTheMoon::windowSize.x / 2;
-	direction.y = event.motion.y - LightOfTheMoon::windowSize.y / 2;
+	mouseX = event.motion.x - LightOfTheMoon::windowSize.x / 2;
+	mouseY = event.motion.y - LightOfTheMoon::windowSize.y / 2;
+	mouseY /= (LightOfTheMoon::windowSize.x / 2); //They are both divided by windowsSize.x for a reason, it's not a bug
+	mouseX /= (LightOfTheMoon::windowSize.x / 2);//They are both divided by windowsSize.x for a reason, it's not a bug
+	direction.x = mouseX;
+	direction.y = mouseY;
 	direction = glm::normalize(direction);
 
 	
@@ -149,7 +155,9 @@ void CharacterController::onCollisionEnd(PhysicsComponent *comp) {
 void CharacterController::updateAnimation(float deltaTime) {
 	//TODO Shooting animation
 
-	float angle = glm::atan(-direction.y, direction.x);
+	//std::cout << "Pos(" << gameObject->getPosition().x << ", " << gameObject->getPosition().y << ") Mouse(" << mouseX << ", " << mouseY << ")" << std::endl;
+ 
+	float angle = glm::atan((-mouseY - gameObject->getPosition().y), mouseX - gameObject->getPosition().x);
 	float angle_deg = glm::degrees(angle);
 	
 	if (angle_deg < -157.5f) {
