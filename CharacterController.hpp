@@ -9,7 +9,7 @@
 
 #include <Box2D/Box2D.h>
 #include "Component.hpp"
-#include "SpriteComponent.hpp"
+#include "AnimatorComponent.hpp"
 #include "HealthComponent.hpp"
 #include "sre/Sprite.hpp"
 
@@ -17,14 +17,17 @@ class CharacterController : public Component{
 public:
     explicit CharacterController(GameObject *gameObject);
 
-    void setSprites(sre::Sprite standing,
-                    sre::Sprite walk1,
-                    sre::Sprite walk2,
-                    sre::Sprite flyUp,
-                    sre::Sprite fly,
-                    sre::Sprite flyDown);
+    void setAnimations(std::shared_ptr<Animation> idle_right_anim,
+		std::shared_ptr<Animation> idle_top_right_anim,
+		std::shared_ptr<Animation> idle_top_anim,
+		std::shared_ptr<Animation> idle_top_left_anim,
+		std::shared_ptr<Animation> idle_left_anim,
+		std::shared_ptr<Animation> idle_down_left_anim,
+		std::shared_ptr<Animation> idle_down_anim,
+		std::shared_ptr<Animation> idle_down_right_anim
+		);
 
-    void updateSprite(float deltaTime);
+    void updateAnimation(float deltaTime);
 
     void update(float deltaTime) override;
 
@@ -36,14 +39,16 @@ public:
 
     void onCollisionEnd(PhysicsComponent *comp) override;
 private:
-    sre::Sprite standing;
-    sre::Sprite walk1;
-    sre::Sprite walk2;
-    sre::Sprite flyUp;
-    sre::Sprite fly;
-    sre::Sprite flyDown;
+	std::shared_ptr<Animation> idle_right_anim;
+	std::shared_ptr<Animation> idle_top_right_anim;
+	std::shared_ptr<Animation> idle_top_anim;
+	std::shared_ptr<Animation> idle_top_left_anim;
+	std::shared_ptr<Animation> idle_left_anim;
+	std::shared_ptr<Animation> idle_down_left_anim;
+	std::shared_ptr<Animation> idle_down_anim;
+	std::shared_ptr<Animation> idle_down_right_anim;
 
-    std::shared_ptr<SpriteComponent> spriteComponent;
+    std::shared_ptr<AnimatorComponent> animatorComponent;
     std::shared_ptr<PhysicsComponent> characterPhysics;
     std::shared_ptr<HealthComponent> characterHealth;
 

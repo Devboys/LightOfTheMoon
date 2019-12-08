@@ -2,6 +2,8 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Francesco Frassineti [07/12/19] - Added the idle animations for the player
+ * + Francesco Frassineti [07/12/19] - The mouse cursor is now visible (it's still trapped inside the window)
  * + Francesco Frassineti [06/12/19] - Added mouse handling
  * + Francesco Frassineti [06/12/19] - Added a temporary object to test the damaging system
  * + Jeppe Faber     [05/12/19] - Added TileMapRenderer-object to render loop
@@ -50,8 +52,8 @@ LightOfTheMoon::LightOfTheMoon()
 
 	r.init();
 
-	SDL_SetWindowGrab(r.getSDLWindow(), SDL_TRUE);
-	SDL_SetRelativeMouseMode(SDL_TRUE);
+	SDL_SetWindowGrab(r.getSDLWindow(), SDL_TRUE); //The cursor will stay inside the window
+	//SDL_SetRelativeMouseMode(SDL_TRUE); //Hide the mouse cursor
 
 	backgroundColor = { .13f,.13f,.13f,1.0f };
 
@@ -97,35 +99,43 @@ void LightOfTheMoon::initLevel() {
 	currentTileMap.loadSprites(spriteAtlas);
 	currentTileMap.loadMap("Assets/Levels/level0.json");
 
-	/////////////////////////////////////////////////////////
-	//                                                     //
-	// !!!! SAMPLE CHARACTER ANIMATION TO  BE REMOVED !!!! //
-	//                                                     //
-	/////////////////////////////////////////////////////////
+	//PLAYER
 	auto playerObj = createGameObject();
 	playerObj->name = "Player";
 	playerObj->setPosition({ 0, 0 });
 
-	auto so = playerObj->addComponent<SpriteComponent>(); 
-	auto sprite = spriteAtlas->get("cowboy-top-1.png");
-	sprite.setScale({ 0.001f,0.001f });
-	so->setSprite(sprite);
+	//<Animation>
+	auto anim = playerObj->addComponent<AnimatorComponent>(); 
+	
+	vector<Sprite> sprites_right({ spriteAtlas->get("cowboy-right-1.png"), spriteAtlas->get("cowboy-right-2.png") });
+	vector<Sprite> sprites_top_right({ spriteAtlas->get("cowboy-top-right-1.png"), spriteAtlas->get("cowboy-top-right-2.png") });
+	vector<Sprite> sprites_top({ spriteAtlas->get("cowboy-top-1.png"), spriteAtlas->get("cowboy-top-2.png") });
+	vector<Sprite> sprites_top_left({ spriteAtlas->get("cowboy-top-left-1.png"), spriteAtlas->get("cowboy-top-left-2.png") });
+	vector<Sprite> sprites_left({ spriteAtlas->get("cowboy-left-1.png"), spriteAtlas->get("cowboy-left-2.png") });
+	vector<Sprite> sprites_down_left({ spriteAtlas->get("cowboy-down-left-1.png"), spriteAtlas->get("cowboy-down-left-2.png") });
+	vector<Sprite> sprites_down({ spriteAtlas->get("cowboy-down-1.png"), spriteAtlas->get("cowboy-down-2.png") });
+	vector<Sprite> sprites_down_right({ spriteAtlas->get("cowboy-down-right-1.png"), spriteAtlas->get("cowboy-down-right-2.png") });
+	for (auto& s : sprites_right) { s.setScale({ 0.001f, 0.001f }); }
+	for (auto& s : sprites_top_right) { s.setScale({ 0.001f, 0.001f }); }
+	for (auto& s : sprites_top) { s.setScale({ 0.001f, 0.001f }); }
+	for (auto& s : sprites_top_left) { s.setScale({ 0.001f, 0.001f }); }
+	for (auto& s : sprites_left) { s.setScale({ 0.001f, 0.001f }); }
+	for (auto& s : sprites_down_left) { s.setScale({ 0.001f, 0.001f }); }
+	for (auto& s : sprites_down) { s.setScale({ 0.001f, 0.001f }); }
+	for (auto& s : sprites_down_right) { s.setScale({ 0.001f, 0.001f }); }
 
-	auto anim = playerObj->addComponent<SpriteAnimationComponent>(); vector<Sprite> spriteAnim({ 
-		spriteAtlas->get("cowboy-right-1.png"), spriteAtlas->get("cowboy-right-2.png"),
-		spriteAtlas->get("cowboy-top-right-1.png"), spriteAtlas->get("cowboy-top-right-2.png"),
-		spriteAtlas->get("cowboy-top-1.png"), spriteAtlas->get("cowboy-top-2.png"),
-		spriteAtlas->get("cowboy-top-left-1.png"), spriteAtlas->get("cowboy-top-left-2.png"),
-		spriteAtlas->get("cowboy-left-1.png"), spriteAtlas->get("cowboy-left-2.png"),
-		spriteAtlas->get("cowboy-down-left-1.png"), spriteAtlas->get("cowboy-down-left-2.png"),
-		spriteAtlas->get("cowboy-down-1.png"), spriteAtlas->get("cowboy-down-2.png"),
-		spriteAtlas->get("cowboy-down-right-1.png"), spriteAtlas->get("cowboy-down-right-2.png"),		
-		});
-	for (auto& s : spriteAnim) {
-		s.setScale({ 0.001f, 0.001f });
-	}
-	anim->setSprites(spriteAnim);
+	std::shared_ptr<Animation> player_idle_right_anim = std::make_shared<Animation>(sprites_right, 1, true);
+	std::shared_ptr<Animation> player_idle_top_right_anim = std::make_shared<Animation>(sprites_top_right, 1, true);
+	std::shared_ptr<Animation> player_idle_top_anim = std::make_shared<Animation>(sprites_top, 1, true);
+	std::shared_ptr<Animation> player_idle_top_left_anim = std::make_shared<Animation>(sprites_top_left, 1, true);
+	std::shared_ptr<Animation> player_idle_left_anim = std::make_shared<Animation>(sprites_left, 1, true);
+	std::shared_ptr<Animation> player_idle_down_left_anim = std::make_shared<Animation>(sprites_down_left, 1, true);
+	std::shared_ptr<Animation> player_idle_down_anim = std::make_shared<Animation>(sprites_down, 1, true);
+	std::shared_ptr<Animation> player_idle_down_right_anim = std::make_shared<Animation>(sprites_down_right, 1, true);
 
+	anim->setAnimation(player_idle_down_anim, true);
+
+	//</Animation>
 
 	auto phys = playerObj->addComponent<PhysicsComponent>();
 	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f}, { playerObj->getPosition().x,playerObj->getPosition().y }, 1);
@@ -136,53 +146,15 @@ void LightOfTheMoon::initLevel() {
 	characterHealth->setCurrentHealth(characterHealthAmount);
 
 	auto characterController = playerObj->addComponent<CharacterController>();
-	/////////////////////////////////////////////////////////
-	//                                                     //
-	// !!!! SAMPLE CHARACTER ANIMATION TO  BE REMOVED !!!! //
-	//                                                     //
-	/////////////////////////////////////////////////////////
-
-	/////////////////////////////////////////////////////////
-	//                                                     //
-	// TEMP FAKE ENTITY TO TEST DAMAGE ON COLLISION        //
-	//                                                     //
-	/////////////////////////////////////////////////////////
-	auto tempObj = createGameObject();
-	tempObj->name = "Temp";
-	tempObj->setPosition({ 50, 0 });
-
-	auto soTemp = tempObj->addComponent<SpriteComponent>();
-	auto spriteTemp = spriteAtlas->get("cowboy-top-1.png");
-	spriteTemp.setScale({ 0.001f,0.001f });
-	soTemp->setSprite(spriteTemp);
-
-	auto animTemp = tempObj->addComponent<SpriteAnimationComponent>(); vector<Sprite> spriteAnimTemp({
-		spriteAtlas->get("cowboy-right-1.png"), spriteAtlas->get("cowboy-right-2.png"),
-		spriteAtlas->get("cowboy-top-right-1.png"), spriteAtlas->get("cowboy-top-right-2.png"),
-		spriteAtlas->get("cowboy-top-1.png"), spriteAtlas->get("cowboy-top-2.png"),
-		spriteAtlas->get("cowboy-top-left-1.png"), spriteAtlas->get("cowboy-top-left-2.png"),
-		spriteAtlas->get("cowboy-left-1.png"), spriteAtlas->get("cowboy-left-2.png"),
-		spriteAtlas->get("cowboy-down-left-1.png"), spriteAtlas->get("cowboy-down-left-2.png"),
-		spriteAtlas->get("cowboy-down-1.png"), spriteAtlas->get("cowboy-down-2.png"),
-		spriteAtlas->get("cowboy-down-right-1.png"), spriteAtlas->get("cowboy-down-right-2.png"),
-		});
-	for (auto& s : spriteAnimTemp) {
-		s.setScale({ 0.001f, 0.001f });
-	}
-	animTemp->setSprites(spriteAnimTemp);
-
-
-	auto physTemp = tempObj->addComponent<PhysicsComponent>();
-	physTemp->initBox(b2_staticBody, { 2.0f, 4.5f }, { tempObj->getPosition().x,tempObj->getPosition().y }, 1);
-
-	auto damageTemp = tempObj->addComponent<FixedDamageComponent>();
-	damageTemp->setDamage(1);
-
-	/////////////////////////////////////////////////////////
-	//                                                     //
-	// TEMP FAKE ENTITY TO TEST DAMAGE ON COLLISION        //
-	//                                                     //
-	/////////////////////////////////////////////////////////
+	characterController->setAnimations(
+		player_idle_right_anim,
+		player_idle_top_right_anim,
+		player_idle_top_anim,
+		player_idle_top_left_anim,
+		player_idle_left_anim,
+		player_idle_down_left_anim,
+		player_idle_down_anim,
+		player_idle_down_right_anim);
 
 }
 

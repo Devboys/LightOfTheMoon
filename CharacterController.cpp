@@ -9,7 +9,6 @@
 #include <iostream>
 #include "CharacterController.hpp"
 #include "GameObject.hpp"
-#include "SpriteComponent.hpp"
 #include "PhysicsComponent.hpp"
 #include "LightOfTheMoon.hpp"
 #include "SpriteComponent.hpp"
@@ -18,9 +17,28 @@
 CharacterController::CharacterController(GameObject *gameObject) : Component(gameObject) {
     characterPhysics = gameObject->getComponent<PhysicsComponent>();
 
-    spriteComponent = gameObject->getComponent<SpriteComponent>();
+    animatorComponent = gameObject->getComponent<AnimatorComponent>();
 
 	characterHealth = gameObject->getComponent<HealthComponent>();
+}
+
+void CharacterController::setAnimations(std::shared_ptr<Animation> idle_right_anim,
+	std::shared_ptr<Animation> idle_top_right_anim,
+	std::shared_ptr<Animation> idle_top_anim,
+	std::shared_ptr<Animation> idle_top_left_anim,
+	std::shared_ptr<Animation> idle_left_anim,
+	std::shared_ptr<Animation> idle_down_left_anim,
+	std::shared_ptr<Animation> idle_down_anim,
+	std::shared_ptr<Animation> idle_down_right_anim
+) {
+	this->idle_right_anim = idle_right_anim;
+	this->idle_top_right_anim = idle_top_right_anim;
+	this->idle_top_anim = idle_top_anim;
+	this->idle_top_left_anim = idle_top_left_anim;
+	this->idle_left_anim = idle_left_anim;
+	this->idle_down_left_anim = idle_down_left_anim;
+	this->idle_down_anim = idle_down_anim;
+	this->idle_down_right_anim = idle_down_right_anim;
 }
 
 bool CharacterController::onKey(SDL_Event &event) {
@@ -117,10 +135,7 @@ void CharacterController::update(float deltaTime) {
 		}
 	}
 	
-
-	//TODO UPDATE ANIMATION
-
-    //updateSprite(deltaTime);
+	updateAnimation(deltaTime);
 }
 
 void CharacterController::onCollisionStart(PhysicsComponent *comp) {
@@ -131,50 +146,39 @@ void CharacterController::onCollisionEnd(PhysicsComponent *comp) {
 
 }
 
-void CharacterController::setSprites(sre::Sprite standing, sre::Sprite walk1, sre::Sprite walk2, sre::Sprite flyUp,
-                                     sre::Sprite fly, sre::Sprite flyDown) {
-    this->standing = standing;
-    this->walk1 = walk1;
-    this->walk2 = walk2;
-    this->flyUp = flyUp;
-    this->fly = fly;
-    this->flyDown = flyDown;
-}
+void CharacterController::updateAnimation(float deltaTime) {
+	//TODO Shooting animation
 
-//TO TRANSFORM INTO UPDATE ANIMATION
-void CharacterController::updateSprite(float deltaTime) {
-    /*auto velocity = characterPhysics->getLinearVelocity();
-
-	animationTimer += animationSpeed * velocity.x * deltaTime;
-
-	if (glm::length(velocity) <= 0.01) {
-		spriteComponent->setSprite(this->standing);
+	float angle = glm::atan(-direction.y, direction.x);
+	float angle_deg = glm::degrees(angle);
+	
+	if (angle_deg < -157.5f) {
+		animatorComponent->setAnimation(idle_left_anim, false);
+	}
+	else if (angle_deg < -112.5f) {
+		animatorComponent->setAnimation(idle_down_left_anim, false);
+	}
+	else if (angle_deg < -67.5f) {
+		animatorComponent->setAnimation(idle_down_anim, false);
+	}
+	else if (angle_deg < -22.5f) {
+		animatorComponent->setAnimation(idle_down_right_anim, false);
+	}
+	else if (angle_deg < 22.5f) {
+		animatorComponent->setAnimation(idle_right_anim, false);
+	}
+	else if (angle_deg < 67.5f) {
+		animatorComponent->setAnimation(idle_top_right_anim, false);
+	}
+	else if (angle_deg < 112.5f) {
+		animatorComponent->setAnimation(idle_top_anim, false);
+	}
+	else if (angle_deg < 157.5f) {
+		animatorComponent->setAnimation(idle_top_left_anim, false);
 	}
 	else {
-		if (isGrounded) {
-			this->walk1.setFlip({ velocity.x < 0, false });
-			this->walk2.setFlip({ velocity.x < 0, false });
-			spriteComponent->setSprite((int)animationTimer % 2 == 0 ? this->walk1 : this->walk2);
-		}
-		else {
-			if (glm::abs(velocity.y) <= midairVelocityThreshold) {
-				//MID JUMP
-				this->fly.setFlip({ velocity.x < 0, false });
-				spriteComponent->setSprite(this->fly);
-			}
-			else if(velocity.y > 0) {
-				//JUMP UP
-				this->flyUp.setFlip({ velocity.x < 0, false });
-				spriteComponent->setSprite(this->flyUp);
-			}
-			else {
-				//FALLING
-				this->flyDown.setFlip({ velocity.x < 0, false });
-				spriteComponent->setSprite(this->flyDown);
-			}
-		}
+		animatorComponent->setAnimation(idle_left_anim, false);
 	}
-	*/
 }
 
 
