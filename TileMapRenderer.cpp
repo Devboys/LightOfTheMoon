@@ -5,6 +5,7 @@
 #include "rapidjson/document.h"
 #include "rapidjson/istreamwrapper.h"
 #include <fstream>
+#include "AssetLocator.hpp"
 
 //easy debug ;)
 #include "iostream"
@@ -40,16 +41,15 @@ void TileMapRenderer::loadSprites(std::shared_ptr<sre::SpriteAtlas> atlas) {
 void TileMapRenderer::loadMap(std::string filename) {
 
 	using namespace rapidjson;
-	std::ifstream fis(filename);
-	IStreamWrapper isw(fis);
-	Document d;
-	d.ParseStream(isw);
+	Document* docPointer = AssetLocator::getService()->getJsonAsset(filename);
+
+	auto jsonArray = (*docPointer)["tileMap"].GetArray();
 
 	//load tilemap as a 2-dimensional vector.
-	for (auto& x : d["tileMap"].GetArray()) {
+	for (auto& x : jsonArray) {
 		std::vector<int> row;
 		for (auto& y : x.GetArray()) {
-			//GetArray() returns generics, so we must use GetInt() to get actual value.
+			//GetArray() returns json generics, so we must use GetInt() to get actual value.
 			row.push_back(y.GetInt());
 		}
 		tileMap.push_back(row);

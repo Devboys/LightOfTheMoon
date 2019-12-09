@@ -7,11 +7,11 @@
 
 #pragma once
 #include <string>
-#include "AudioService.hpp"
+#include "IAudioService.hpp"
 #include "SDL_mixer.h"
 #include <map>
 
-class GameAudio : public AudioService {
+class GameAudio : public IAudioService {
 
 public:
 	GameAudio();
@@ -19,9 +19,4 @@ public:
 
 	virtual void playOneshot(std::string soundName);
 	virtual void stopAll();
-
-private:
-	void loadSound(std::string filename);
-
-	std::map<std::string, Mix_Chunk*> sounds;
 };

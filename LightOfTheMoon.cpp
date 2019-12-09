@@ -26,6 +26,8 @@
 #include "FixedDamageComponent.hpp"
 #include "AudioLocator.hpp"
 #include "GameAudio.hpp"
+#include "AssetLocator.hpp"
+#include "GameAssetManager.hpp"
 
 using namespace std;
 using namespace sre;
@@ -44,8 +46,13 @@ LightOfTheMoon::LightOfTheMoon()
 	assert(instance == nullptr);
 	instance = this;
 
-	//init audio service locator
+	//init service locators
 	AudioLocator::initialize();
+	AssetLocator::initialize();
+
+	//Provide basic services
+	AudioLocator::setService(std::make_shared<GameAudio>());
+	AssetLocator::setService(std::make_shared<GameAssetManager>());
 
 	r.setWindowSize(windowSize);
 	r.setWindowTitle("Light of the Moon");
@@ -62,9 +69,6 @@ LightOfTheMoon::LightOfTheMoon()
 		.withFile("Assets/Sprites/LOTMSprites.png")
 		.withFilterSampling(false)
 		.build());
-	
-	//Provide basic audio service to audio service locator
-	AudioLocator::setService(std::make_shared<GameAudio>());
 
 	initLevel();
 

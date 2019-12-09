@@ -7,17 +7,17 @@
 
 #pragma once
 #include <memory>
-#include "AudioService.hpp"
+#include "IAudioService.hpp"
 #include "NullAudio.hpp"
 
 class AudioLocator {
 public:
 
 	static void initialize();
-	static std::shared_ptr<AudioService> getService();
-	static void setService(std::shared_ptr<AudioService> service);
+	static std::shared_ptr<IAudioService> getService();
+	static void setService(std::shared_ptr<IAudioService> service);
 
 private:
-	static std::shared_ptr<AudioService> _service;
+	static std::shared_ptr<IAudioService> _service;
 	static std::shared_ptr<NullAudio> _nullService;
 };

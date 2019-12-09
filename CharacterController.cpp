@@ -46,6 +46,9 @@ bool CharacterController::onKey(SDL_Event &event) {
             case SDLK_LEFT:
             {
                 left = event.type == SDL_KEYDOWN;
+				if (event.type == SDL_KEYDOWN) {
+					AudioLocator::getService()->playOneshot("Assets/Sounds/sound.wav");
+				}
 				break;
             }
             case SDLK_RIGHT:

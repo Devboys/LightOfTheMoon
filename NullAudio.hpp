@@ -6,10 +6,10 @@
  */
 
 #pragma once
-#include "AudioService.hpp"
+#include "IAudioService.hpp"
 #include <string>
 
-class NullAudio : public AudioService {
+class NullAudio : public IAudioService {
 
 public:
 	virtual void playOneshot(std::string soundName) { /* Do Nothing */ }

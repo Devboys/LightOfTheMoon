@@ -8,9 +8,9 @@
 #pragma once
 #include <string>
 
-class AudioService {
+class IAudioService {
 public:
-	virtual ~AudioService() {}
+	virtual ~IAudioService() {}
 	virtual void playOneshot(std::string soundName) = 0;
 	virtual void stopAll() = 0;
 };
