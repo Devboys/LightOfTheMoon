@@ -168,6 +168,26 @@ void LightOfTheMoon::update(float time) {
 	{
 		updatePhysics();
 	}
+
+	//Remove all the gameObjects that were requested to be removed in a safe way
+	while (!toBeRemoved.empty()) {
+		GameObject* go = toBeRemoved.front();
+		toBeRemoved.pop();
+		for (int i = 0; i < sceneObjects.size(); i++) {
+			if (go == &(*sceneObjects[i])) {//Check between a raw pointer and the raw pointer inside the smart pointer
+				sceneObjects.erase(sceneObjects.begin() + i);
+				break;
+			}
+		}
+	}
+
+	//Add all the gameObjects that were requested to be removed in a safe wa
+	while (!toBeAdded.empty()) {
+		std::shared_ptr<GameObject> go = toBeAdded.front();
+		toBeAdded.pop();
+		sceneObjects.push_back(go);
+	}
+
 	for (int i = 0; i < sceneObjects.size(); i++) {
 		sceneObjects[i]->update(time);
 	}
@@ -251,8 +271,16 @@ void LightOfTheMoon::onKey(SDL_Event& event) {
 
 std::shared_ptr<GameObject> LightOfTheMoon::createGameObject() {
 	auto obj = shared_ptr<GameObject>(new GameObject());
-	sceneObjects.push_back(obj);
+	toBeAdded.push(obj);//Add it safely (it will be added before updating the next frame)
 	return obj;
+}
+
+void LightOfTheMoon::addGameObject(std::shared_ptr<GameObject> gameObject) {
+	toBeAdded.push(gameObject);//Add it safely (it will be added before updating the next frame)
+}
+
+void LightOfTheMoon::destroyGameObject(GameObject* gameObject) {
+	toBeRemoved.push(gameObject);//Remove it safely (it will be removed before updating the next frame)
 }
 
 void LightOfTheMoon::updatePhysics() {

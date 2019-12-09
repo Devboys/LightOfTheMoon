@@ -15,6 +15,7 @@
 #include "GameObject.hpp"
 #include "CameraComponent.hpp"
 #include "TileMapRenderer.hpp"
+#include <queue>
 
 class PhysicsComponent;
 
@@ -34,6 +35,8 @@ public:
 	static constexpr float32 timeStep = 1.0f / 60.0f;
 
 	std::shared_ptr<GameObject> createGameObject();
+	void addGameObject(std::shared_ptr<GameObject> gameObject);
+	void destroyGameObject(GameObject* gameObject);
 
 	void BeginContact(b2Contact* contact) override;
 	void EndContact(b2Contact* contact) override;
@@ -63,6 +66,9 @@ private:
 	std::vector<std::shared_ptr<GameObject>> sceneObjects;
 
 	void updatePhysics();
+
+	std::queue<std::shared_ptr<GameObject>> toBeAdded;
+	std::queue<GameObject*> toBeRemoved;
 
 	sre::Color backgroundColor;
 	b2World* world = nullptr;
