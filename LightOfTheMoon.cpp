@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Added 
  * + Francesco Frassineti [07/12/19] - Added the idle animations for the player
  * + Francesco Frassineti [07/12/19] - The mouse cursor is now visible (it's still trapped inside the window)
  * + Francesco Frassineti [06/12/19] - Added mouse handling
@@ -60,7 +61,11 @@ LightOfTheMoon::LightOfTheMoon()
 	AudioLocator::initialize();
 	AssetLocator::initialize(); //must be initialized AFTER sre
 
-	initLevel();
+	//Provide basic services
+	AudioLocator::setService(std::make_shared<GameAudio>());
+	AssetLocator::setService(std::make_shared<GameAssetManager>());
+
+	ChangeState(GameState::GameOver);
 
 	// setup callback functions
 	r.keyEvent = [&](SDL_Event& e) {
@@ -79,13 +84,64 @@ LightOfTheMoon::LightOfTheMoon()
 	r.startEventLoop();
 }
 
-void LightOfTheMoon::initLevel() {
+void LightOfTheMoon::ChangeState(GameState state) {
+	//clear previous state
 	initPhysics();
+	sceneObjects.clear();
 
-	//Provide basic services
-	AudioLocator::setService(std::make_shared<GameAudio>());
-	AssetLocator::setService(std::make_shared<GameAssetManager>());
+	//init new state
+	switch (state)
+	{
+	case GameState::Menu:
+		initMenu();
+		break;
+	case GameState::Running:
+		initLevel();
+		break;
+	case GameState::GameOver:
+		initGameOver();
+		break;
+	default:
+		break;
+	}
 
+	currentState = state;
+}
+
+void LightOfTheMoon::initMenu() {
+	
+	auto camObj = createGameObject();
+	camObj->name = "Camera";
+	camera = camObj->addComponent<CameraComponent>();
+	camObj->setPosition(windowSize * 0.5f);
+
+	std::shared_ptr<sre::SpriteAtlas> uiAtlas = AssetLocator::getService()->getSpriteAtlas("Assets/Sprites/MenuSprites.json");
+
+	//fetch menu title sprites
+	auto titleSprite = uiAtlas->get("Title.png");
+	titleSprite.setScale(glm::vec2(0.001f, 0.001f));
+
+	auto startTextSprite = uiAtlas->get("EnterStart.png");
+	startTextSprite.setScale(glm::vec2(0.001f, 0.001f));
+
+	//make menu title objects
+	auto titleObj = createGameObject();
+	titleObj->name = "Title";
+	titleObj->position = glm::vec2(0, 0);
+
+	auto spr = titleObj->addComponent<SpriteComponent>();
+	spr->setSprite(titleSprite);
+
+	auto startTextObj = createGameObject();
+	startTextObj->name = "SubText";
+	startTextObj->position = glm::vec2(0, -(startTextSprite.getSpriteSize().y * 2) * startTextSprite.getScale().y);
+
+	spr = startTextObj->addComponent<SpriteComponent>();
+	spr->setSprite(startTextSprite);
+}
+
+
+void LightOfTheMoon::initLevel() {
 	spriteAtlas = AssetLocator::getService()->getSpriteAtlas("Assets/Sprites/LOTMSprites.json");
 
 	auto camObj = createGameObject();
@@ -158,6 +214,53 @@ void LightOfTheMoon::initLevel() {
 
 }
 
+void LightOfTheMoon::initGameOver() {
+
+	auto camObj = createGameObject();
+	camObj->name = "Camera";
+	camera = camObj->addComponent<CameraComponent>();
+	camObj->setPosition(windowSize * 0.5f);
+
+	std::shared_ptr<sre::SpriteAtlas> uiAtlas = AssetLocator::getService()->getSpriteAtlas("Assets/Sprites/MenuSprites.json");
+
+	//fetch menu sprites
+	auto gameOverSprite = uiAtlas->get("GameOver.png");
+	gameOverSprite.setScale(glm::vec2(0.001f, 0.001f));
+
+	auto restartTextSprite = uiAtlas->get("EnterRestart.png");
+	restartTextSprite.setScale(glm::vec2(0.001f, 0.001f));
+
+	auto menuTextSprite = uiAtlas->get("BackspaceMenu.png");
+	menuTextSprite.setScale(glm::vec2(0.001f, 0.001f));
+
+	//make menu objects
+	auto gameOverObj = createGameObject();
+	gameOverObj->name = "Title";
+	gameOverObj->position = glm::vec2(0, 0);
+
+	auto spr = gameOverObj->addComponent<SpriteComponent>();
+	spr->setSprite(gameOverSprite);
+
+	auto restartTextObj = createGameObject();
+	restartTextObj->name = "RestartText";
+	restartTextObj->position = glm::vec2(0, -(restartTextSprite.getSpriteSize().y * 2) * restartTextSprite.getScale().y);
+
+	spr = restartTextObj->addComponent<SpriteComponent>();
+	spr->setSprite(restartTextSprite);
+
+	auto menuTextObj = createGameObject();
+	menuTextObj->name = "MenuText";
+	menuTextObj->position = glm::vec2(0, -(menuTextSprite.getSpriteSize().y * 3) * menuTextSprite.getScale().y);
+
+	spr = menuTextObj->addComponent<SpriteComponent>();
+	spr->setSprite(menuTextSprite);
+
+}
+
+void LightOfTheMoon::initWin() {
+
+}
+
 void LightOfTheMoon::update(float time) {
 	updatePhysics();
 	if (time > 0.03) // if framerate approx 30 fps then run two physics steps
@@ -216,6 +319,7 @@ void LightOfTheMoon::render() {
 	}
 
 	auto sb = spriteBatchBuilder.build();
+
 	rp.draw(sb);
 
 	if (doDebugDraw) {
@@ -247,7 +351,16 @@ void LightOfTheMoon::onKey(SDL_Event& event) {
 		switch (event.key.keysym.sym) {
 		
 		//  Add all cases for key presses check here
-
+		case SDLK_RETURN:
+			if (currentState == GameState::Menu || currentState == GameState::GameOver) {
+				ChangeState(GameState::Running);
+			}
+			break;
+		case SDLK_BACKSPACE:
+			if (currentState == GameState::GameOver) {
+				ChangeState(GameState::Menu);
+			}
+			break;
 		case SDLK_d:
 			// Press 'D' for physics debug
 			doDebugDraw = !doDebugDraw;

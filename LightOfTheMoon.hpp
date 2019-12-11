@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Jeppe Faber [11/12/19] - Made simple menu/game/gameover system
  * + Francesco Frassineti [06/12/19] - Added CharacterController as a friend class
  * + Alberto Giudice [05/12/19] - Fixed Singleton implementation to deal with gameloop
  * + Alberto Giudice [05/12/19] - Basic creation
@@ -38,6 +39,8 @@ public:
 	void addGameObject(std::shared_ptr<GameObject> gameObject);
 	void destroyGameObject(GameObject* gameObject);
 
+	void ChangeState(GameState state);
+
 	void BeginContact(b2Contact* contact) override;
 	void EndContact(b2Contact* contact) override;
 
@@ -50,7 +53,11 @@ private:
 
 	sre::SDLRenderer r;
 
+	void initMenu();
 	void initLevel();
+	void initGameOver();
+	void initWin();
+
 	void initPhysics();
 
 	void update(float time);
@@ -80,6 +87,8 @@ private:
 	bool doDebugDraw = false;
 
 	TileMapRenderer currentTileMap;
+
+	GameState currentState;
 
 	friend class PhysicsComponent;
 	friend class CharacterController;
