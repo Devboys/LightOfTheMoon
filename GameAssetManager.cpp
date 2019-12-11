@@ -64,12 +64,14 @@ void GameAssetManager::loadAssets() {
 			png = *pngItr;
 			png.replace_extension("");
 
-			if ((json.compare(png) == 0) && !pngFound) {
-				pngFound = true;
-				loadSpriteAtlas(jsonItr->string(), pngItr->string());
-			}
-			else if (pngFound) {
-				std::cout << "DUPLICATE PNG FOUND FOR; " << jsonItr->string();
+			if ((json.compare(png) == 0)) {
+				if (!pngFound) {
+					pngFound = true;
+					loadSpriteAtlas(jsonItr->string(), pngItr->string());
+				}
+				else {
+					std::cout << "DUPLICATE PNG FOUND FOR; " << jsonItr->string();
+				}
 			}
 		}
 		if (!pngFound) {
