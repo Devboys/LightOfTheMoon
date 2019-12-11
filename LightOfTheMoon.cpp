@@ -16,7 +16,6 @@
 #include <sre/Inspector.hpp>
 #include "Box2D/Dynamics/Contacts/b2Contact.h"
 #include "sre/RenderPass.hpp"
-#include "sre/Texture.hpp"
 #include "GameObject.hpp"
 #include "SpriteComponent.hpp"
 #include "PhysicsComponent.hpp"
@@ -46,17 +45,10 @@ LightOfTheMoon::LightOfTheMoon()
 	assert(instance == nullptr);
 	instance = this;
 
-	//init service locators
-	AudioLocator::initialize();
-	AssetLocator::initialize();
-
-	//Provide basic services
-	AudioLocator::setService(std::make_shared<GameAudio>());
-	AssetLocator::setService(std::make_shared<GameAssetManager>());
-
 	r.setWindowSize(windowSize);
 	r.setWindowTitle("Light of the Moon");
 
+	//intialize SRE
 	r.init();
 
 	SDL_SetWindowGrab(r.getSDLWindow(), SDL_TRUE); //The cursor will stay inside the window
@@ -64,11 +56,9 @@ LightOfTheMoon::LightOfTheMoon()
 
 	backgroundColor = { .13f,.13f,.13f,1.0f };
 
-	// Sprite Atlas creation
-	spriteAtlas = SpriteAtlas::create("Assets/Sprites/LOTMSprites.json", Texture::create()
-		.withFile("Assets/Sprites/LOTMSprites.png")
-		.withFilterSampling(false)
-		.build());
+	//init default services for locators
+	AudioLocator::initialize();
+	AssetLocator::initialize(); //must be initialized AFTER sre
 
 	initLevel();
 
@@ -91,6 +81,12 @@ LightOfTheMoon::LightOfTheMoon()
 
 void LightOfTheMoon::initLevel() {
 	initPhysics();
+
+	//Provide basic services
+	AudioLocator::setService(std::make_shared<GameAudio>());
+	AssetLocator::setService(std::make_shared<GameAssetManager>());
+
+	spriteAtlas = AssetLocator::getService()->getSpriteAtlas("Assets/Sprites/LOTMSprites.json");
 
 	auto camObj = createGameObject();
 	camObj->name = "Camera";

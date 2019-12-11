@@ -8,14 +8,15 @@ void DefaultAssetManager::loadAssets() {
 
 rapidjson::Document* DefaultAssetManager::getJsonAsset(std::string filename) {
 	std::cout << "DEFAULT: json asset Gotten \n";
-	return NULL;
+	return nullptr;
 }
 
 Mix_Chunk* DefaultAssetManager::getSoundAsset(std::string filename) {
-	return NULL;
 	std::cout << "DEFAULT: sound asset Gotten \n";
+	return nullptr;
 }
 
-void DefaultAssetManager::getSpriteAsset() {
+std::shared_ptr<sre::SpriteAtlas> DefaultAssetManager::getSpriteAtlas(std::string jsonPath) {
 	std::cout << "DEFAULT: sprite asset Gotten \n";
+	return nullptr;
 }
