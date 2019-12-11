@@ -163,7 +163,8 @@ void LightOfTheMoon::initLevel() {
 	playerObj->setPosition({ 0, 0 });
 
 	//<Animation>
-	auto anim = playerObj->addComponent<AnimatorComponent>(); 
+	auto anim = playerObj->addComponent<AnimatorComponent>();
+	anim->setOffset(glm::vec2(0, 20 * 0.001f));
 	
 	vector<Sprite> sprites_right({ spriteAtlas->get("cowboy-right-1.png"), spriteAtlas->get("cowboy-right-2.png") });
 	vector<Sprite> sprites_top_right({ spriteAtlas->get("cowboy-top-right-1.png"), spriteAtlas->get("cowboy-top-right-2.png") });
@@ -196,7 +197,7 @@ void LightOfTheMoon::initLevel() {
 	//</Animation>
 
 	auto phys = playerObj->addComponent<PhysicsComponent>();
-	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f}, { playerObj->getPosition().x,playerObj->getPosition().y }, 1);
+	phys->initBox(b2_dynamicBody, { 2.0f, 2.0f}, {playerObj->getPosition().x, playerObj->getPosition().y}, 1);
 	phys->fixRotation();
 
 	auto characterHealth = playerObj->addComponent <HealthComponent>();

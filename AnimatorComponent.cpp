@@ -16,7 +16,7 @@ void AnimatorComponent::update(float deltaTime) {
 
 void AnimatorComponent::renderSprite(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder) {
 	sre::Sprite sprite = animation->getFrame(timer);
-	sprite.setPosition(gameObject->getPosition());
+	sprite.setPosition(gameObject->getPosition() + offset);
 	sprite.setRotation(gameObject->getRotation());
 	spriteBatchBuilder.addSprite(sprite);
 }
@@ -30,4 +30,8 @@ void AnimatorComponent::setAnimation(std::shared_ptr<Animation> animation, bool 
 
 std::shared_ptr<Animation> AnimatorComponent::getAnimation() {
 	return animation;
+}
+
+void AnimatorComponent::setOffset(glm::vec2 offset) {
+	this->offset = offset;
 }
