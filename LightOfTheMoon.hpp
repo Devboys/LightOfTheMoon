@@ -15,7 +15,7 @@
 #include "Box2DDebugDraw.hpp"
 #include "GameObject.hpp"
 #include "CameraComponent.hpp"
-#include "TileMapRenderer.hpp"
+#include "TileMap.hpp"
 #include <queue>
 
 class PhysicsComponent;
@@ -86,7 +86,7 @@ private:
 	Box2DDebugDraw debugDraw;
 	bool doDebugDraw = false;
 
-	TileMapRenderer currentTileMap;
+	TileMap currentTileMap;
 
 	GameState currentState;
 

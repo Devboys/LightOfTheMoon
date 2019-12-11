@@ -154,6 +154,8 @@ void LightOfTheMoon::initLevel() {
 	// Create TileMapRenderer object
 	currentTileMap.loadSprites(spriteAtlas);
 	currentTileMap.loadMap("Assets/Levels/level0.json");
+	currentTileMap.printMap();
+	currentTileMap.generateColliders();
 
 	//PLAYER
 	auto playerObj = createGameObject();
@@ -195,6 +197,7 @@ void LightOfTheMoon::initLevel() {
 
 	auto phys = playerObj->addComponent<PhysicsComponent>();
 	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f}, { playerObj->getPosition().x,playerObj->getPosition().y }, 1);
+	phys->fixRotation();
 
 	auto characterHealth = playerObj->addComponent <HealthComponent>();
 	float characterHealthAmount = 5;
@@ -211,7 +214,6 @@ void LightOfTheMoon::initLevel() {
 		player_idle_down_left_anim,
 		player_idle_down_anim,
 		player_idle_down_right_anim);
-
 }
 
 void LightOfTheMoon::initGameOver() {
