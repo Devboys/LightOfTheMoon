@@ -12,17 +12,28 @@
 #include "sre/Sprite.hpp"
 #include "sre/SpriteBatch.hpp"
 
-class TileMapRenderer {
+class TileMap{
 public:
-	explicit TileMapRenderer();
+	explicit TileMap();
 
 	void loadMap(std::string filename);
+	
+	void printMap();
 
 	void renderMap(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder);
 
 	void loadSprites(std::shared_ptr<sre::SpriteAtlas>);
 
+	void generateColliders();
+
+
 private:
+	std::vector<std::vector<bool>> calculateBorderCells();
+	void generateEdgeBottomLeft(int i, int j);
+	void generateEdgeBottomRight(int i, int j);
+	void generateEdgeTopLeft(int i, int j);
+	void generateEdgeTopRight(int i, int j);
+
 	std::vector<std::vector<int>> tileMap;
 	int tileHeight;
 	int tileWidth;
