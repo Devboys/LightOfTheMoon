@@ -56,7 +56,6 @@ private:
 	void initMenu();
 	void initLevel();
 	void initGameOver();
-	void initWin();
 
 	void initPhysics();
 
