@@ -65,7 +65,7 @@ LightOfTheMoon::LightOfTheMoon()
 	AudioLocator::setService(std::make_shared<GameAudio>());
 	AssetLocator::setService(std::make_shared<GameAssetManager>());
 
-	ChangeState(GameState::GameOver);
+	changeState(GameState::Menu);
 
 	// setup callback functions
 	r.keyEvent = [&](SDL_Event& e) {
@@ -84,7 +84,11 @@ LightOfTheMoon::LightOfTheMoon()
 	r.startEventLoop();
 }
 
-void LightOfTheMoon::ChangeState(GameState state) {
+void LightOfTheMoon::requestChangeState(GameState state) {
+	requestedState = state;
+}
+
+void LightOfTheMoon::changeState(GameState state) {
 	//clear previous state
 	initPhysics();
 	sceneObjects.clear();
@@ -106,6 +110,7 @@ void LightOfTheMoon::ChangeState(GameState state) {
 	}
 
 	currentState = state;
+	requestedState = state;
 }
 
 void LightOfTheMoon::initMenu() {
@@ -154,7 +159,7 @@ void LightOfTheMoon::initLevel() {
 	// Create TileMapRenderer object
 	currentTileMap.loadSprites(spriteAtlas);
 	currentTileMap.loadMap("Assets/Levels/level0.json");
-	currentTileMap.printMap();
+	//currentTileMap.printMap();
 	currentTileMap.generateColliders();
 
 	//PLAYER
@@ -260,6 +265,10 @@ void LightOfTheMoon::initGameOver() {
 }
 
 void LightOfTheMoon::update(float time) {
+	if (requestedState != currentState) {
+		changeState(requestedState); //Change GameState in a safe way
+	}
+
 	updatePhysics();
 	if (time > 0.03) // if framerate approx 30 fps then run two physics steps
 	{
@@ -351,16 +360,16 @@ void LightOfTheMoon::onKey(SDL_Event& event) {
 		//  Add all cases for key presses check here
 		case SDLK_RETURN:
 			if (currentState == GameState::Menu || currentState == GameState::GameOver) {
-				ChangeState(GameState::Running);
+				changeState(GameState::Running);
 			}
 			break;
 		case SDLK_BACKSPACE:
 			if (currentState == GameState::GameOver) {
-				ChangeState(GameState::Menu);
+				changeState(GameState::Menu);
 			}
 			break;
-		case SDLK_d:
-			// Press 'D' for physics debug
+		case SDLK_q:
+			// Press 'Q' for physics debug
 			doDebugDraw = !doDebugDraw;
 			if (doDebugDraw) {
 				world->SetDebugDraw(&debugDraw);

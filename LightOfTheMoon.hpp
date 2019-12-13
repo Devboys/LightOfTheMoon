@@ -39,7 +39,7 @@ public:
 	void addGameObject(std::shared_ptr<GameObject> gameObject);
 	void destroyGameObject(GameObject* gameObject);
 
-	void ChangeState(GameState state);
+	void requestChangeState(GameState state);//Change GameState in a safe way
 
 	void BeginContact(b2Contact* contact) override;
 	void EndContact(b2Contact* contact) override;
@@ -66,6 +66,8 @@ private:
 
 	void handleContact(b2Contact* contact, bool begin);
 
+	void changeState(GameState state);
+
 	std::shared_ptr<CameraComponent> camera;
 	std::shared_ptr<sre::SpriteAtlas> spriteAtlas;
 
@@ -88,6 +90,7 @@ private:
 	TileMap currentTileMap;
 
 	GameState currentState;
+	GameState requestedState;
 
 	friend class PhysicsComponent;
 	friend class CharacterController;

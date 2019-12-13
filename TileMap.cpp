@@ -59,7 +59,7 @@ void TileMap::loadMap(std::string filename) {
 	}
 }
 
-/* Prints the tilemap
+/* Prints the tilemap indexes in a matrix form
  *
  */
 void TileMap::printMap() {
@@ -72,40 +72,23 @@ void TileMap::printMap() {
 	}
 }
 
+/*Generate every necessary edge colliders for each tile*/
 void TileMap::generateColliders() {
 	std::vector<std::vector<bool>> borderCells = calculateBorderCells(); //Temporary variable where the borders of the tilemap will be saved
 
 	for (int i = 0; i < borderCells.size(); i++) {
 		for (int j = 0; j < borderCells[0].size(); j++) {
 			if (borderCells[i][j]) {
-
-				int ti = i - 1;
-				int tj = j - 1;
-
-				//TODO SEMPLIFICA:
-				std::cout << "SIMPLIFY" << std::endl;
-				/*
-				if(i == borderCells.size() - 1)
+				if(i != 0 && !borderCells[i - 1][j])
 					generateEdgeBottomLeft(i, j);
-				if (0 <= ti && ti < tileMap.size() && 0 <= tj && tj < tileMap[ti].size()) {
-					if(tileMap[ti+1][tj] >= 0)
-						generateEdgeBottomLeft(i, j);
-				}*/
-				generateEdgeBottomLeft(i, j);
-				generateEdgeBottomRight(i, j);
-				generateEdgeTopLeft(i, j);
-				generateEdgeTopRight(i, j);
+				if (i != borderCells.size() -1  && !borderCells[i + 1][j])
+					generateEdgeTopRight(i, j);
+				if(j != 0 && !borderCells[i][j -1])
+					generateEdgeBottomRight(i, j);
+				if (j != borderCells[0].size() - 1 && !borderCells[i][j + 1])
+					generateEdgeTopLeft(i, j);
 			}
 		}
-	}
-
-	std::cout << "Border Cells:" << std::endl;
-	for (std::vector<bool>& x : borderCells) {
-		std::cout << "|";
-		for (bool y : x) {
-			std::cout << " " << y << "\t|";
-		}
-		std::cout << std::endl;
 	}
 }
 
@@ -161,13 +144,17 @@ void TileMap::generateEdgeTopRight(int i, int j) {
 	phys->initEdge(b2_staticBody, { 0, 0 }, { edgeX_i, edgeY_i }, { edgeX_f, edgeY_f });
 }
 
+
+/*Returns a matrix with information regarding the empty tiles of the tilemap, including the extended borders.
+* tileMap has size n*m, the function return a (n+1)*(m+1) matrix
+*/
 std::vector<std::vector<bool>> TileMap::calculateBorderCells() {
 	std::vector<std::vector<bool>> borderCells;
 	//Init border cells
 	for (int i = 0; i < tileMap.size() + 2; i++) {
 		std::vector<bool> row;
 		for (int j = 0; j < tileMap[0].size() + 2; j++) {
-			row.push_back(false);
+			row.push_back(i == 0 || i == tileMap.size() + 1 || j == 0 || j == tileMap[0].size() + 1); //init matrix with true on the border and false inside
 		}
 		borderCells.push_back(row);
 	}
