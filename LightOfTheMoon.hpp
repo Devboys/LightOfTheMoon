@@ -44,6 +44,9 @@ public:
 	void BeginContact(b2Contact* contact) override;
 	void EndContact(b2Contact* contact) override;
 
+	const float physicsScale = 0.01f;
+	std::shared_ptr<sre::SpriteAtlas> getSpriteAtlas();
+
 	// Delete copy equal 
 	LightOfTheMoon(const LightOfTheMoon&) = delete;
 	LightOfTheMoon& operator=(const LightOfTheMoon&) = delete;
@@ -83,7 +86,6 @@ private:
 
 	sre::Color backgroundColor;
 	b2World* world = nullptr;
-	const float physicsScale = 0.01f;
 	void registerPhysicsComponent(PhysicsComponent* r);
 	void deregisterPhysicsComponent(PhysicsComponent* r);
 	std::map<b2Fixture*, PhysicsComponent*> physicsComponentLookup;

@@ -39,6 +39,8 @@ public:
 
     void onCollisionEnd(PhysicsComponent *comp) override;
 private:
+	void spawnPlayerBullet(glm::vec2& direction);
+
 	std::shared_ptr<Animation> idle_right_anim;
 	std::shared_ptr<Animation> idle_top_right_anim;
 	std::shared_ptr<Animation> idle_top_anim;
@@ -62,11 +64,15 @@ private:
 	float dashDuration = 0.1f;
 	float dashTimer; //Keeps track of the time the character has beeen dashing. If dashTimer = 0 the character is not dashing
 
+	float bulletSpeed = 50.0f;
+	float bulletOffset = 0.03f;
+	float shootingCooldown = 1.0 / 8.0;
+	float shootingTimer = 0.0f;
+
     bool left = false;
     bool right = false;
 	bool up = false;
 	bool down = false;
 	bool dash = false;
-
-	bool debug_show_life = false; //TODO REMOVE
+	bool shoot = false;
 };

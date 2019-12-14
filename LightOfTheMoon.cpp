@@ -28,8 +28,6 @@
 #include "GameAudio.hpp"
 #include "AssetLocator.hpp"
 #include "GameAssetManager.hpp"
-#include "BulletComponent.hpp"
-#include "MovementLinearComponent.hpp"
 
 
 #define BOSS_SPRITE_SCALE 0.002f
@@ -87,6 +85,10 @@ LightOfTheMoon::LightOfTheMoon()
 	};
 	// start game loop
 	r.startEventLoop();
+}
+
+std::shared_ptr<sre::SpriteAtlas> LightOfTheMoon::getSpriteAtlas() {
+	return spriteAtlas;
 }
 
 void LightOfTheMoon::requestChangeState(GameState state) {
@@ -173,28 +175,6 @@ void LightOfTheMoon::initLevel() {
 
 	//BOSS
 	initBoss();
-
-	// Linear Bullet test creation code. Move it wherever you need it.
-	auto linearBulletObj = createGameObject();
-	linearBulletObj->name = "LinearBullet";
-	linearBulletObj->setPosition({ .3f, .3f });
-
-	auto linearBulletphys = linearBulletObj->addComponent<PhysicsComponent>();
-	linearBulletphys->initCircle(b2_kinematicBody, 1.0f, { linearBulletObj->getPosition().x / physicsScale, linearBulletObj->getPosition().y / physicsScale }, 1);
-	linearBulletphys->fixRotation();
-	linearBulletphys->setSensor(true);
-
-	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
-	bulletComponent->initBossBullet(10);
-
-	auto bulletAnimator = linearBulletObj->addComponent<AnimatorComponent>();
-	vector<Sprite> linearBulletSprites({ spriteAtlas->get("bullet-cowboy-1.png"), spriteAtlas->get("bullet-cowboy-2.png") });
-	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
-	std::shared_ptr<Animation> linearBulletAnimation = std::make_shared<Animation>(linearBulletSprites, 1, true);
-	bulletAnimator->setAnimation(linearBulletAnimation, true);
-
-	auto bulletLinearMovement = linearBulletObj->addComponent<MovementLinearComponent>();
-	bulletLinearMovement->initParameters(225.0f, 50.0f);
 }
 
 void LightOfTheMoon::initPlayer() {

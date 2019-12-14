@@ -15,11 +15,14 @@ MovementLinearComponent::MovementLinearComponent(GameObject* gameObject) : Compo
 
 void MovementLinearComponent::initParameters(const float& directionAngleDeg, const float& velocity) {
 	_directionAngleDegrees = directionAngleDeg;
-	_velocity = velocity;
+	initParameters(glm::vec2(_velocity * std::cos(_directionAngleDegrees * M_PI / 180), _velocity * std::sin(_directionAngleDegrees * M_PI / 180)), velocity);
+}
 
+void MovementLinearComponent::initParameters(const glm::vec2& direction, const float& velocity) {
+	_velocity = velocity;
 	std::shared_ptr<PhysicsComponent> phys = gameObject->getComponent<PhysicsComponent>();
 	if (phys != nullptr) {
-		phys->setLinearVelocity(glm::vec2(_velocity * std::cos(_directionAngleDegrees * M_PI / 180), _velocity * std::sin(_directionAngleDegrees * M_PI / 180)));
+		phys->setLinearVelocity(_velocity * direction);
 	}
 }
 
