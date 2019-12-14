@@ -105,6 +105,7 @@ void TileMap::generateEdgeBottomLeft(int i, int j) {
 	//Create collider object
 	std::shared_ptr<GameObject> go = LightOfTheMoon::getInstance()->createGameObject();
 	go->setPosition(glm::vec2(0, 0));
+	go->name = "Wall";
 	auto phys = go->addComponent<PhysicsComponent>();
 
 	float jc = j - (tileMap[0].size()+2) / 2.0 - 0.5f;
@@ -121,6 +122,7 @@ void TileMap::generateEdgeBottomRight(int i, int j) {
 	//Create collider object
 	std::shared_ptr<GameObject> go = LightOfTheMoon::getInstance()->createGameObject();
 	go->setPosition(glm::vec2(0, 0));
+	go->name = "Wall";
 	auto phys = go->addComponent<PhysicsComponent>();
 
 	float jc = j - (tileMap[0].size() + 2) / 2.0 - 0.5f;
@@ -137,6 +139,7 @@ void TileMap::generateEdgeTopLeft(int i, int j) {
 	//Create collider object
 	std::shared_ptr<GameObject> go = LightOfTheMoon::getInstance()->createGameObject();
 	go->setPosition(glm::vec2(0, 0));
+	go->name = "Wall";
 	auto phys = go->addComponent<PhysicsComponent>();
 
 	float jc = j - (tileMap[0].size() + 2) / 2.0 - 0.5f;
@@ -153,6 +156,7 @@ void TileMap::generateEdgeTopRight(int i, int j) {
 	//Create collider object
 	std::shared_ptr<GameObject> go = LightOfTheMoon::getInstance()->createGameObject();
 	go->setPosition(glm::vec2(0, 0));
+	go->name = "Wall";
 	auto phys = go->addComponent<PhysicsComponent>();
 
 	float jc = j - (tileMap[0].size() + 2) / 2.0 - 0.5f;
