@@ -2,7 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
- * + Alberto Giudice [14/12/10] - Added a test linear bullet in the direction of the player
+ * + Alberto Giudice [14/12/10] - Added a test linear/wave/spiral bullet in the direction of the player
  * + Francesco Frassineti [07/12/19] - Added the idle animations for the player
  * + Francesco Frassineti [07/12/19] - The mouse cursor is now visible (it's still trapped inside the window)
  * + Francesco Frassineti [06/12/19] - Added mouse handling
@@ -30,6 +30,8 @@
 #include "GameAssetManager.hpp"
 #include "BulletComponent.hpp"
 #include "MovementLinearComponent.hpp"
+#include "MovementWaveComponent.hpp"
+#include "MovementSpiralComponent.hpp"
 
 
 #define BOSS_SPRITE_SCALE 0.002f
@@ -169,32 +171,34 @@ void LightOfTheMoon::initLevel() {
 	currentTileMap.generateColliders();
 
 	//PLAYER
-	initPlayer();
+	//initPlayer();
 
 	//BOSS
-	initBoss();
+	//initBoss();
 
-	// Linear Bullet test creation code. Move it wherever you need it.
-	auto linearBulletObj = createGameObject();
-	linearBulletObj->name = "LinearBullet";
-	linearBulletObj->setPosition({ .3f, .3f });
+	// Wave Bullet test creation code. Move it wherever you need it.
+	/*auto waveBulletObj = createGameObject();
+	waveBulletObj->name = "LinearBullet";
+	waveBulletObj->setPosition({ .0f, .0f });
 
-	auto linearBulletphys = linearBulletObj->addComponent<PhysicsComponent>();
-	linearBulletphys->initCircle(b2_kinematicBody, 1.0f, { linearBulletObj->getPosition().x / physicsScale, linearBulletObj->getPosition().y / physicsScale }, 1);
+	auto linearBulletphys = waveBulletObj->addComponent<PhysicsComponent>();
+	linearBulletphys->initCircle(b2_kinematicBody, 1.0f, { waveBulletObj->getPosition().x / physicsScale, waveBulletObj->getPosition().y / physicsScale }, 1);
 	linearBulletphys->fixRotation();
 	linearBulletphys->setSensor(true);
 
-	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
+	auto bulletComponent = waveBulletObj->addComponent<BulletComponent>();
 	bulletComponent->initBossBullet(10);
 
-	auto bulletAnimator = linearBulletObj->addComponent<AnimatorComponent>();
-	vector<Sprite> linearBulletSprites({ spriteAtlas->get("bullet-cowboy-1.png"), spriteAtlas->get("bullet-cowboy-2.png") });
+	auto bulletAnimator = waveBulletObj->addComponent<AnimatorComponent>();
+	vector<Sprite> linearBulletSprites({ spriteAtlas->get("bullet-enemy-2-1.png"), spriteAtlas->get("bullet-enemy-2-2.png") });
 	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
 	std::shared_ptr<Animation> linearBulletAnimation = std::make_shared<Animation>(linearBulletSprites, 1, true);
 	bulletAnimator->setAnimation(linearBulletAnimation, true);
 
-	auto bulletLinearMovement = linearBulletObj->addComponent<MovementLinearComponent>();
-	bulletLinearMovement->initParameters(225.0f, 50.0f);
+	auto bulletLinearMovement = waveBulletObj->addComponent<MovementWaveComponent>();
+	bulletLinearMovement->initParameters(45.0f, .5f, .08f, 10.0f);*/
+
+	// Spiral Bullet test creation code. Move it wherever you need.
 }
 
 void LightOfTheMoon::initPlayer() {

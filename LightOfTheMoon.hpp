@@ -34,6 +34,7 @@ public:
 
 	static const glm::vec2 windowSize;
 	static constexpr float32 timeStep = 1.0f / 60.0f;
+	static constexpr float32 physicsScale = 0.01f;
 
 	std::shared_ptr<GameObject> createGameObject();
 	void addGameObject(std::shared_ptr<GameObject> gameObject);
@@ -83,7 +84,6 @@ private:
 
 	sre::Color backgroundColor;
 	b2World* world = nullptr;
-	const float physicsScale = 0.01f;
 	void registerPhysicsComponent(PhysicsComponent* r);
 	void deregisterPhysicsComponent(PhysicsComponent* r);
 	std::map<b2Fixture*, PhysicsComponent*> physicsComponentLookup;
