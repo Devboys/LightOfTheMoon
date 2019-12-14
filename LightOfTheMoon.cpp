@@ -90,8 +90,9 @@ void LightOfTheMoon::requestChangeState(GameState state) {
 
 void LightOfTheMoon::changeState(GameState state) {
 	//clear previous state
-	initPhysics();
 	sceneObjects.clear();
+	initPhysics();
+	currentTileMap.clearMap();
 
 	//init new state
 	switch (state)
@@ -156,7 +157,7 @@ void LightOfTheMoon::initLevel() {
 
 	// Create all the things in the level
 
-	// Create TileMapRenderer object
+	// Create TileMap object
 	currentTileMap.loadSprites(spriteAtlas);
 	currentTileMap.loadMap("Assets/Levels/level0.json");
 	//currentTileMap.printMap();

@@ -23,7 +23,8 @@ TileMap::TileMap() {
  * @param atlas : SpriteAtlas to source sprites from.
  */
 void TileMap::loadSprites(std::shared_ptr<sre::SpriteAtlas> atlas) {
-	
+	sprites.clear(); //Delete the old ones
+
 	//cache all sprites for later use
 	sprites.push_back(atlas->get("top-tile-blue.png")); //0
 	sprites.push_back(atlas->get("top-tile-cyan.png")); //1
@@ -43,6 +44,8 @@ void TileMap::loadSprites(std::shared_ptr<sre::SpriteAtlas> atlas) {
  */
 void TileMap::loadMap(std::string filename) {
 
+	tileMap.clear();
+
 	using namespace rapidjson;
 	Document* docPointer = AssetLocator::getService()->getJsonAsset(filename);
 
@@ -57,6 +60,12 @@ void TileMap::loadMap(std::string filename) {
 		}
 		tileMap.push_back(row);
 	}
+}
+
+void TileMap::clearMap() {
+	this->tileMap.clear();
+	this->tileHeight = 0;
+	this->tileWidth = 0;
 }
 
 /* Prints the tilemap indexes in a matrix form
