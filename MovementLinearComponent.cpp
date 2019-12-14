@@ -7,12 +7,20 @@
  */
 
 #include "MovementLinearComponent.hpp"
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "GameObject.hpp"
 
 MovementLinearComponent::MovementLinearComponent(GameObject* gameObject) : Component(gameObject) {}
 
 void MovementLinearComponent::initParameters(const float& directionAngleDeg, const float& velocity) {
 	_directionAngleDegrees = directionAngleDeg;
 	_velocity = velocity;
+
+	std::shared_ptr<PhysicsComponent> phys = gameObject->getComponent<PhysicsComponent>();
+	if (phys != nullptr) {
+		phys->setLinearVelocity(glm::vec2(_velocity * std::cos(_directionAngleDegrees * M_PI / 180), _velocity * std::sin(_directionAngleDegrees * M_PI / 180)));
+	}
 }
 
 const float MovementLinearComponent::getDirectionDeg() {
@@ -21,9 +29,4 @@ const float MovementLinearComponent::getDirectionDeg() {
 
 const float MovementLinearComponent::getVelocity() {
 	return _velocity;
-}
-
-// Logic for moving the object attached to this in a linear line over time
-void MovementLinearComponent::update(float deltaTime) {
-	
 }

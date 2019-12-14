@@ -2,7 +2,7 @@
  * Created by Alberto Giudice on 12/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
- * + Alberto Giudice [14/12/19] - Implementation of methods
+ * + Alberto Giudice [14/12/19] - First implementation of methods
  * + Alberto Giudice [12/12/19] - Basic creation
  */
 

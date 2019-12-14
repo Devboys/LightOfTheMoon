@@ -2,7 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
- * + Added 
+ * + Alberto Giudice [14/12/10] - Added a test linear bullet in the direction of the player
  * + Francesco Frassineti [07/12/19] - Added the idle animations for the player
  * + Francesco Frassineti [07/12/19] - The mouse cursor is now visible (it's still trapped inside the window)
  * + Francesco Frassineti [06/12/19] - Added mouse handling
@@ -28,6 +28,8 @@
 #include "GameAudio.hpp"
 #include "AssetLocator.hpp"
 #include "GameAssetManager.hpp"
+#include "BulletComponent.hpp"
+#include "MovementLinearComponent.hpp"
 
 using namespace std;
 using namespace sre;
@@ -219,6 +221,28 @@ void LightOfTheMoon::initLevel() {
 		player_idle_down_left_anim,
 		player_idle_down_anim,
 		player_idle_down_right_anim);
+
+	// Linear Bullet test creation code. Move it wherever you need it.
+	auto linearBulletObj = createGameObject();
+	linearBulletObj->name = "LinearBullet";
+	linearBulletObj->setPosition({ .3f, .3f });
+
+	auto linearBulletphys = linearBulletObj->addComponent<PhysicsComponent>();
+	linearBulletphys->initCircle(b2_kinematicBody, 1.0f, { linearBulletObj->getPosition().x / physicsScale, linearBulletObj->getPosition().y / physicsScale }, 1);
+	linearBulletphys->fixRotation();
+	linearBulletphys->setSensor(true);
+
+	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
+	bulletComponent->initBossBullet(10);
+
+	auto bulletAnimator = linearBulletObj->addComponent<AnimatorComponent>();
+	vector<Sprite> linearBulletSprites({ spriteAtlas->get("bullet-cowboy-1.png"), spriteAtlas->get("bullet-cowboy-2.png") });
+	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
+	std::shared_ptr<Animation> linearBulletAnimation = std::make_shared<Animation>(linearBulletSprites, 1, true);
+	bulletAnimator->setAnimation(linearBulletAnimation, true);
+
+	auto bulletLinearMovement = linearBulletObj->addComponent<MovementLinearComponent>();
+	bulletLinearMovement->initParameters(225.0f, 50.0f);
 }
 
 void LightOfTheMoon::initGameOver() {

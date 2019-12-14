@@ -9,6 +9,7 @@
 #pragma once
 
 #include "Component.hpp"
+#include "PhysicsComponent.hpp"
 
 class MovementLinearComponent : public Component {
 public:
@@ -16,8 +17,6 @@ public:
 
 	// A linear movement can only be fully initialized, direction and velocity cannot change after movement start
 	void initParameters(const float& directionAngleDeg, const float& velocity);
-
-	void update(float deltaTime) override;
 
 	// Getters
 	const float getDirectionDeg();

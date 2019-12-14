@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include <iostream>
 #include "BulletComponent.hpp"
 #include "CharacterController.hpp"
 #include "BossComponent.hpp"
@@ -48,6 +49,7 @@ void BulletComponent::onCollisionStart(PhysicsComponent* comp) {
 			std::shared_ptr<HealthComponent> bossHealth = comp->getGameObject()->getComponent<HealthComponent>();
 			if (bossHealth != nullptr) {
 				bossHealth->removeHealth(_damageAmount);
+				std::cout << "CURR BOSS HEALTH: " << bossHealth->getCurrentHealth() << std::endl;
 			}
 			targetHit = true;
 		}
@@ -57,12 +59,14 @@ void BulletComponent::onCollisionStart(PhysicsComponent* comp) {
 			std::shared_ptr<HealthComponent> playerHealth = comp->getGameObject()->getComponent<HealthComponent>();
 			if (playerHealth != nullptr) {
 				playerHealth->removeHealth(_damageAmount);
+				std::cout << "CURR PLAYER HEALTH: " << playerHealth->getCurrentHealth() << std::endl;
 			}
 			targetHit = true;
 		}
 	}
 
 	if (targetHit) {
+		std::cout << "BULLET DESTROYED" << std::endl;
 		_inUse = false;
 		LightOfTheMoon::getInstance()->destroyGameObject(this->gameObject);
 	}
