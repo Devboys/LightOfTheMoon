@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Jeppe Faber [11/12/19] - Made simple menu/game/gameover system
  * + Francesco Frassineti [06/12/19] - Added CharacterController as a friend class
  * + Alberto Giudice [05/12/19] - Fixed Singleton implementation to deal with gameloop
  * + Alberto Giudice [05/12/19] - Basic creation
@@ -14,7 +15,7 @@
 #include "Box2DDebugDraw.hpp"
 #include "GameObject.hpp"
 #include "CameraComponent.hpp"
-#include "TileMapRenderer.hpp"
+#include "TileMap.hpp"
 #include <queue>
 
 class PhysicsComponent;
@@ -38,6 +39,8 @@ public:
 	void addGameObject(std::shared_ptr<GameObject> gameObject);
 	void destroyGameObject(GameObject* gameObject);
 
+	void requestChangeState(GameState state);//Change GameState in a safe way
+
 	void BeginContact(b2Contact* contact) override;
 	void EndContact(b2Contact* contact) override;
 
@@ -50,7 +53,10 @@ private:
 
 	sre::SDLRenderer r;
 
+	void initMenu();
 	void initLevel();
+	void initGameOver();
+
 	void initPhysics();
 
 	void update(float time);
@@ -59,6 +65,8 @@ private:
 	void onMouse(SDL_Event& event);
 
 	void handleContact(b2Contact* contact, bool begin);
+
+	void changeState(GameState state);
 
 	std::shared_ptr<CameraComponent> camera;
 	std::shared_ptr<sre::SpriteAtlas> spriteAtlas;
@@ -79,7 +87,10 @@ private:
 	Box2DDebugDraw debugDraw;
 	bool doDebugDraw = false;
 
-	TileMapRenderer currentTileMap;
+	TileMap currentTileMap;
+
+	GameState currentState;
+	GameState requestedState;
 
 	friend class PhysicsComponent;
 	friend class CharacterController;

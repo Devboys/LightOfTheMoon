@@ -20,6 +20,7 @@ PhysicsComponent::PhysicsComponent(GameObject* gameObject)
 PhysicsComponent::~PhysicsComponent() {
 	delete polygon;
 	delete circle;
+	delete edge;
 
 	// Check if the destructor is called due to the game being closed, if so the physicsComponentLookup is already cleared
 	if (LightOfTheMoon::getInstance()->physicsComponentLookup.size() != 0) {
@@ -95,6 +96,27 @@ void PhysicsComponent::initBox(b2BodyType type, glm::vec2 size, glm::vec2 center
 	fxD.userData = (void*)"Box";
 	fxD.shape = polygon;
 	fxD.density = density;
+	fixture = body->CreateFixture(&fxD);
+
+	LightOfTheMoon::getInstance()->registerPhysicsComponent(this);
+}
+
+void PhysicsComponent::initEdge(b2BodyType type, glm::vec2 center, glm::vec2 v1, glm::vec2 v2){
+	assert(body == nullptr);
+	autoUpdate = type != b2_staticBody;
+	// do init
+	shapeType = b2Shape::Type::e_edge;
+	b2BodyDef bd;
+	bd.type = type;
+	rbType = type;
+	bd.position = b2Vec2(center.x, center.y);
+	body = world->CreateBody(&bd);
+	edge = new b2EdgeShape();
+	edge->Set(b2Vec2(v1.x, v1.y), b2Vec2(v2.x, v2.y));
+	b2FixtureDef fxD;
+	fxD.userData = (void*)"Edge";
+	fxD.shape = edge;
+	//fxD.density = density;
 	fixture = body->CreateFixture(&fxD);
 
 	LightOfTheMoon::getInstance()->registerPhysicsComponent(this);

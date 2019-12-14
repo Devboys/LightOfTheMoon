@@ -44,30 +44,37 @@ void CharacterController::setAnimations(std::shared_ptr<Animation> idle_right_an
 }
 
 bool CharacterController::onKey(SDL_Event &event) {
+	std::cout << "CharacterController::onKey remove //TO_REMOVE before handin" << std::endl;
         switch (event.key.keysym.sym){
-            case SDLK_LEFT:
+            case SDLK_a:
             {
                 left = event.type == SDL_KEYDOWN;
 				break;
             }
-            case SDLK_RIGHT:
+            case SDLK_d:
             {
                 right = event.type == SDL_KEYDOWN;
 				break;
             }
-			case SDLK_UP:
+			case SDLK_w:
 			{
 				up = event.type == SDL_KEYDOWN;
 				break;
 			}
-			case SDLK_DOWN:
+			case SDLK_s:
 			{
 				down = event.type == SDL_KEYDOWN;
 				break;
 			}
 			case SDLK_SPACE:
+			{
 				dash = event.type == SDL_KEYDOWN;
 				break;
+			}
+			case SDLK_e:
+			{
+				characterHealth->removeHealth(1); //TO_REMOVE
+			}
             break;
         }
 
@@ -92,18 +99,9 @@ void CharacterController::onMouse(SDL_Event &event) {
 void CharacterController::update(float deltaTime) {
 
 	if (!characterHealth->isAlive()) {
-		//TODO DEATH
-		std::cout << "DEAD" << std::endl;
+		LightOfTheMoon::instance->requestChangeState(GameState::GameOver);
 		return;
 	}
-
-	//TODO Remove
-	if (debug_show_life) {
-
-		std::cout << "Player Health: " << characterHealth->getCurrentHealth() << "/" << characterHealth->getMaxHealth() << std::endl;
-		debug_show_life = false;
-	}
-
 
 	/*Get input axis-xy and normalize it*/
     characterPhysics->fixRotation();
@@ -131,6 +129,7 @@ void CharacterController::update(float deltaTime) {
 		if (dash) {
 			//Prepare to dash
 			dash = false;
+
 			characterPhysics->setLinearVelocity(dashSpeed*movement);
 			dashTimer = dashDuration;
 		}
@@ -145,7 +144,7 @@ void CharacterController::update(float deltaTime) {
 }
 
 void CharacterController::onCollisionStart(PhysicsComponent *comp) {
-	debug_show_life = true; //TODO remove
+
 }
 
 void CharacterController::onCollisionEnd(PhysicsComponent *comp) {
