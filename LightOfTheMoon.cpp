@@ -29,6 +29,9 @@
 #include "AssetLocator.hpp"
 #include "GameAssetManager.hpp"
 
+
+#define BOSS_SPRITE_SCALE 0.002f
+
 using namespace std;
 using namespace sre;
 
@@ -231,7 +234,63 @@ void LightOfTheMoon::initPlayer() {
 }
 
 void LightOfTheMoon::initBoss() {
+
+	auto bossObj = createGameObject();
+	bossObj->name = "Boss";
+	bossObj->setPosition({ 0, 0 });
+
 	std::cout << "INIT BOSS TO DO" << std::endl;
+
+	//< Boss Animation>
+	auto anim = bossObj->addComponent<AnimatorComponent>();
+
+	vector<Sprite> sprites_right({ spriteAtlas->get("enemy-right.png")});
+	vector<Sprite> sprites_top_right({ spriteAtlas->get("enemy-top-right.png")});
+	vector<Sprite> sprites_top({ spriteAtlas->get("enemy-top.png")});
+	vector<Sprite> sprites_top_left({ spriteAtlas->get("enemy-top-left.png")});
+	vector<Sprite> sprites_left({ spriteAtlas->get("enemy-left.png")});
+	vector<Sprite> sprites_down_left({ spriteAtlas->get("enemy-down-left.png")});
+	vector<Sprite> sprites_down({ spriteAtlas->get("enemy-down.png")});
+	vector<Sprite> sprites_down_right({ spriteAtlas->get("enemy-down-right.png")});
+	for (auto& s : sprites_right) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE}); }
+	for (auto& s : sprites_top_right) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_top) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_top_left) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_left) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_down_left) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_down) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_down_right) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+
+	std::shared_ptr<Animation> enemy_idle_right_anim = std::make_shared<Animation>(sprites_right, 1, true);
+	std::shared_ptr<Animation> enemy_idle_top_right_anim = std::make_shared<Animation>(sprites_top_right, 1, true);
+	std::shared_ptr<Animation> enemy_idle_top_anim = std::make_shared<Animation>(sprites_top, 1, true);
+	std::shared_ptr<Animation> enemy_idle_top_left_anim = std::make_shared<Animation>(sprites_top_left, 1, true);
+	std::shared_ptr<Animation> enemy_idle_left_anim = std::make_shared<Animation>(sprites_left, 1, true);
+	std::shared_ptr<Animation> enemy_idle_down_left_anim = std::make_shared<Animation>(sprites_down_left, 1, true);
+	std::shared_ptr<Animation> enemy_idle_down_anim = std::make_shared<Animation>(sprites_down, 1, true);
+	std::shared_ptr<Animation> enemy_idle_down_right_anim = std::make_shared<Animation>(sprites_down_right, 1, true);
+
+	anim->setAnimation(enemy_idle_down_anim, true); //Set initial animation
+
+	//</Boss Animation>
+
+	std::cout << "initBoss(): setAnimations to bossController (see commented code) - Francesco" << std::endl;
+	/*
+	UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT
+	UNCOMMENT -UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT
+	UNCOMMENT -UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT - UNCOMMENT
+
+	bossController->setAnimations(
+		enemy_idle_right_anim,
+		enemy_idle_top_right_anim,
+		enemy_idle_top_anim,
+		enemy_idle_top_left_anim,
+		enemy_idle_left_anim,
+		enemy_idle_down_left_anim,
+		enemy_idle_down_anim,
+		enemy_idle_down_right_anim);
+
+	*/
 }
 
 void LightOfTheMoon::initGameOver() {
