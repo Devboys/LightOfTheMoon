@@ -74,6 +74,7 @@ bool CharacterController::onKey(SDL_Event &event) {
 			case SDLK_e:
 			{
 				characterHealth->removeHealth(1); //TO_REMOVE
+				break;
 			}
             break;
         }

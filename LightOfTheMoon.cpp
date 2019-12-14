@@ -213,7 +213,7 @@ void LightOfTheMoon::initPlayer() {
 	//</Player Animation>
 
 	auto phys = playerObj->addComponent<PhysicsComponent>();
-	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f }, { playerObj->getPosition().x, playerObj->getPosition().y }, 1);
+	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f }, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y / physicsScale }, 1);
 	phys->fixRotation();
 
 	auto characterHealth = playerObj->addComponent <HealthComponent>();
