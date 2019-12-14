@@ -17,6 +17,7 @@ public:
 	explicit TileMap();
 
 	void loadMap(std::string filename);
+	void clearMap();
 
 	void printMap();//Prints the tilemap indexes in a matrix form
 

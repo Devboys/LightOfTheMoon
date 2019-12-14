@@ -57,6 +57,9 @@ private:
 	void initLevel();
 	void initGameOver();
 
+	void initPlayer();
+	void initBoss();
+
 	void initPhysics();
 
 	void update(float time);
