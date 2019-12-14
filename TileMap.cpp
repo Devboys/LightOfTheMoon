@@ -107,10 +107,13 @@ void TileMap::generateEdgeBottomLeft(int i, int j) {
 	go->setPosition(glm::vec2(0, 0));
 	auto phys = go->addComponent<PhysicsComponent>();
 
-	float edgeX_i = (-j + i + 0) * (tileWidth / 2) * COLLIDER_SCALE;
-	float edgeY_i = (j + i - 2) * (tileHeight / 2) * COLLIDER_SCALE;
-	float edgeX_f = (-j + i - 1) * (tileWidth / 2) * COLLIDER_SCALE;
-	float edgeY_f = (j + i - 1) * (tileHeight / 2) * COLLIDER_SCALE;
+	float jc = j - (tileMap[0].size()+2) / 2.0 - 0.5f;
+	float ic = i - (tileMap.size()+2) / 2.0 - 0.5f;
+
+	float edgeX_i = (-jc + ic - 0) * (tileWidth / 2) * COLLIDER_SCALE;
+	float edgeY_i = (jc + ic - 2 + 2) * (tileHeight / 2) * COLLIDER_SCALE;
+	float edgeX_f = (-jc + ic - 1) * (tileWidth / 2) * COLLIDER_SCALE;
+	float edgeY_f = (jc + ic - 1 + 2) * (tileHeight / 2) * COLLIDER_SCALE;
 	phys->initEdge(b2_staticBody, { 0, 0 }, { edgeX_i, edgeY_i }, { edgeX_f, edgeY_f });
 }
 
@@ -120,10 +123,13 @@ void TileMap::generateEdgeBottomRight(int i, int j) {
 	go->setPosition(glm::vec2(0, 0));
 	auto phys = go->addComponent<PhysicsComponent>();
 
-	float edgeX_i = (-j + i + 0) * (tileWidth / 2) * COLLIDER_SCALE;
-	float edgeY_i = (j + i + -2) * (tileHeight / 2) * COLLIDER_SCALE;
-	float edgeX_f = (-j + i + 1) * (tileWidth / 2) * COLLIDER_SCALE;
-	float edgeY_f = (j + i - 1) * (tileHeight / 2) * COLLIDER_SCALE;
+	float jc = j - (tileMap[0].size() + 2) / 2.0 - 0.5f;
+	float ic = i - (tileMap.size() + 2) / 2.0 - 0.5f;
+
+	float edgeX_i = (-jc + ic + 0) * (tileWidth / 2) * COLLIDER_SCALE;
+	float edgeY_i = (jc + ic + -2 + 2) * (tileHeight / 2) * COLLIDER_SCALE;
+	float edgeX_f = (-jc + ic + 1) * (tileWidth / 2) * COLLIDER_SCALE;
+	float edgeY_f = (jc + ic - 1 + 2) * (tileHeight / 2) * COLLIDER_SCALE;
 	phys->initEdge(b2_staticBody, { 0, 0 }, { edgeX_i, edgeY_i }, { edgeX_f, edgeY_f });
 }
 
@@ -133,10 +139,13 @@ void TileMap::generateEdgeTopLeft(int i, int j) {
 	go->setPosition(glm::vec2(0, 0));
 	auto phys = go->addComponent<PhysicsComponent>();
 
-	float edgeX_i = (-j + i - 1) * (tileWidth / 2) * COLLIDER_SCALE;
-	float edgeY_i = (j + i + -1) * (tileHeight / 2) * COLLIDER_SCALE;
-	float edgeX_f = (-j + i + 0) * (tileWidth / 2) * COLLIDER_SCALE;
-	float edgeY_f = (j + i - 0) * (tileHeight / 2) * COLLIDER_SCALE;
+	float jc = j - (tileMap[0].size() + 2) / 2.0 - 0.5f;
+	float ic = i - (tileMap.size() + 2) / 2.0 - 0.5f;
+
+	float edgeX_i = (-jc + ic - 1) * (tileWidth / 2) * COLLIDER_SCALE;
+	float edgeY_i = (jc + ic + -1 + 2) * (tileHeight / 2) * COLLIDER_SCALE;
+	float edgeX_f = (-jc + ic + 0) * (tileWidth / 2) * COLLIDER_SCALE;
+	float edgeY_f = (jc + ic - 0 + 2) * (tileHeight / 2) * COLLIDER_SCALE;
 	phys->initEdge(b2_staticBody, { 0, 0 }, { edgeX_i, edgeY_i }, { edgeX_f, edgeY_f });
 }
 
@@ -146,10 +155,13 @@ void TileMap::generateEdgeTopRight(int i, int j) {
 	go->setPosition(glm::vec2(0, 0));
 	auto phys = go->addComponent<PhysicsComponent>();
 
-	float edgeX_i = (-j + i + 1) * (tileWidth / 2) * COLLIDER_SCALE;
-	float edgeY_i = (j + i - 1) * (tileHeight / 2) * COLLIDER_SCALE;
-	float edgeX_f = (-j + i - 0) * (tileWidth / 2) * COLLIDER_SCALE;
-	float edgeY_f = (j + i + 0) * (tileHeight / 2) * COLLIDER_SCALE;
+	float jc = j - (tileMap[0].size() + 2) / 2.0 - 0.5f;
+	float ic = i - (tileMap.size() + 2) / 2.0 - 0.5f;
+
+	float edgeX_i = (-jc + ic + 1) * (tileWidth / 2) * COLLIDER_SCALE;
+	float edgeY_i = (jc + ic - 1 + 2) * (tileHeight / 2) * COLLIDER_SCALE;
+	float edgeX_f = (-jc + ic - 0) * (tileWidth / 2) * COLLIDER_SCALE;
+	float edgeY_f = (jc + ic + 0 + 2) * (tileHeight / 2) * COLLIDER_SCALE;
 	phys->initEdge(b2_staticBody, { 0, 0 }, { edgeX_i, edgeY_i }, { edgeX_f, edgeY_f });
 }
 
@@ -163,7 +175,7 @@ std::vector<std::vector<bool>> TileMap::calculateBorderCells() {
 	for (int i = 0; i < tileMap.size() + 2; i++) {
 		std::vector<bool> row;
 		for (int j = 0; j < tileMap[0].size() + 2; j++) {
-			row.push_back(i == 0 || i == tileMap.size() + 1 || j == 0 || j == tileMap[0].size() + 1); //init matrix with true on the border and false inside
+			row.push_back(true);
 		}
 		borderCells.push_back(row);
 	}
@@ -175,24 +187,16 @@ std::vector<std::vector<bool>> TileMap::calculateBorderCells() {
 			if (tileMap[i][j] >= 0) {
 				//Solid tile
 				//Check down
-				if (i == 0)
-					borderCells[i_f - 1][j_f] = true;
-				else
+				if (i != 0)
 					borderCells[i_f - 1][j_f] = tileMap[i - 1][j] < 0;
 				//Check up
-				if (i == tileMap.size() - 1)
-					borderCells[i_f + 1][j_f] = true;
-				else
+				if (i != tileMap.size() - 1)
 					borderCells[i_f + 1][j_f] = tileMap[i + 1][j] < 0;
 				//Check left
-				if (j == 0)
-					borderCells[i_f][j_f - 1] = true;
-				else
+				if (j != 0)
 					borderCells[i_f][j_f - 1] = tileMap[i][j - 1] < 0;
 				//Check right
-				if (j == tileMap[0].size() - 1)
-					borderCells[i_f][j_f + 1] = true;
-				else
+				if (j != tileMap[0].size() - 1)
 					borderCells[i_f][j_f + 1] = tileMap[i][j + 1] < 0;
 			}
 			else {
@@ -200,6 +204,7 @@ std::vector<std::vector<bool>> TileMap::calculateBorderCells() {
 			}
 		}
 	}
+
 
 	return borderCells;
 }
@@ -219,9 +224,24 @@ void TileMap::renderMap(sre::SpriteBatch::SpriteBatchBuilder& batchBuilder) {
 				//Tilemap describes type of tile.
 				sprite = sprites.at(tileMap[mapX][mapY]);
 
+				float centeredX;
+				if (tileMap[0].size() % 2 == 0) {
+					centeredX = mapX - tileMap[0].size() / 2.0 - 0.5f;
+				}
+				else {
+					centeredX = mapX - (tileMap[0].size()-1) / 2.0 - 1;
+				}
+				float centeredY;
+				if (tileMap.size() % 2 == 0) {
+					centeredY = mapY - tileMap.size() / 2.0 - 0.5f;
+				}
+				else {
+					centeredY = mapY - (tileMap.size() - 1) / 2.0 - 1;
+				}
+
 				//place tile
-				float spriteIsoX = (mapX - mapY) * (tileWidth / 2) * sprite.getScale().x;
-				float spriteIsoY = (mapX + mapY) * (tileHeight / 2) * sprite.getScale().y;
+				float spriteIsoX = (centeredX - centeredY) * (tileWidth / 2) * sprite.getScale().x;
+				float spriteIsoY = (centeredX + centeredY) * (tileHeight / 2) * sprite.getScale().y;
 
 				sprite.setPosition(glm::vec2(spriteIsoX, spriteIsoY));
 				batchBuilder.addSprite(sprite);

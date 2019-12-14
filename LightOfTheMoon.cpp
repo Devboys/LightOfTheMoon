@@ -166,7 +166,7 @@ void LightOfTheMoon::initLevel() {
 
 	// Create TileMap object
 	currentTileMap.loadSprites(spriteAtlas);
-	currentTileMap.loadMap("Assets/Levels/level0.json");
+	currentTileMap.loadMap("Assets/Levels/level1.json");
 	//currentTileMap.printMap();
 	currentTileMap.generateColliders();
 
