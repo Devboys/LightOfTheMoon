@@ -164,13 +164,21 @@ void LightOfTheMoon::initLevel() {
 	currentTileMap.generateColliders();
 
 	//PLAYER
+	initPlayer();
+
+	//BOSS
+	initBoss();
+}
+
+void LightOfTheMoon::initPlayer() {
+
 	auto playerObj = createGameObject();
 	playerObj->name = "Player";
 	playerObj->setPosition({ 0, 0 });
 
-	//<Animation>
+	//< Player Animation>
 	auto anim = playerObj->addComponent<AnimatorComponent>();
-	
+
 	vector<Sprite> sprites_right({ spriteAtlas->get("cowboy-right-1.png"), spriteAtlas->get("cowboy-right-2.png") });
 	vector<Sprite> sprites_top_right({ spriteAtlas->get("cowboy-top-right-1.png"), spriteAtlas->get("cowboy-top-right-2.png") });
 	vector<Sprite> sprites_top({ spriteAtlas->get("cowboy-top-1.png"), spriteAtlas->get("cowboy-top-2.png") });
@@ -199,10 +207,10 @@ void LightOfTheMoon::initLevel() {
 
 	anim->setAnimation(player_idle_down_anim, true);
 
-	//</Animation>
+	//</Player Animation>
 
 	auto phys = playerObj->addComponent<PhysicsComponent>();
-	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f}, {playerObj->getPosition().x, playerObj->getPosition().y}, 1);
+	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f }, { playerObj->getPosition().x, playerObj->getPosition().y }, 1);
 	phys->fixRotation();
 
 	auto characterHealth = playerObj->addComponent <HealthComponent>();
@@ -220,6 +228,10 @@ void LightOfTheMoon::initLevel() {
 		player_idle_down_left_anim,
 		player_idle_down_anim,
 		player_idle_down_right_anim);
+}
+
+void LightOfTheMoon::initBoss() {
+	std::cout << "INIT BOSS TO DO" << std::endl;
 }
 
 void LightOfTheMoon::initGameOver() {
