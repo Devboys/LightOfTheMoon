@@ -2,7 +2,8 @@
  * Created by Alberto Giudice on 12/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
- * + Alberto Giudice [15/12/19] - Logic implementation of the sin wave movement
+ * + Alberto Giudice [15/12/19] - Fixed the rotation logic to accept any pivot point
+ * + Alberto Giudice [14/12/19] - Logic implementation of the sin wave movement
  * + Alberto Giudice [14/12/19] - First implementation of methods
  * + Alberto Giudice [12/12/19] - Basic creation
  */
@@ -15,7 +16,8 @@
 
 MovementWaveComponent::MovementWaveComponent(GameObject* gameObject) : Component(gameObject) {}
 
-void MovementWaveComponent::initParameters(const float& directionAngleDeg, const float& velocity, const float& amplitude, const float& frequency) {
+void MovementWaveComponent::initParameters(const glm::vec2& startingPos, const float& directionAngleDeg, const float& velocity, const float& amplitude, const float& frequency) {
+	_startingPosition = startingPos;
 	_directionAngleDegrees = directionAngleDeg;
 	_velocity = velocity;
 	_frequency = frequency;
@@ -43,16 +45,18 @@ const float MovementWaveComponent::getWaveFrequency() {
 
 // Logic for moving the object attached to this in a sine wave line over time
 void MovementWaveComponent::update(float deltaTime) {
-	glm::vec2 newPos;
+	glm::vec2 newPos = _startingPosition;
 	// move position based on the sin wave function
-	newPos.x = _totalTime * _velocity;
-	newPos.y = _amplitude * std::sin(_frequency * _totalTime);
+	newPos.x += _totalTime * _velocity;
+	newPos.y += _amplitude * std::sin(_frequency * _totalTime);
 
-	// position rotation by the required degrees
+	// position rotation by the required degrees, pivoting on the starting position
 	float newPosX = newPos.x;
 	float newPosY = newPos.y;
-	newPos.x = std::cos(_directionAngleDegrees * M_PI / 180) * newPosX - std::sin(_directionAngleDegrees * M_PI / 180) * newPosY;
-	newPos.y = std::sin(_directionAngleDegrees * M_PI / 180) * newPosX + std::cos(_directionAngleDegrees * M_PI / 180) * newPosY;
+	newPos.x = _startingPosition.x + std::cos(_directionAngleDegrees * M_PI / 180) * (newPosX - (float)_startingPosition.x) 
+				- std::sin(_directionAngleDegrees * M_PI / 180) * (newPosY - (float)_startingPosition.y);
+	newPos.y = _startingPosition.y + std::sin(_directionAngleDegrees * M_PI / 180) * (newPosX - (float)_startingPosition.x) 
+				+ std::cos(_directionAngleDegrees * M_PI / 180) * (newPosY - (float)_startingPosition.y);
 
 	// set the position of the bullet gameObject to the new position
 	gameObject->setPosition(newPos);
@@ -61,5 +65,6 @@ void MovementWaveComponent::update(float deltaTime) {
 		phys->moveTo(newPos/LightOfTheMoon::physicsScale);
 	}
 
+	// Increase total time elapsed counter
 	_totalTime += deltaTime;
 }

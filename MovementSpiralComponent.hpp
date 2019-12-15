@@ -9,13 +9,14 @@
 #pragma once
 
 #include "Component.hpp"
+#include "PhysicsComponent.hpp"
 
 class MovementSpiralComponent : public Component {
 public:
 	explicit MovementSpiralComponent(GameObject* gameObject);
 
 	// A spiral movement can only be fully initialized, direction and velocity cannot change after movement start
-	void initParameters(const glm::vec2 center, const float& radiusExpansionRate, const bool& clockwise);
+	void initParameters(const glm::vec2& center, const float& minVelocity, const float& maxVelocity, const float& radiusExpansionRate, const bool& clockwise = true);
 
 	void update(float deltaTime) override;
 
@@ -27,6 +28,12 @@ public:
 private:
 	glm::vec2 _center;
 	float _radiusExpansionRate;
+	float _radius;
+	float _velocity;
+	float _minVelocity;
+	float _maxVelocity;
+	float _velocityDampFactor;
 	bool _clockwise;
 	float _totalTime;
+	std::shared_ptr<PhysicsComponent> phys;
 };

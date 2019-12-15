@@ -2,9 +2,12 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [14/12/19] - Improved accuracy of moveTo on circular motions
+ * + Francesco Frassineti [11/12/19] - Addeded edge creation
  * + Alberto Giudice [05/12/19] - Basic creation
  */
 
+#include <iostream>
 #include <Box2D/Box2D.h>
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/norm.hpp>
@@ -130,6 +133,14 @@ void PhysicsComponent::setSensor(bool enabled) {
 	fixture->SetSensor(enabled);
 }
 
+bool PhysicsComponent::isBullet() {
+	return body->IsBullet();
+}
+
+void PhysicsComponent::setBullet(bool enabled) {
+	body->SetBullet(enabled);
+}
+
 void PhysicsComponent::fixRotation() {
 	fixture->GetBody()->SetFixedRotation(true);
 }
@@ -137,7 +148,7 @@ void PhysicsComponent::fixRotation() {
 void PhysicsComponent::moveTo(glm::vec2 pos) {
 	glm::vec2 delta = pos - getPosition();
 
-	setLinearVelocity(delta * (1 / LightOfTheMoon::timeStep));
+	setLinearVelocity(delta * (2 / LightOfTheMoon::timeStep));
 }
 
 glm::vec2 PhysicsComponent::getPosition() {

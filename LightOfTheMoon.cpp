@@ -171,34 +171,58 @@ void LightOfTheMoon::initLevel() {
 	currentTileMap.generateColliders();
 
 	//PLAYER
-	//initPlayer();
+	initPlayer();
 
 	//BOSS
-	//initBoss();
+	initBoss();
 
 	// Wave Bullet test creation code. Move it wherever you need it.
-	/*auto waveBulletObj = createGameObject();
-	waveBulletObj->name = "LinearBullet";
-	waveBulletObj->setPosition({ .0f, .0f });
+	auto waveBulletObj = createGameObject();
+	waveBulletObj->name = "WaveBullet";
+	waveBulletObj->setPosition({ -.7f, -.7f });
 
-	auto linearBulletphys = waveBulletObj->addComponent<PhysicsComponent>();
-	linearBulletphys->initCircle(b2_kinematicBody, 1.0f, { waveBulletObj->getPosition().x / physicsScale, waveBulletObj->getPosition().y / physicsScale }, 1);
-	linearBulletphys->fixRotation();
-	linearBulletphys->setSensor(true);
+	auto waveBulletPhys = waveBulletObj->addComponent<PhysicsComponent>();
+	waveBulletPhys->initCircle(b2_kinematicBody, 1.0f, { waveBulletObj->getPosition().x / physicsScale, waveBulletObj->getPosition().y / physicsScale }, 1);
+	waveBulletPhys->fixRotation();
+	waveBulletPhys->setSensor(true);
+	waveBulletPhys->setBullet(true);
+	waveBulletPhys->setAutoUpdate(false);
 
-	auto bulletComponent = waveBulletObj->addComponent<BulletComponent>();
-	bulletComponent->initBossBullet(10);
+	auto waveBulletComponent = waveBulletObj->addComponent<BulletComponent>();
+	waveBulletComponent->initBossBullet(10);
 
-	auto bulletAnimator = waveBulletObj->addComponent<AnimatorComponent>();
-	vector<Sprite> linearBulletSprites({ spriteAtlas->get("bullet-enemy-2-1.png"), spriteAtlas->get("bullet-enemy-2-2.png") });
-	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
-	std::shared_ptr<Animation> linearBulletAnimation = std::make_shared<Animation>(linearBulletSprites, 1, true);
-	bulletAnimator->setAnimation(linearBulletAnimation, true);
+	auto waveBulletAnimator = waveBulletObj->addComponent<AnimatorComponent>();
+	vector<Sprite> waveBulletSprites({ spriteAtlas->get("bullet-enemy-2-1.png"), spriteAtlas->get("bullet-enemy-2-2.png") });
+	for (auto& s : waveBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
+	std::shared_ptr<Animation> waveBulletAnimation = std::make_shared<Animation>(waveBulletSprites, 1, true);
+	waveBulletAnimator->setAnimation(waveBulletAnimation, true);
 
-	auto bulletLinearMovement = waveBulletObj->addComponent<MovementWaveComponent>();
-	bulletLinearMovement->initParameters(45.0f, .5f, .08f, 10.0f);*/
+	auto bulletWaveMovement = waveBulletObj->addComponent<MovementWaveComponent>();
+	bulletWaveMovement->initParameters({ waveBulletObj->getPosition().x, waveBulletObj->getPosition().y }, 45.0f, .4f, .08f, 8.0f);
 
 	// Spiral Bullet test creation code. Move it wherever you need.
+	auto spiralBulletObj = createGameObject();
+	spiralBulletObj->name = "SpiralBullet";
+	spiralBulletObj->setPosition({ -0.3f, -0.3f });
+
+	auto spiralBulletPhys = spiralBulletObj->addComponent<PhysicsComponent>();
+	spiralBulletPhys->initCircle(b2_kinematicBody, 1.0f, { spiralBulletObj->getPosition().x / physicsScale, spiralBulletObj->getPosition().y / physicsScale }, 1);
+	spiralBulletPhys->fixRotation();
+	spiralBulletPhys->setSensor(true);
+	spiralBulletPhys->setBullet(true);
+	spiralBulletPhys->setAutoUpdate(false);
+
+	auto spiralBulletComponent = spiralBulletObj->addComponent<BulletComponent>();
+	spiralBulletComponent->initBossBullet(10);
+
+	auto spiralBulletAnimator = spiralBulletObj->addComponent<AnimatorComponent>();
+	vector<Sprite> spiralBulletSprites({ spriteAtlas->get("bullet-enemy-3-1.png"), spriteAtlas->get("bullet-enemy-3-2.png") });
+	for (auto& s : spiralBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
+	std::shared_ptr<Animation> spiralBulletAnimation = std::make_shared<Animation>(spiralBulletSprites, 1, true);
+	spiralBulletAnimator->setAnimation(spiralBulletAnimation, true);
+
+	auto bulletSpiralMovement = spiralBulletObj->addComponent<MovementSpiralComponent>();
+	bulletSpiralMovement->initParameters({ spiralBulletObj->getPosition().x, spiralBulletObj->getPosition().y }, 40.0f, 150.0f, .05f, true);
 }
 
 void LightOfTheMoon::initPlayer() {

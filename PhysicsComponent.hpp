@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [14/12/19] - Added support for bullets (CCD)
  * + Alberto Giudice [05/12/19] - Basic creation
  */
 
@@ -30,6 +31,9 @@ public:
 
 	bool isSensor();
 	void setSensor(bool enabled);
+
+	bool isBullet();
+	void setBullet(bool enabled);
 
 	void fixRotation();
 

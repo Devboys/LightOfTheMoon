@@ -6,15 +6,27 @@
  * + Alberto Giudice [12/12/19] - Basic creation
  */
 
+#include <iostream>
 #include "MovementSpiralComponent.hpp"
+#include "GameObject.hpp"
+#define _USE_MATH_DEFINES
+#include <math.h>
+#include "LightOfTheMoon.hpp"
 
 MovementSpiralComponent::MovementSpiralComponent(GameObject* gameObject) : Component(gameObject) {}
 
-void MovementSpiralComponent::initParameters(const glm::vec2 center, const float& radiusExpansionRate, const bool& clockwise) {
+void MovementSpiralComponent::initParameters(const glm::vec2& center, const float& minVelocity, const float& maxVelocity, const float& radiusExpansionRate, const bool& clockwise) {
 	_center = center;
 	_radiusExpansionRate = radiusExpansionRate;
+	_radius = 0.001f;
+	_minVelocity = minVelocity;
+	_maxVelocity = maxVelocity;
+	_velocity = _maxVelocity;
+	_velocityDampFactor = _maxVelocity * 0.05f;
 	_clockwise = clockwise;
 	_totalTime = 0.0f;
+
+	phys = gameObject->getComponent<PhysicsComponent>();
 }
 
 const glm::vec2 MovementSpiralComponent::getCenter() {
@@ -31,5 +43,32 @@ const bool MovementSpiralComponent::isClockwise() {
 
 // Logic for moving the object attached to this in spiral stemming from the _center over time
 void MovementSpiralComponent::update(float deltaTime) {
+	int rotDirection;
+	if (_clockwise)
+		rotDirection = 1;
+	else
+		rotDirection = -1;
 
+	// Change rotation of the object, tangent to the next position on the spiral
+	float oldRot = gameObject->getRotation();
+	float newRot = std::fmod((oldRot + rotDirection * _velocity * deltaTime), 360.0f);
+	gameObject->setRotation(newRot);
+
+	// Calculate new position with increased radius
+	glm::vec2 newPos = _center;
+	newPos.x += std::sin(newRot * M_PI / 180.0f) * _radius;
+	newPos.y += std::cos(newRot * M_PI / 180.0f) * _radius;
+	gameObject->setPosition(newPos);
+
+	// Set the position of the bullet gameObject to the new position
+	if (phys != nullptr) {
+		phys->moveTo(newPos / LightOfTheMoon::physicsScale);
+	}
+
+	// Decrease velocity until minVelocity is reached, to prevent crazy speed on big radius values
+	if(_velocity > _minVelocity)
+		_velocity -= _velocityDampFactor * deltaTime;
+
+	// Increase radius
+	_radius += _radiusExpansionRate * deltaTime;
 }
