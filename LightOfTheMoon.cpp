@@ -25,7 +25,6 @@
 #include "SpriteAnimationComponent.hpp"
 #include "CharacterController.hpp"
 #include "HealthComponent.hpp"
-#include "FixedDamageComponent.hpp"
 #include "AudioLocator.hpp"
 #include "GameAudio.hpp"
 #include "AssetLocator.hpp"
@@ -370,7 +369,7 @@ std::shared_ptr<GameObject> LightOfTheMoon::initBoss(std::shared_ptr<GameObject>
 	//</Boss Animation>
 
 	auto phys = bossObj->addComponent<PhysicsComponent>();
-	phys->initBox(b2_dynamicBody, { 6.0f, 9.0f }, { bossObj->getPosition().x / physicsScale, bossObj->getPosition().y / physicsScale }, 1);
+	phys->initBox(b2_staticBody, { 6.0f, 9.0f }, { bossObj->getPosition().x / physicsScale, bossObj->getPosition().y / physicsScale }, 1);
 	phys->setAutoUpdate(false);
 	phys->fixRotation();
 
