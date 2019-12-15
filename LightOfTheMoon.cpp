@@ -370,12 +370,12 @@ std::shared_ptr<GameObject> LightOfTheMoon::initBoss(std::shared_ptr<GameObject>
 	//</Boss Animation>
 
 	auto phys = bossObj->addComponent<PhysicsComponent>();
-	phys->initBox(b2_dynamicBody, { 6.0f, 9.0f }, { bossObj->getPosition().x / physicsScale, bossObj->getPosition().y / physicsScale }, 1);
+	phys->initCircle(b2_kinematicBody, 5.0f, { bossObj->getPosition().x / physicsScale, bossObj->getPosition().y / physicsScale }, 1);
 	phys->setAutoUpdate(false);
 	phys->fixRotation();
 
 	auto health = bossObj->addComponent<HealthComponent>();
-	float bossHealthAmount = 30;
+	float bossHealthAmount = 60;
 	health->setMaxHealth(bossHealthAmount);
 	health->setCurrentHealth(bossHealthAmount);
 

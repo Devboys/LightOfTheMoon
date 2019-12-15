@@ -36,7 +36,6 @@ BulletPool* BulletPool::createLinearPool() {
 		auto movement = obj->addComponent<MovementLinearComponent>();
 
 		linearBullets[i] = obj;
-		std::cout << "LINEAR BULLET CREATION: " << i << std::endl;
 	}
 	return this;
 }
