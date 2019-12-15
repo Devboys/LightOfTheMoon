@@ -20,9 +20,9 @@ public:
 	explicit PhysicsComponent(GameObject* gameObject);
 	virtual ~PhysicsComponent();
 
-	void initCircle(b2BodyType type, float radius, glm::vec2 center, float density);
-	void initBox(b2BodyType type, glm::vec2 size, glm::vec2 center, float density);
-	void initEdge(b2BodyType type, glm::vec2 center, glm::vec2 v1, glm::vec2 v2);
+	void initCircle(b2BodyType type, float radius, glm::vec2 center, float density, const bool& registerComponent = true);
+	void initBox(b2BodyType type, glm::vec2 size, glm::vec2 center, float density, const bool& registerComponent = true);
+	void initEdge(b2BodyType type, glm::vec2 center, glm::vec2 v1, glm::vec2 v2, const bool& registerComponent = true);
 
 	void initSensorBox(glm::vec2 size, glm::vec2 center, float density, glm::vec2 offset = { 0,0 });
 

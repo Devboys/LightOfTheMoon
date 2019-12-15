@@ -68,7 +68,7 @@ void PhysicsComponent::setLinearVelocity(glm::vec2 velocity) {
 	body->SetLinearVelocity(v);
 }
 
-void PhysicsComponent::initCircle(b2BodyType type, float radius, glm::vec2 center, float density) {
+void PhysicsComponent::initCircle(b2BodyType type, float radius, glm::vec2 center, float density, const bool& registerComponent) {
 	assert(body == nullptr);
 	autoUpdate = type != b2_staticBody;
 	// do init
@@ -85,11 +85,11 @@ void PhysicsComponent::initCircle(b2BodyType type, float radius, glm::vec2 cente
 	fxD.shape = circle;
 	fxD.density = density;
 	fixture = body->CreateFixture(&fxD);
-
-	LightOfTheMoon::getInstance()->registerPhysicsComponent(this);
+	if(registerComponent)
+		LightOfTheMoon::getInstance()->registerPhysicsComponent(this);
 }
 
-void PhysicsComponent::initBox(b2BodyType type, glm::vec2 size, glm::vec2 center, float density) {
+void PhysicsComponent::initBox(b2BodyType type, glm::vec2 size, glm::vec2 center, float density, const bool& registerComponent) {
 	assert(body == nullptr);
 	autoUpdate = type != b2_staticBody;
 	// do init
@@ -107,10 +107,11 @@ void PhysicsComponent::initBox(b2BodyType type, glm::vec2 size, glm::vec2 center
 	fxD.density = density;
 	fixture = body->CreateFixture(&fxD);
 
-	LightOfTheMoon::getInstance()->registerPhysicsComponent(this);
+	if(registerComponent)
+		LightOfTheMoon::getInstance()->registerPhysicsComponent(this);
 }
 
-void PhysicsComponent::initEdge(b2BodyType type, glm::vec2 center, glm::vec2 v1, glm::vec2 v2){
+void PhysicsComponent::initEdge(b2BodyType type, glm::vec2 center, glm::vec2 v1, glm::vec2 v2, const bool& registerComponent){
 	assert(body == nullptr);
 	autoUpdate = type != b2_staticBody;
 	// do init
@@ -128,7 +129,8 @@ void PhysicsComponent::initEdge(b2BodyType type, glm::vec2 center, glm::vec2 v1,
 	//fxD.density = density;
 	fixture = body->CreateFixture(&fxD);
 
-	LightOfTheMoon::getInstance()->registerPhysicsComponent(this);
+	if(registerComponent)
+		LightOfTheMoon::getInstance()->registerPhysicsComponent(this);
 }
 
 

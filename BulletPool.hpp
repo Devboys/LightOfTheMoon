@@ -16,20 +16,16 @@ public:
 	BulletPool* createWavePool();
 	BulletPool* createSpiralPool();
 
-	void spawnPlayerLinearBullet(const glm::vec2 & position, std::vector<sre::Sprite> sprites, 
+	void spawnPlayerLinearBullet(const glm::vec2 & position, const std::vector<sre::Sprite>& sprites, 
 								const int& damage, const float& directionAngleDeg, const float& velocity);
-	void spawnPlayerLinearBullet(const glm::vec2& position, std::vector<sre::Sprite> sprites, 
-								const int& damage, const glm::vec2 & direction, const float& velocity);
 
-	void spawnBossLinearBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites, 
+	void spawnBossLinearBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites,
 								const int& damage, const float& directionAngleDeg, const float& velocity);
-	void spawnBossLinearBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites, 
-								const int& damage, const glm::vec2 & direction, const float& velocity);
 
-	void spawnBossWaveBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites, const int& damage, 
+	void spawnBossWaveBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites, const int& damage,
 							const float& directionAngleDeg, const float& velocity, const float& amplitude = 1.0f, const float& frequency = 1.0f);
 
-	void spawnBossSpiralBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites, const int& damage, 
+	void spawnBossSpiralBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites, const int& damage,
 							const float& minVelocity, const float& maxVelocity, const float& radiusExpansionRate, const bool& clockwise = true);
 
 private:
@@ -37,8 +33,4 @@ private:
 	std::shared_ptr<GameObject> linearBullets[POOL_SIZE];
 	std::shared_ptr<GameObject> waveBullets[POOL_SIZE];
 	std::shared_ptr<GameObject> spiralBullets[POOL_SIZE];
-
-	friend class BulletComponent;
-	friend class CharacterController;
-	friend class BossController;
 };
