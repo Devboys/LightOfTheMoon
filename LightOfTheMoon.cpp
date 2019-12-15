@@ -23,7 +23,6 @@
 #include "GameObject.hpp"
 #include "SpriteComponent.hpp"
 #include "PhysicsComponent.hpp"
-#include "SpriteAnimationComponent.hpp"
 #include "CharacterController.hpp"
 #include "HealthComponent.hpp"
 #include "AudioLocator.hpp"
