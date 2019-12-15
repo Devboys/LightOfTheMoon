@@ -5,6 +5,6 @@
  * + Alberto Giudice [14/12/19] - Basic creation
  */
 
-#include "BossComponent.hpp"
+#include "BossController.hpp"
 
-BossComponent::BossComponent(GameObject* gameObject) : Component(gameObject), _phase(BossPhase::Idle) {}
+BossController::BossController(GameObject* gameObject) : Component(gameObject), _phase(BossPhase::Idle) {}

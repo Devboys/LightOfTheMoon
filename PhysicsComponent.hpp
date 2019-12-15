@@ -48,6 +48,8 @@ public:
 	// Get position in physics scale
 	glm::vec2 getPosition();
 
+	void setPositionAndRotation(const glm::vec2& pos, const float& rot);
+
 	//  is updating sprite transform based on ridig body
 	bool isAutoUpdate() const;
 	//  update sprite transform based on ridig body

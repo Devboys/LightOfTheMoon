@@ -12,6 +12,7 @@
 #include "AnimatorComponent.hpp"
 #include "HealthComponent.hpp"
 #include "sre/Sprite.hpp"
+#include "BulletPool.hpp"
 
 class CharacterController : public Component{
 public:
@@ -53,6 +54,8 @@ private:
     std::shared_ptr<AnimatorComponent> animatorComponent;
     std::shared_ptr<PhysicsComponent> characterPhysics;
     std::shared_ptr<HealthComponent> characterHealth;
+
+	BulletPool* bulletPool;
 
 	glm::vec2 direction;
 	float mouseX;

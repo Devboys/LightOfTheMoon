@@ -51,6 +51,7 @@ private:
 	bool active = true;
 
     friend class LightOfTheMoon;
+	friend class BulletPool;
 };
 
 // definition of the template member function addComponent

@@ -174,6 +174,10 @@ glm::vec2 PhysicsComponent::getPosition() {
 	return glm::vec2(body->GetPosition().x, body->GetPosition().y);
 }
 
+void PhysicsComponent::setPositionAndRotation(const glm::vec2& pos, const float& rot) {
+	body->SetTransform({ pos.x, pos.y }, 0.0f);
+}
+
 bool PhysicsComponent::isAutoUpdate() const {
 	return autoUpdate;
 }

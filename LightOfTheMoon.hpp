@@ -100,4 +100,5 @@ private:
 
 	friend class PhysicsComponent;
 	friend class CharacterController;
+	friend class BulletPool;
 };

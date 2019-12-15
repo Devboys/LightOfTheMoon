@@ -27,6 +27,9 @@ CharacterController::CharacterController(GameObject *gameObject) : Component(gam
     animatorComponent = gameObject->getComponent<AnimatorComponent>();
 
 	characterHealth = gameObject->getComponent<HealthComponent>();
+
+	bulletPool = new BulletPool();
+	bulletPool->createLinearPool();
 }
 
 void CharacterController::setAnimations(std::shared_ptr<Animation> idle_right_anim,
@@ -145,7 +148,11 @@ void CharacterController::update(float deltaTime) {
 	}
 	
 	if (shoot && shootingTimer <= 0) {//If ready to shoot
-		spawnPlayerBullet(glm::vec2(mouseX, mouseY));
+		auto spriteAtlas = LightOfTheMoon::getInstance()->getSpriteAtlas();
+		std::vector<sre::Sprite> linearBulletSprites({ spriteAtlas->get("bullet-cowboy-1.png"), spriteAtlas->get("bullet-cowboy-2.png") }); 
+		glm::vec2 direction = glm::normalize(glm::vec2(mouseX, mouseY) - gameObject->getPosition());
+		bulletPool->spawnPlayerLinearBullet(gameObject->getPosition(), linearBulletSprites, 10, direction, bulletSpeed);
+		//spawnPlayerBullet(glm::vec2(mouseX, mouseY));
 		shootingTimer = shootingCooldown; //Set cooldown
 	}
 
