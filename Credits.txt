@@ -1,0 +1,31 @@
+Music:
+------
+	Created by: "airtone @ dig.ccmixter.org"
+
+	Copyright: reNovation by airtone (c) copyright 2019 
+	Licensed under a Creative Commons Attribution (3.0) license.
+
+	http://dig.ccmixter.org/files/airtone/60674
+
+Tilemap sprite assets:
+----------------------
+	Created by: "Tio Aimar @ opengameart.org" 
+
+	https://opengameart.org/content/isometric-blocks-pack-2
+
+Player sprite:
+--------------
+	Created by: "FLAG @ opengameart.org"
+	www.flagamengine.com
+	
+	https://opengameart.org/content/cowboy-platform-and-isometric-sprite-sheet
+
+Boss sprite:
+------------
+	Created by: "marcintokarski @ opengameart.org"
+	
+	https://opengameart.org/content/orc-mage-hero
+
+All proprietary sound effects created with:
+-------------------------------------------
+	BFXR @ https://www.bfxr.net/
