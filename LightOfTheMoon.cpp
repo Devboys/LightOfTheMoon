@@ -25,7 +25,6 @@
 #include "SpriteAnimationComponent.hpp"
 #include "CharacterController.hpp"
 #include "HealthComponent.hpp"
-#include "FixedDamageComponent.hpp"
 #include "AudioLocator.hpp"
 #include "GameAudio.hpp"
 #include "AssetLocator.hpp"
