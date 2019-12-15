@@ -22,8 +22,10 @@ class PhysicsComponent;
 
 enum class GameState {
 	Menu,
+	Loading,
 	Running,
-	GameOver
+	GameOver,
+	Win
 };
 
 class LightOfTheMoon : public b2ContactListener {
