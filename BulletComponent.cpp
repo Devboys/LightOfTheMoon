@@ -12,10 +12,10 @@
 #include <iostream>
 #include "BulletComponent.hpp"
 #include "CharacterController.hpp"
-#include "BossComponent.hpp"
 #include "HealthComponent.hpp"
 #include "LightOfTheMoon.hpp"
 #include "PhysicsComponent.hpp"
+#include "Boss1Component.hpp"
 
 BulletComponent::BulletComponent(GameObject* gameObject) : Component(gameObject) {}
 
@@ -46,7 +46,7 @@ void BulletComponent::setDamage(const int& amount) {
 void BulletComponent::onCollisionStart(PhysicsComponent* comp) {
 	bool targetHit = false;
 	if (_type == BulletType::PlayerBullet) {
-		if (comp->getGameObject()->getComponent<BossComponent>() != nullptr) {
+		if (comp->getGameObject()->getComponent<Boss1Component>() != nullptr) {
 			std::shared_ptr<HealthComponent> bossHealth = comp->getGameObject()->getComponent<HealthComponent>();
 			if (bossHealth != nullptr) {
 				bossHealth->removeHealth(_damageAmount);

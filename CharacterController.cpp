@@ -171,7 +171,7 @@ void CharacterController::spawnPlayerBullet(glm::vec2& destination) {
 	linearBulletphys->setBullet(true);
 
 	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
-	bulletComponent->initPlayerBullet(10);
+	bulletComponent->initPlayerBullet(1);
 
 	auto bulletAnimator = linearBulletObj->addComponent<AnimatorComponent>();
 	auto spriteAtlas = LightOfTheMoon::getInstance()->getSpriteAtlas();

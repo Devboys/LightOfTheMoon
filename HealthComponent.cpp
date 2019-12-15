@@ -7,6 +7,7 @@
 
 #include "HealthComponent.hpp"
 #include "AudioLocator.hpp"
+#include <iostream>
 
 HealthComponent::HealthComponent(GameObject* gameObject)
 	: Component(gameObject)
@@ -64,4 +65,8 @@ void HealthComponent::removeHealth(int amount) {
 
 bool HealthComponent::isAlive() {
 	return current_health > 0;
+}
+
+void HealthComponent::print() {
+	std::cout << current_health << "/" << max_health << std::endl;
 }

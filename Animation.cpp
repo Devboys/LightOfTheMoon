@@ -27,8 +27,10 @@ sre::Sprite Animation::getFrame(float time) {
 		else {
 			time = glm::min(time, length);
 		}
-
-		return sprites[(int)(sprites.size() * time / length)];
+		if (time == length)
+			return sprites[0];
+		else
+			return sprites[(int)(sprites.size() * time / length)];
 	}
 }
 

@@ -22,6 +22,8 @@ public:
 
 	bool isAlive();
 
+	void print();
+
 private:
 	int max_health;
 	int current_health;
