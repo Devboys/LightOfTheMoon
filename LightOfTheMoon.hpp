@@ -61,6 +61,7 @@ private:
 	void initMenu();
 	void initLevel();
 	void initGameOver();
+	void initWin();
 
 	std::shared_ptr<GameObject> initPlayer();
 	std::shared_ptr<GameObject> initBoss(std::shared_ptr<GameObject> player);
