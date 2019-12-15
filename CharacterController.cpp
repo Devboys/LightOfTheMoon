@@ -2,6 +2,9 @@
  * Created by Francesco Frassineti on 06/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Added second sensor collider
+ * + Francesco Frassineti [14/12/19] - Implemented shooting
+ * + Francesco Frassineti [07/12/19] - Implemented animation and movement
  * + Francesco Frassineti [06/12/19] - Basic creation
  */
 
@@ -161,9 +164,10 @@ void CharacterController::spawnPlayerBullet(glm::vec2& destination) {
 	linearBulletObj->setPosition(gameObject->getPosition() + direction * bulletOffset);
 
 	auto linearBulletphys = linearBulletObj->addComponent<PhysicsComponent>();
-	linearBulletphys->initCircle(b2_kinematicBody, 1.0f, { linearBulletObj->getPosition().x / LightOfTheMoon::getInstance()->physicsScale, linearBulletObj->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 1);
+	linearBulletphys->initCircle(b2_dynamicBody, 1.0f, { linearBulletObj->getPosition().x / LightOfTheMoon::getInstance()->physicsScale, linearBulletObj->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 1);
 	linearBulletphys->fixRotation();
 	linearBulletphys->setSensor(true);
+	linearBulletphys->setBullet(true);
 
 	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
 	bulletComponent->initPlayerBullet(10);

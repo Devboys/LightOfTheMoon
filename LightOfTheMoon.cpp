@@ -2,7 +2,8 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
- * + Alberto Giudice [14/12/10] - Added a test linear/wave/spiral bullet in the direction of the player
+ * + Alberto Giudice [15/12/19] - Modified the physics lookup functions to support the second fixture
+ * + Alberto Giudice [14/12/19] - Added a test linear/wave/spiral bullet in the direction of the player
  * + Francesco Frassineti [07/12/19] - Added the idle animations for the player
  * + Francesco Frassineti [07/12/19] - The mouse cursor is now visible (it's still trapped inside the window)
  * + Francesco Frassineti [06/12/19] - Added mouse handling
@@ -180,13 +181,44 @@ void LightOfTheMoon::initLevel() {
 	//BOSS
 	initBoss();
 
+
+
+
+
+	// Linear Bullet test creation code. Move it wherever you need it.
+	auto linearBulletObj = LightOfTheMoon::instance->createGameObject();
+	linearBulletObj->name = "LinearBullet";
+	linearBulletObj->setPosition({ 0.5f, 0.0f });
+
+	auto linearBulletphys = linearBulletObj->addComponent<PhysicsComponent>();
+	linearBulletphys->initCircle(b2_dynamicBody, 1.0f, { linearBulletObj->getPosition().x / LightOfTheMoon::getInstance()->physicsScale, linearBulletObj->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 1);
+	linearBulletphys->fixRotation();
+	linearBulletphys->setSensor(true);
+	linearBulletphys->setBullet(true);
+
+	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
+	bulletComponent->initBossBullet(10);
+
+	auto bulletAnimator = linearBulletObj->addComponent<AnimatorComponent>();
+	std::vector<sre::Sprite> linearBulletSprites({ spriteAtlas->get("bullet-enemy-2-1.png"), spriteAtlas->get("bullet-enemy-2-2.png") });
+	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
+	std::shared_ptr<Animation> linearBulletAnimation = std::make_shared<Animation>(linearBulletSprites, 1, true);
+	bulletAnimator->setAnimation(linearBulletAnimation, true);
+
+	auto bulletLinearMovement = linearBulletObj->addComponent<MovementLinearComponent>();
+	bulletLinearMovement->initParameters(180.0f, 20.0f);
+
+
+
+
+
 	// Wave Bullet test creation code. Move it wherever you need it.
 	auto waveBulletObj = createGameObject();
 	waveBulletObj->name = "WaveBullet";
 	waveBulletObj->setPosition({ -.7f, -.7f });
 
 	auto waveBulletPhys = waveBulletObj->addComponent<PhysicsComponent>();
-	waveBulletPhys->initCircle(b2_kinematicBody, 1.0f, { waveBulletObj->getPosition().x / physicsScale, waveBulletObj->getPosition().y / physicsScale }, 1);
+	waveBulletPhys->initCircle(b2_dynamicBody, 1.0f, { waveBulletObj->getPosition().x / physicsScale, waveBulletObj->getPosition().y / physicsScale }, 1);
 	waveBulletPhys->fixRotation();
 	waveBulletPhys->setSensor(true);
 	waveBulletPhys->setBullet(true);
@@ -204,13 +236,17 @@ void LightOfTheMoon::initLevel() {
 	auto bulletWaveMovement = waveBulletObj->addComponent<MovementWaveComponent>();
 	bulletWaveMovement->initParameters({ waveBulletObj->getPosition().x, waveBulletObj->getPosition().y }, 45.0f, .4f, .08f, 8.0f);
 
+
+
+
+
 	// Spiral Bullet test creation code. Move it wherever you need.
 	auto spiralBulletObj = createGameObject();
 	spiralBulletObj->name = "SpiralBullet";
 	spiralBulletObj->setPosition({ -0.3f, -0.3f });
 
 	auto spiralBulletPhys = spiralBulletObj->addComponent<PhysicsComponent>();
-	spiralBulletPhys->initCircle(b2_kinematicBody, 1.0f, { spiralBulletObj->getPosition().x / physicsScale, spiralBulletObj->getPosition().y / physicsScale }, 1);
+	spiralBulletPhys->initCircle(b2_dynamicBody, 1.0f, { spiralBulletObj->getPosition().x / physicsScale, spiralBulletObj->getPosition().y / physicsScale }, 1);
 	spiralBulletPhys->fixRotation();
 	spiralBulletPhys->setSensor(true);
 	spiralBulletPhys->setBullet(true);
@@ -270,7 +306,8 @@ void LightOfTheMoon::initPlayer() {
 	//</Player Animation>
 
 	auto phys = playerObj->addComponent<PhysicsComponent>();
-	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f }, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y / physicsScale }, 1);
+	phys->initCircle(b2_dynamicBody, 2.0f, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y / physicsScale }, 1);
+	phys->initSensorBox({ 2.0f, 4.5f }, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y  / physicsScale }, 1, { 0.0f, 0.025f / physicsScale });
 	phys->fixRotation();
 
 	auto characterHealth = playerObj->addComponent <HealthComponent>();
@@ -539,7 +576,7 @@ void LightOfTheMoon::updatePhysics() {
 		auto position = physicsComponent->getBody()->GetPosition();
 		float angle = physicsComponent->getBody()->GetAngle();
 		auto gameObject = physicsComponent->getGameObject();
-		gameObject->setPosition(glm::vec2(position.x * physicsScale, position.y * physicsScale));
+		gameObject->setPosition(glm::vec2((position.x + physicsComponent->getSpriteOffset().x) * physicsScale, (position.y + physicsComponent->getSpriteOffset().y) * physicsScale));
 		gameObject->setRotation(angle);
 	}
 }
@@ -573,10 +610,20 @@ void LightOfTheMoon::deregisterPhysicsComponent(PhysicsComponent* r) {
 	else {
 		assert(false); // cannot find physics object
 	}
+	if (r->getSecondFixture() != nullptr) {
+		auto iter2 = physicsComponentLookup.find(r->getSecondFixture());
+		if (iter2 != physicsComponentLookup.end()) {
+			physicsComponentLookup.erase(iter2);
+		}
+	}
 }
 
 void LightOfTheMoon::registerPhysicsComponent(PhysicsComponent* r) {
 	physicsComponentLookup[r->getFixture()] = r;
+}
+
+void LightOfTheMoon::registerSecondPhysicsComponent(PhysicsComponent* r) {
+	physicsComponentLookup[r->getSecondFixture()] = r;
 }
 
 void LightOfTheMoon::handleContact(b2Contact* contact, bool begin) {

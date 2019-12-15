@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Second fixture support
  * + Alberto Giudice [14/12/19] - Added support for bullets (CCD)
  * + Alberto Giudice [05/12/19] - Basic creation
  */
@@ -22,6 +23,8 @@ public:
 	void initCircle(b2BodyType type, float radius, glm::vec2 center, float density);
 	void initBox(b2BodyType type, glm::vec2 size, glm::vec2 center, float density);
 	void initEdge(b2BodyType type, glm::vec2 center, glm::vec2 v1, glm::vec2 v2);
+
+	void initSensorBox(glm::vec2 size, glm::vec2 center, float density, glm::vec2 offset = { 0,0 });
 
 	void addForce(glm::vec2 force);     // Force gradually affects the velocity over time
 	void addImpulse(glm::vec2 force);   // Instantly affects velocity
@@ -52,6 +55,9 @@ public:
 
 	b2Body* getBody();
 	b2Fixture* getFixture();
+	b2Fixture* getSecondFixture();
+
+	const glm::vec2 getSpriteOffset();
 
 private:
 	// auto update sprite position and rotation based on physics update
@@ -62,7 +68,9 @@ private:
 	b2Body* body = nullptr;
 	b2Shape::Type shapeType;
 	b2Fixture* fixture = nullptr;
+	b2Fixture* secondFixture = nullptr;
 	b2BodyType rbType;
 	std::vector<PhysicsComponent*> collidingBodies;
 	b2World* world = nullptr;
+	glm::vec2 spriteOffset;
 };
