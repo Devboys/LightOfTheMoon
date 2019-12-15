@@ -143,6 +143,9 @@ void LightOfTheMoon::initMenu() {
 	auto startTextSprite = uiAtlas->get("EnterStart.png");
 	startTextSprite.setScale(glm::vec2(0.001f, 0.001f));
 
+	auto quitTextSprite = uiAtlas->get("EscapeQuit.png");
+	quitTextSprite.setScale(glm::vec2(0.001f, 0.001f));
+
 	//make menu title objects
 	auto titleObj = createGameObject();
 	titleObj->name = "Title";
@@ -152,11 +155,18 @@ void LightOfTheMoon::initMenu() {
 	spr->setSprite(titleSprite);
 
 	auto startTextObj = createGameObject();
-	startTextObj->name = "SubText";
+	startTextObj->name = "StartText";
 	startTextObj->position = glm::vec2(0, -(startTextSprite.getSpriteSize().y * 2) * startTextSprite.getScale().y);
 
 	spr = startTextObj->addComponent<SpriteComponent>();
 	spr->setSprite(startTextSprite);
+
+	auto quitTextObj = createGameObject();
+	quitTextObj->name = "QuitText";
+	quitTextObj->position = glm::vec2(0, startTextObj->getPosition().y - quitTextSprite.getSpriteSize().y * 1.1f *  quitTextSprite.getScale().y);
+
+	spr = quitTextObj->addComponent<SpriteComponent>();
+	spr->setSprite(quitTextSprite);
 
 	//start music
 	AudioLocator::getService()->playLooped("Assets/Sounds/renovation_airtone.wav");
@@ -549,6 +559,10 @@ void LightOfTheMoon::onKey(SDL_Event& event) {
 				changeState(GameState::Menu);
 			}
 			break;
+		case SDLK_ESCAPE:
+			if (currentState == GameState::Menu) {
+				r.stopEventLoop(); //quit game
+			}
 		case SDLK_q:
 			// Press 'Q' for physics debug
 			doDebugDraw = !doDebugDraw;
