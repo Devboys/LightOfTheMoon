@@ -156,6 +156,9 @@ void LightOfTheMoon::initMenu() {
 
 	spr = startTextObj->addComponent<SpriteComponent>();
 	spr->setSprite(startTextSprite);
+
+	//start music
+	AudioLocator::getService()->playLooped("Assets/Sounds/renovation_airtone.wav");
 }
 
 

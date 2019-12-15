@@ -18,5 +18,6 @@ public:
 	~GameAudio();
 
 	virtual void playOneshot(std::string soundName);
+	virtual void playLooped(std::string filename);
 	virtual void stopAll();
 };
