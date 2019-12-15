@@ -12,10 +12,12 @@
 #include "AnimatorComponent.hpp"
 #include "HealthComponent.hpp"
 #include "sre/Sprite.hpp"
+#include "BulletPool.hpp"
 
 class CharacterController : public Component{
 public:
     explicit CharacterController(GameObject *gameObject);
+	~CharacterController();
 
     void setAnimations(std::shared_ptr<Animation> idle_right_anim,
 		std::shared_ptr<Animation> idle_top_right_anim,
@@ -35,9 +37,6 @@ public:
 
 	void onMouse(SDL_Event &event) override;
 
-    void onCollisionStart(PhysicsComponent *comp) override;
-
-    void onCollisionEnd(PhysicsComponent *comp) override;
 private:
 	void spawnPlayerBullet(glm::vec2& direction);
 
@@ -53,6 +52,8 @@ private:
     std::shared_ptr<AnimatorComponent> animatorComponent;
     std::shared_ptr<PhysicsComponent> characterPhysics;
     std::shared_ptr<HealthComponent> characterHealth;
+
+	BulletPool* bulletPool;
 
 	glm::vec2 direction;
 	float mouseX;
@@ -75,4 +76,6 @@ private:
 	bool down = false;
 	bool dash = false;
 	bool shoot = false;
+
+	std::vector<sre::Sprite> linearBulletSprites;
 };

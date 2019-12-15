@@ -15,10 +15,10 @@
 
 class Animation{
 public:
-	explicit Animation(std::vector<sre::Sprite> sprites, float length, bool loop);
+	explicit Animation(const std::vector<sre::Sprite>& sprites, const float& length, const bool& loop);
 
 	std::vector<sre::Sprite> getSprites();
-	sre::Sprite getFrame(float time);
+	const sre::Sprite getFrame(float time);
 
 private:
 	std::vector<sre::Sprite> sprites;

@@ -14,7 +14,7 @@ Boss1Component::Boss1Component(GameObject* gameObject) : Component(gameObject), 
 	bossAnimator = gameObject->getComponent<AnimatorComponent>();
 	bossPhysics = gameObject->getComponent<PhysicsComponent>();
 
-	direction = glm::vec2(-1, 0); //Start by facing west
+	direction = glm::vec2(0, -1); //Start by facing south
 
 	std::cout << "Boss Component initialized" << std::endl;
 }
@@ -40,36 +40,35 @@ void Boss1Component::update(float deltaTime) {
 		break;
 	}
 
-	/*if (bossPhysics->getLinearVelocity().length() > 0.1f) {
-		direction = glm::normalize(bossPhysics->getLinearVelocity());
-	}*/
-
 	updateAnimation(deltaTime);
 }
 
 void Boss1Component::updatePhase1(float deltaTime) {
-	if (bossHealth->getCurrentHealth() < healthPercentageThresholds[0] * bossHealth->getMaxHealth()) {
+	/*ALL TRANSITIONS INSIDE IF STATEMENTS*/
+	//If current health <= threshold -> go to next phase
+	if (bossHealth->getCurrentHealth() <= healthPercentageThresholds[0] * bossHealth->getMaxHealth()) {
 		_phase = Boss1Phase::Second;
 		_state = Boss1State::Second_Idle;
 		bossHealth->print();
 		std::cout << "Boss1: Transition to Phase 2" << std::endl;
 	}
 
+	/*LOGIC FOR THE CURRENT PHASE*/
 	switch (_state) {
 	case Boss1State::First_Idle:
-		//Something
+		/*LOGIC FOR THE CURRENT STATE*/
 		break;
 	//case yada yada
 	//...
 	//...
 	case Boss1State::First_StartMove:
-		//Something
+		/*LOGIC FOR THE CURRENT STATE*/
 		break;
 	}
 }
 
 void Boss1Component::updatePhase2(float deltaTime) {
-	if (bossHealth->getCurrentHealth() < healthPercentageThresholds[1] * bossHealth->getMaxHealth()) {
+	if (bossHealth->getCurrentHealth() <= healthPercentageThresholds[1] * bossHealth->getMaxHealth()) {
 		_phase = Boss1Phase::Third;
 		_state = Boss1State::Third_Idle;
 		bossHealth->print();
@@ -130,6 +129,12 @@ void Boss1Component::setAnimations(std::shared_ptr<Animation> idle_right_anim,
 
 void Boss1Component::updateAnimation(float deltaTime) {
 
+	if (player == nullptr) {
+		std::cerr << "You forgot to assign player to Boss1!" << std::endl;
+	}
+	else {
+		direction = glm::normalize(player->getPosition() - gameObject->getPosition());
+	}
 	float angle = glm::atan(direction.y, direction.x);
 	float angle_deg = glm::degrees(angle);
 
@@ -160,4 +165,8 @@ void Boss1Component::updateAnimation(float deltaTime) {
 	else {
 		bossAnimator->setAnimation(idle_left_anim, false);
 	}
+}
+
+void Boss1Component::setPlayer(std::shared_ptr<GameObject> player) {
+	this->player = player;
 }

@@ -60,8 +60,8 @@ private:
 	void initLevel();
 	void initGameOver();
 
-	void initPlayer();
-	void initBoss();
+	std::shared_ptr<GameObject> initPlayer();
+	std::shared_ptr<GameObject> initBoss(std::shared_ptr<GameObject> player);
 
 	void initPhysics();
 
@@ -100,4 +100,5 @@ private:
 
 	friend class PhysicsComponent;
 	friend class CharacterController;
+	friend class BulletPool;
 };

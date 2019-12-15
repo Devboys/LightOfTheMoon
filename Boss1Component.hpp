@@ -47,6 +47,8 @@ public:
 	void updateAnimation(float deltaTime);
 	void update(float deltaTime) override;
 
+	void setPlayer(std::shared_ptr<GameObject> player);
+
 	void setAnimations(std::shared_ptr<Animation> idle_right_anim,
 		std::shared_ptr<Animation> idle_top_right_anim,
 		std::shared_ptr<Animation> idle_top_anim,
@@ -67,6 +69,8 @@ private:
 	std::shared_ptr<HealthComponent> bossHealth;
 	std::shared_ptr<AnimatorComponent> bossAnimator;
 	std::shared_ptr<PhysicsComponent> bossPhysics;
+
+	std::shared_ptr<GameObject> player;
 
 	std::shared_ptr<Animation> idle_right_anim;
 	std::shared_ptr<Animation> idle_top_right_anim;

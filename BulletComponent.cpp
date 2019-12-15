@@ -17,7 +17,7 @@
 #include "PhysicsComponent.hpp"
 #include "Boss1Component.hpp"
 
-BulletComponent::BulletComponent(GameObject* gameObject) : Component(gameObject) {}
+BulletComponent::BulletComponent(GameObject* gameObject) : Component(gameObject), _inUse(false) {}
 
 void BulletComponent::initPlayerBullet(const int& damage) {
 	_inUse = true;
@@ -70,10 +70,10 @@ void BulletComponent::onCollisionStart(PhysicsComponent* comp) {
 		targetHit = true;
 
 	if (targetHit) {
-		std::cout << "BULLET DESTROYED" << std::endl;
+		//std::cout << "BULLET DESTROYED" << std::endl;
 		_inUse = false;
 		LightOfTheMoon::getInstance()->destroyGameObject(this->gameObject);
 	}
-
-	std::cout << comp->getGameObject()->name << std::endl;
+	
+	//std::cout << comp->getGameObject()->name << std::endl;
 }

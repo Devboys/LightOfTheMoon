@@ -17,7 +17,9 @@ public:
 
 	// A linear movement can only be fully initialized, direction and velocity cannot change after movement start
 	void initParameters(const float& directionAngleDeg, const float& velocity);
-	void initParameters(const glm::vec2& direction, const float& velocity);
+	//void initParameters(const glm::vec2& direction, const float& velocity);
+
+	void update(float deltaTime) override;
 
 	// Getters
 	const float getDirectionDeg();
@@ -26,4 +28,5 @@ public:
 private:
 	float _directionAngleDegrees;
 	float _velocity;
+	std::shared_ptr<PhysicsComponent> phys;
 };

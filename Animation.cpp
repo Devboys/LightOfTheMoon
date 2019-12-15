@@ -9,7 +9,7 @@
 #include <iostream>
 #include "Animation.hpp"
 
-Animation::Animation(std::vector<sre::Sprite> sprites, float length, bool loop) {
+Animation::Animation(const std::vector<sre::Sprite>& sprites, const float& length, const bool& loop) {
 	this->sprites = sprites;
 	this->length = length;
 	this->loop = loop;
@@ -19,7 +19,7 @@ std::vector<sre::Sprite> Animation::getSprites() {
 	return this->sprites;
 }
 
-sre::Sprite Animation::getFrame(float time) {
+const sre::Sprite Animation::getFrame(float time) {
 	{
 		if (loop) {
 			time = fmod(time, length);

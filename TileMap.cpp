@@ -220,7 +220,6 @@ std::vector<std::vector<bool>> TileMap::calculateBorderCells() {
 void TileMap::renderMap(sre::SpriteBatch::SpriteBatchBuilder& batchBuilder) {
 
 	sre::Sprite sprite;
-
 	//render 2D array as isometric tilemap
 	for (int mapX = 0; mapX < tileMap.size(); mapX++) {
 		for (int mapY = 0; mapY < tileMap[mapX].size(); mapY++) {
@@ -252,5 +251,4 @@ void TileMap::renderMap(sre::SpriteBatch::SpriteBatchBuilder& batchBuilder) {
 			}
 		}
 	}
-
 }
