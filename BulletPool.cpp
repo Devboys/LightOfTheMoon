@@ -178,7 +178,7 @@ void BulletPool::spawnBossWaveBullet(const glm::vec2& position, const std::vecto
 			phys->setActive(true);
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
-			bc->initPlayerBullet(damage);
+			bc->initBossBullet(damage);
 
 			std::shared_ptr<AnimatorComponent> animator = bullet->getComponent<AnimatorComponent>();
 			assert(animator != nullptr);
@@ -214,7 +214,7 @@ void BulletPool::spawnBossSpiralBullet(const glm::vec2& position, const std::vec
 			phys->setActive(true);
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
-			bc->initPlayerBullet(damage);
+			bc->initBossBullet(damage);
 
 			std::shared_ptr<AnimatorComponent> animator = bullet->getComponent<AnimatorComponent>();
 			assert(animator != nullptr);

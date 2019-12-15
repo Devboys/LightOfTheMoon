@@ -80,5 +80,10 @@ private:
 	std::vector<sre::Sprite> waveBulletSprites;
 	std::vector<sre::Sprite> spiralBulletSprites;
 
+	float timeElapsedCurrentPhase;
+	float shootingTimer;
+	float shootingCooldownFirstPattern;
+	float shootingCooldownSecondPattern;
+	float shootingCooldownThirdPattern;
 	float healthPercentageThresholds[2]{ 0.66, 0.33 };//For every phase, if the health percentage goes below the threshold switch to the next phase
 };

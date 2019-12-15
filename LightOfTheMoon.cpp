@@ -195,87 +195,6 @@ void LightOfTheMoon::initLevel() {
 
 	//BOSS
 	auto boss = initBoss(player);
-
-	/*
-	// Linear Bullet test creation code. Move it wherever you need it.
-	auto linearBulletObj = LightOfTheMoon::instance->createGameObject();
-	linearBulletObj->name = "LinearBullet";
-	linearBulletObj->setPosition({ 0.5f, 0.0f });
-
-	auto linearBulletphys = linearBulletObj->addComponent<PhysicsComponent>();
-	linearBulletphys->initCircle(b2_dynamicBody, 1.0f, { linearBulletObj->getPosition().x / LightOfTheMoon::getInstance()->physicsScale, linearBulletObj->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 1);
-	linearBulletphys->setPositionAndRotation({ linearBulletObj->getPosition().x / LightOfTheMoon::getInstance()->physicsScale, linearBulletObj->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
-	linearBulletphys->fixRotation();
-	linearBulletphys->setSensor(true);
-	linearBulletphys->setBullet(true);
-	linearBulletphys->setAutoUpdate(false);
-
-	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
-	bulletComponent->initBossBullet(10);
-
-	auto bulletAnimator = linearBulletObj->addComponent<AnimatorComponent>();
-	std::vector<sre::Sprite> linearBulletSprites({ spriteAtlas->get("bullet-enemy-2-1.png"), spriteAtlas->get("bullet-enemy-2-2.png") });
-	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
-	std::shared_ptr<Animation> linearBulletAnimation = std::make_shared<Animation>(linearBulletSprites, 1, true);
-	bulletAnimator->setAnimation(linearBulletAnimation, true);
-
-	auto bulletLinearMovement = linearBulletObj->addComponent<MovementLinearComponent>();
-	bulletLinearMovement->initParameters(180.0f, 50.0f);
-
-
-
-	// Wave Bullet test creation code. Move it wherever you need it.
-	auto waveBulletObj = createGameObject();
-	waveBulletObj->name = "WaveBullet";
-	waveBulletObj->setPosition({ -.7f, -.7f });
-
-	auto waveBulletPhys = waveBulletObj->addComponent<PhysicsComponent>();
-	waveBulletPhys->initCircle(b2_dynamicBody, 1.0f, { waveBulletObj->getPosition().x / physicsScale, waveBulletObj->getPosition().y / physicsScale }, 1);
-	waveBulletPhys->fixRotation();
-	waveBulletPhys->setSensor(true);
-	waveBulletPhys->setBullet(true);
-	waveBulletPhys->setAutoUpdate(false);
-
-	auto waveBulletComponent = waveBulletObj->addComponent<BulletComponent>();
-	waveBulletComponent->initBossBullet(10);
-
-	auto waveBulletAnimator = waveBulletObj->addComponent<AnimatorComponent>();
-	vector<Sprite> waveBulletSprites({ spriteAtlas->get("bullet-enemy-2-1.png"), spriteAtlas->get("bullet-enemy-2-2.png") });
-	for (auto& s : waveBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
-	std::shared_ptr<Animation> waveBulletAnimation = std::make_shared<Animation>(waveBulletSprites, 1, true);
-	waveBulletAnimator->setAnimation(waveBulletAnimation, true);
-
-	auto bulletWaveMovement = waveBulletObj->addComponent<MovementWaveComponent>();
-	bulletWaveMovement->initParameters({ waveBulletObj->getPosition().x, waveBulletObj->getPosition().y }, 45.0f, .4f, .08f, 8.0f);
-
-
-
-
-
-	// Spiral Bullet test creation code. Move it wherever you need.
-	auto spiralBulletObj = createGameObject();
-	spiralBulletObj->name = "SpiralBullet";
-	spiralBulletObj->setPosition({ -0.3f, -0.3f });
-
-	auto spiralBulletPhys = spiralBulletObj->addComponent<PhysicsComponent>();
-	spiralBulletPhys->initCircle(b2_dynamicBody, 1.0f, { spiralBulletObj->getPosition().x / physicsScale, spiralBulletObj->getPosition().y / physicsScale }, 1);
-	spiralBulletPhys->fixRotation();
-	spiralBulletPhys->setSensor(true);
-	spiralBulletPhys->setBullet(true);
-	spiralBulletPhys->setAutoUpdate(false);
-
-	auto spiralBulletComponent = spiralBulletObj->addComponent<BulletComponent>();
-	spiralBulletComponent->initBossBullet(10);
-
-	auto spiralBulletAnimator = spiralBulletObj->addComponent<AnimatorComponent>();
-	vector<Sprite> spiralBulletSprites({ spriteAtlas->get("bullet-enemy-3-1.png"), spriteAtlas->get("bullet-enemy-3-2.png") });
-	for (auto& s : spiralBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
-	std::shared_ptr<Animation> spiralBulletAnimation = std::make_shared<Animation>(spiralBulletSprites, 1, true);
-	spiralBulletAnimator->setAnimation(spiralBulletAnimation, true);
-
-	auto bulletSpiralMovement = spiralBulletObj->addComponent<MovementSpiralComponent>();
-	bulletSpiralMovement->initParameters({ spiralBulletObj->getPosition().x, spiralBulletObj->getPosition().y }, 40.0f, 150.0f, .05f, true);
-	bulletSpiralMovement->initParameters({ spiralBulletObj->getPosition().x, spiralBulletObj->getPosition().y }, 40.0f, 150.0f, .05f, true);*/
 }
 
 std::shared_ptr<GameObject> LightOfTheMoon::initPlayer() {
@@ -323,7 +242,7 @@ std::shared_ptr<GameObject> LightOfTheMoon::initPlayer() {
 	phys->fixRotation();
 
 	auto characterHealth = playerObj->addComponent <HealthComponent>();
-	float characterHealthAmount = 5;
+	float characterHealthAmount = 100;
 	characterHealth->setMaxHealth(characterHealthAmount);
 	characterHealth->setCurrentHealth(characterHealthAmount);
 

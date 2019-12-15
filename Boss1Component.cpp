@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 14/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Bullet spawning logic for all phases of the combat
  * + Alberto Giudice [15/12/19] - Initialized the bullet pools
  * + Francesco Frassineti [15/12/19] - Logic implementation for animations and states
  * + Alberto Giudice [14/12/19] - Basic creation
@@ -10,12 +11,21 @@
 #include "Boss1Component.hpp"
 #include "GameObject.hpp"
 #include "LightOfTheMoon.hpp"
+#include <stdlib.h>
+#include <time.h>
+#include "AudioLocator.hpp"
 
 Boss1Component::Boss1Component(GameObject* gameObject) : Component(gameObject), _phase(Boss1Phase::First), _state(Boss1State::Idle) {
 	bossHealth = gameObject->getComponent<HealthComponent>();
 	bossAnimator = gameObject->getComponent<AnimatorComponent>();
 
 	direction = glm::vec2(0, -1); // Start by facing south
+	
+	timeElapsedCurrentPhase = 0.0f;
+	shootingTimer = 0.0f;
+	shootingCooldownFirstPattern = 0.4f;
+	shootingCooldownSecondPattern = 0.6f;
+	shootingCooldownThirdPattern = 0.0f;
 
 	auto spriteAtlas = LightOfTheMoon::getInstance()->getSpriteAtlas();
 
@@ -35,6 +45,8 @@ Boss1Component::Boss1Component(GameObject* gameObject) : Component(gameObject), 
 	bulletPool->createLinearPool();
 	bulletPool->createWavePool();
 	bulletPool->createSpiralPool();
+
+	srand(time(NULL));
 }
 
 Boss1Component::~Boss1Component() {
@@ -72,53 +84,140 @@ void Boss1Component::updatePhase1(const float& deltaTime) {
 	if (bossHealth->getCurrentHealth() <= healthPercentageThresholds[0] * bossHealth->getMaxHealth()) {
 		_phase = Boss1Phase::Second;
 		_state = Boss1State::Idle;
+		shootingCooldownFirstPattern = 0.3f;
+		shootingCooldownSecondPattern = 0.3f;
+		shootingCooldownThirdPattern = 0.15f;
+		timeElapsedCurrentPhase = 0.0f;
+		shootingTimer = 0.0f;
 		bossHealth->print();
 		std::cout << "Boss1: Transition to Phase 2" << std::endl;
 	}
 
+	// calculate useful positions and directions
+	glm::vec2 curPosition = gameObject->getPosition();
+	glm::vec2 direction = player->getPosition() - curPosition;
+	float directionAngle = std::atan2f(direction.y, direction.x) * 180.0f / M_PI;
+
+	bool bulletFired = false;
 	/*LOGIC FOR THE CURRENT PHASE*/
 	switch (_state) {
 		case Boss1State::Idle:
-			/*LOGIC FOR THE CURRENT STATE*/
+			if (timeElapsedCurrentPhase > .5f)
+				_state = Boss1State::FirstShotPattern;
 			break;
-		//case yada yada
-		//...
-		//...
 		case Boss1State::FirstShotPattern:
-			/*LOGIC FOR THE CURRENT STATE*/
+			if (shootingTimer < 0.0f) {
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, directionAngle, 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, directionAngle + 30, 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, directionAngle - 30, 50.0f);
+				bulletFired = true;
+				shootingTimer = shootingCooldownFirstPattern;
+			}
+			if (fmodf(timeElapsedCurrentPhase, 2.0f) > 1.0f)
+				_state = Boss1State::SecondShotPattern;
 			break;
 		case Boss1State::SecondShotPattern:
-			//Something
+			if (shootingTimer < 0.0f) {
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, directionAngle + 15, 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, directionAngle - 15, 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, directionAngle + 45, 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, directionAngle - 45, 50.0f);
+				bulletFired = true;
+				shootingTimer = shootingCooldownSecondPattern;
+			}
+			if (fmodf(timeElapsedCurrentPhase, 2.0f) < 1.0f)
+				_state = Boss1State::FirstShotPattern;
 			break;
 		default:
 			break;
 	}
+	if(bulletFired)
+		AudioLocator::getService()->playOneshot("Assets/Sounds/BossShootSound.wav");
+
+	shootingTimer -= deltaTime;
+	timeElapsedCurrentPhase += deltaTime;
 }
 
 void Boss1Component::updatePhase2(const float& deltaTime) {
 	if (bossHealth->getCurrentHealth() <= healthPercentageThresholds[1] * bossHealth->getMaxHealth()) {
 		_phase = Boss1Phase::Third;
 		_state = Boss1State::Idle;
+		shootingCooldownFirstPattern = 0.3f;
+		shootingCooldownSecondPattern = 0.3f;
+		shootingCooldownThirdPattern = 0.8f;
+		timeElapsedCurrentPhase = 0.0f;
+		shootingTimer = 0.0f;
 		bossHealth->print();
 		std::cout << "Boss1: Transition to Phase 3" << std::endl;
 	}
 
+	// calculate useful positions and directions
+	glm::vec2 curPosition = gameObject->getPosition();
+
+	bool bulletFired = false;
+
 	switch (_state) {
 		case Boss1State::Idle:
-			//Something
+			if (timeElapsedCurrentPhase > .5f)
+				_state = Boss1State::FirstShotPattern;
 			break;
-			//case yada yada
-			//...
-			//...
 		case Boss1State::FirstShotPattern:
-			//Something
+			if (shootingTimer < 0.0f) {
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 22.5f, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 67.5f, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 112.5f, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 157.5f, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 202.5f, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 247.5f, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 292.5f, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 337.5f, .4f, .08f, 8.0f);
+				bulletFired = true;
+				shootingTimer = shootingCooldownFirstPattern;
+			}
+			if (fmodf(timeElapsedCurrentPhase, 4.0f) > 1.0f)
+				_state = Boss1State::SecondShotPattern;
 			break;
 		case Boss1State::SecondShotPattern:
-			//Something
+			if (shootingTimer < 0.0f) {
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 0, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 45, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 90, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 135, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 180, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 225, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 270, .4f, .08f, 8.0f);
+				bulletPool->spawnBossWaveBullet(curPosition, waveBulletSprites, 15, 315, .4f, .08f, 8.0f);
+				bulletFired = true;
+				shootingTimer = shootingCooldownFirstPattern;
+			}
+			if (fmodf(timeElapsedCurrentPhase, 4.0f) > 2.0f)
+				_state = Boss1State::ThirdShotPattern;
+			break;
+		case Boss1State::ThirdShotPattern:
+			if (shootingTimer < 0.0f) { 
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 0 + (rand() % 21 - 10), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 45 + (rand() % 21 - 10), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 90 + (rand() % 21 - 10), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 135 + (rand() % 21 - 10), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 180 + (rand() % 21 - 10), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 225 + (rand() % 21 - 10), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 270 + (rand() % 21 - 10), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 315 + (rand() % 21 - 10), 50.0f);
+				bulletFired = true;
+				shootingTimer = shootingCooldownThirdPattern;
+			}
+			if (fmodf(timeElapsedCurrentPhase, 4.0f) < 1.0f)
+				_state = Boss1State::FirstShotPattern;
 			break;
 		default:
 			break;
 	}
+
+	if (bulletFired)
+		AudioLocator::getService()->playOneshot("Assets/Sounds/BossShootSound.wav");
+
+	shootingTimer -= deltaTime;
+	timeElapsedCurrentPhase += deltaTime;
 }
 
 void Boss1Component::updatePhase3(const float& deltaTime) {
@@ -128,25 +227,77 @@ void Boss1Component::updatePhase3(const float& deltaTime) {
 		_state = Boss1State::Idle;
 	}
 
+	// calculate useful positions and directions
+	glm::vec2 curPosition = gameObject->getPosition();
+	float offsetX = (float)(rand() % 101) / 100 - 0.5f;
+	float offsetY = (float)(rand() % 101) / 100 - 0.5f;
+
+	bool bulletFired = false;
+
 	switch (_state) {
 		case Boss1State::Idle:
-			//Something
+			if (timeElapsedCurrentPhase > .5f)
+				_state = Boss1State::FirstShotPattern;
 			break;
-			//case yada yada
-			//...
-			//...
 		case Boss1State::FirstShotPattern:
-			//Something
+			if (shootingTimer < 0.0f) {
+				bulletPool->spawnBossSpiralBullet(curPosition + glm::vec2(offsetX, offsetY), spiralBulletSprites, 30, 40.0f, 150.0f, .05f, true);
+				bulletFired = true;
+				shootingTimer = shootingCooldownFirstPattern;
+			}
+			if (fmodf(timeElapsedCurrentPhase, 5.0f) > 1.0f)
+				_state = Boss1State::SecondShotPattern;
 			break;
 		case Boss1State::SecondShotPattern:
-			//Something
+			if (shootingTimer < 0.0f) {
+				bulletPool->spawnBossSpiralBullet(curPosition + glm::vec2(offsetX, offsetY), spiralBulletSprites, 30, 40.0f, 150.0f, .05f, false);
+				bulletFired = true;
+				shootingTimer = shootingCooldownSecondPattern;
+			}
+			if (fmodf(timeElapsedCurrentPhase, 5.0f) > 2.0f)
+				_state = Boss1State::ThirdShotPattern;
 			break;
 		case Boss1State::ThirdShotPattern:
-			//Something
+			if (shootingTimer < 0.0f) {
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 0 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 15 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 30 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 45 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 60 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 75 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 90 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 105 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 120 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 135 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 150 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 165 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 180 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 195 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 210 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 225 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 240 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 255 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 270 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 285 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 300 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 315 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 330 + (rand() % 7 - 3), 50.0f);
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 345 + (rand() % 7 - 3), 50.0f);
+				bulletFired = true;
+				shootingTimer = shootingCooldownThirdPattern;
+			}
+			if (fmodf(timeElapsedCurrentPhase, 5.0f) < 1.0f)
+				_state = Boss1State::FirstShotPattern;
 			break;
 		default:
 			break;
 	}
+
+	if (bulletFired)
+		AudioLocator::getService()->playOneshot("Assets/Sounds/BossShootSound.wav");
+
+	shootingTimer -= deltaTime;
+	timeElapsedCurrentPhase += deltaTime;
 }
 
 void Boss1Component::setAnimations(std::shared_ptr<Animation> idle_right_anim,
