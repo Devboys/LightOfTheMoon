@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Modified object clearing to support the bullet pool items
  * + Alberto Giudice [15/12/19] - Modified the physics lookup functions to support the second fixture
  * + Alberto Giudice [14/12/19] - Added a test linear/wave/spiral bullet in the direction of the player
  * + Francesco Frassineti [07/12/19] - Added the idle animations for the player
@@ -184,10 +185,7 @@ void LightOfTheMoon::initLevel() {
 	//BOSS
 	initBoss();
 
-
-
-
-
+	/*
 	// Linear Bullet test creation code. Move it wherever you need it.
 	auto linearBulletObj = LightOfTheMoon::instance->createGameObject();
 	linearBulletObj->name = "LinearBullet";
@@ -195,9 +193,11 @@ void LightOfTheMoon::initLevel() {
 
 	auto linearBulletphys = linearBulletObj->addComponent<PhysicsComponent>();
 	linearBulletphys->initCircle(b2_dynamicBody, 1.0f, { linearBulletObj->getPosition().x / LightOfTheMoon::getInstance()->physicsScale, linearBulletObj->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 1);
+	linearBulletphys->setPositionAndRotation({ linearBulletObj->getPosition().x / LightOfTheMoon::getInstance()->physicsScale, linearBulletObj->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
 	linearBulletphys->fixRotation();
 	linearBulletphys->setSensor(true);
 	linearBulletphys->setBullet(true);
+	linearBulletphys->setAutoUpdate(false);
 
 	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
 	bulletComponent->initBossBullet(10);
@@ -209,9 +209,7 @@ void LightOfTheMoon::initLevel() {
 	bulletAnimator->setAnimation(linearBulletAnimation, true);
 
 	auto bulletLinearMovement = linearBulletObj->addComponent<MovementLinearComponent>();
-	bulletLinearMovement->initParameters(180.0f, 20.0f);
-
-
+	bulletLinearMovement->initParameters(180.0f, 50.0f);
 
 
 
@@ -266,7 +264,7 @@ void LightOfTheMoon::initLevel() {
 
 	auto bulletSpiralMovement = spiralBulletObj->addComponent<MovementSpiralComponent>();
 	bulletSpiralMovement->initParameters({ spiralBulletObj->getPosition().x, spiralBulletObj->getPosition().y }, 40.0f, 150.0f, .05f, true);
-	bulletSpiralMovement->initParameters({ spiralBulletObj->getPosition().x, spiralBulletObj->getPosition().y }, 40.0f, 150.0f, .05f, true);
+	bulletSpiralMovement->initParameters({ spiralBulletObj->getPosition().x, spiralBulletObj->getPosition().y }, 40.0f, 150.0f, .05f, true);*/
 }
 
 void LightOfTheMoon::initPlayer() {
@@ -450,6 +448,13 @@ void LightOfTheMoon::update(float time) {
 		toBeRemoved.pop();
 		for (int i = 0; i < sceneObjects.size(); i++) {
 			if (go == &(*sceneObjects[i])) {//Check between a raw pointer and the raw pointer inside the smart pointer
+				if (go->getComponent<BulletComponent>() != nullptr) {
+					auto phys = go->getComponent<PhysicsComponent>();
+					if (phys != nullptr) {
+						phys->setPositionAndRotation({ 2000.0f, 2000.0f }, 0.0f);
+						deregisterPhysicsComponent(phys.get());
+					}
+				}
 				sceneObjects.erase(sceneObjects.begin() + i);
 				break;
 			}
@@ -609,10 +614,10 @@ void LightOfTheMoon::deregisterPhysicsComponent(PhysicsComponent* r) {
 	auto iter = physicsComponentLookup.find(r->getFixture());
 	if (iter != physicsComponentLookup.end()) {
 		physicsComponentLookup.erase(iter);
-	}
+	}/*
 	else {
 		assert(false); // cannot find physics object
-	}
+	}*/
 	if (r->getSecondFixture() != nullptr) {
 		auto iter2 = physicsComponentLookup.find(r->getSecondFixture());
 		if (iter2 != physicsComponentLookup.end()) {

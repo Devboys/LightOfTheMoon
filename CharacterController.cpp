@@ -2,6 +2,7 @@
  * Created by Francesco Frassineti on 06/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice 15/12/19] - Implemented shooting through pool
  * + Alberto Giudice [15/12/19] - Added second sensor collider
  * + Francesco Frassineti [14/12/19] - Implemented shooting
  * + Francesco Frassineti [07/12/19] - Implemented animation and movement
@@ -27,6 +28,19 @@ CharacterController::CharacterController(GameObject *gameObject) : Component(gam
     animatorComponent = gameObject->getComponent<AnimatorComponent>();
 
 	characterHealth = gameObject->getComponent<HealthComponent>();
+
+
+	auto spriteAtlas = LightOfTheMoon::getInstance()->getSpriteAtlas();
+	linearBulletSprites.push_back(spriteAtlas->get("bullet-cowboy-1.png"));
+	linearBulletSprites.push_back(spriteAtlas->get("bullet-cowboy-2.png"));
+	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
+
+	bulletPool = new BulletPool();
+	bulletPool->createLinearPool();
+}
+
+CharacterController::~CharacterController() {
+	delete bulletPool;
 }
 
 void CharacterController::setAnimations(std::shared_ptr<Animation> idle_right_anim,
@@ -145,8 +159,15 @@ void CharacterController::update(float deltaTime) {
 	}
 	
 	if (shoot && shootingTimer <= 0) {//If ready to shoot
+		// calculate the angle to shoot the bullet based on mouse position relative to character
+		glm::vec2 direction = glm::vec2(mouseX, mouseY) - gameObject->getPosition();
+		float directionAngleDeg = std::atan2f(direction.y, direction.x) * 180.0f / M_PI;
+
+		// spawn a linear bullet from the character's pool
+		bulletPool->spawnPlayerLinearBullet(gameObject->getPosition(), linearBulletSprites, 10, directionAngleDeg, bulletSpeed);
+		// play bullet sound
 		AudioLocator::getService()->playOneshot("Assets/Sounds/ShootSound.wav");
-		spawnPlayerBullet(glm::vec2(mouseX, mouseY));
+
 		shootingTimer = shootingCooldown; //Set cooldown
 	}
 
@@ -154,42 +175,6 @@ void CharacterController::update(float deltaTime) {
 		shootingTimer -= deltaTime;
 
 	updateAnimation(deltaTime);
-}
-
-void CharacterController::spawnPlayerBullet(glm::vec2& destination) {
-	glm::vec2 direction = glm::normalize(destination - gameObject->getPosition());
-
-	// Linear Bullet test creation code. Move it wherever you need it.
-	auto linearBulletObj = LightOfTheMoon::instance->createGameObject();
-	linearBulletObj->name = "PlayerBullet";
-	linearBulletObj->setPosition(gameObject->getPosition() + direction * bulletOffset);
-
-	auto linearBulletphys = linearBulletObj->addComponent<PhysicsComponent>();
-	linearBulletphys->initCircle(b2_dynamicBody, 1.0f, { linearBulletObj->getPosition().x / LightOfTheMoon::getInstance()->physicsScale, linearBulletObj->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 1);
-	linearBulletphys->fixRotation();
-	linearBulletphys->setSensor(true);
-	linearBulletphys->setBullet(true);
-
-	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
-	bulletComponent->initPlayerBullet(10);
-
-	auto bulletAnimator = linearBulletObj->addComponent<AnimatorComponent>();
-	auto spriteAtlas = LightOfTheMoon::getInstance()->getSpriteAtlas();
-	std::vector<sre::Sprite> linearBulletSprites({ spriteAtlas->get("bullet-cowboy-1.png"), spriteAtlas->get("bullet-cowboy-2.png") });
-	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
-	std::shared_ptr<Animation> linearBulletAnimation = std::make_shared<Animation>(linearBulletSprites, 1, true);
-	bulletAnimator->setAnimation(linearBulletAnimation, true);
-
-	auto bulletLinearMovement = linearBulletObj->addComponent<MovementLinearComponent>();
-	bulletLinearMovement->initParameters(direction, bulletSpeed);
-}
-
-void CharacterController::onCollisionStart(PhysicsComponent *comp) {
-
-}
-
-void CharacterController::onCollisionEnd(PhysicsComponent *comp) {
-
 }
 
 void CharacterController::updateAnimation(float deltaTime) {
@@ -225,5 +210,3 @@ void CharacterController::updateAnimation(float deltaTime) {
 		animatorComponent->setAnimation(idle_left_anim, false);
 	}
 }
-
-

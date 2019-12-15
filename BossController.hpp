@@ -17,9 +17,9 @@ enum class BossPhase {
 	Dead
 };
 
-class BossComponent : public Component {
+class BossController : public Component {
 public:
-	explicit BossComponent(GameObject* gameObject);
+	explicit BossController(GameObject* gameObject);
 
 	virtual void initBoss() = 0;
 
