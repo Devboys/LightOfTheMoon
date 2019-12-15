@@ -133,7 +133,7 @@ void CharacterController::update(float deltaTime) {
 		if (dash) {
 			//Prepare to dash
 			dash = false;
-
+			AudioLocator::getService()->playOneshot("Assets/Sounds/DashSound.wav");
 			characterPhysics->setLinearVelocity(dashSpeed*movement);
 			dashTimer = dashDuration;
 		}
@@ -145,6 +145,7 @@ void CharacterController::update(float deltaTime) {
 	}
 	
 	if (shoot && shootingTimer <= 0) {//If ready to shoot
+		AudioLocator::getService()->playOneshot("Assets/Sounds/ShootSound.wav");
 		spawnPlayerBullet(glm::vec2(mouseX, mouseY));
 		shootingTimer = shootingCooldown; //Set cooldown
 	}
@@ -192,9 +193,6 @@ void CharacterController::onCollisionEnd(PhysicsComponent *comp) {
 }
 
 void CharacterController::updateAnimation(float deltaTime) {
-	//TODO Shooting animation
-
-	//std::cout << "Pos(" << gameObject->getPosition().x << ", " << gameObject->getPosition().y << ") Mouse(" << mouseX << ", " << mouseY << ")" << std::endl;
  
 	float angle = glm::atan((mouseY - gameObject->getPosition().y), mouseX - gameObject->getPosition().x);
 	float angle_deg = glm::degrees(angle);
