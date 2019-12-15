@@ -15,6 +15,8 @@
 #include "LightOfTheMoon.hpp"
 #include "SpriteComponent.hpp"
 #include "AudioLocator.hpp"
+#include "BulletComponent.hpp"
+#include "MovementLinearComponent.hpp"
 
 CharacterController::CharacterController(GameObject *gameObject) : Component(gameObject) {
     characterPhysics = gameObject->getComponent<PhysicsComponent>();
@@ -44,7 +46,6 @@ void CharacterController::setAnimations(std::shared_ptr<Animation> idle_right_an
 }
 
 bool CharacterController::onKey(SDL_Event &event) {
-	std::cout << "CharacterController::onKey remove //TO_REMOVE before handin" << std::endl;
         switch (event.key.keysym.sym){
             case SDLK_a:
             {
@@ -71,11 +72,6 @@ bool CharacterController::onKey(SDL_Event &event) {
 				dash = event.type == SDL_KEYDOWN;
 				break;
 			}
-			case SDLK_e:
-			{
-				characterHealth->removeHealth(1); //TO_REMOVE
-				break;
-			}
             break;
         }
 
@@ -85,16 +81,20 @@ bool CharacterController::onKey(SDL_Event &event) {
 void CharacterController::onMouse(SDL_Event &event) {
 	mouseX = event.motion.x - LightOfTheMoon::windowSize.x / 2;
 	mouseY = event.motion.y - LightOfTheMoon::windowSize.y / 2;
-	mouseY /= (LightOfTheMoon::windowSize.x / 2); //They are both divided by windowsSize.x for a reason, it's not a bug
-	mouseX /= (LightOfTheMoon::windowSize.x / 2);//They are both divided by windowsSize.x for a reason, it's not a bug
-	direction.x = mouseX;
-	direction.y = mouseY;
+	mouseY /= -(LightOfTheMoon::windowSize.y / 2); //They are both divided by windowsSize.x for a reason, it's not a bug
+	mouseX /= (LightOfTheMoon::windowSize.y / 2);//They are both divided by windowsSize.x for a reason, it's not a bug
+	direction.x = mouseX - gameObject->getPosition().x;
+	direction.y = mouseY - gameObject->getPosition().y;
 	direction = glm::normalize(direction);
 
-	
-	//std::cout << "Direction: (" << direction.x << ", " << direction.y << ")" << std::endl;
-
-	//TODO SHOOT BULLETS towards direction (there's a field called direction)
+	if (event.button.button == SDL_BUTTON_LEFT) {
+		if (event.type == SDL_MOUSEBUTTONDOWN) {
+			shoot = true;
+		}
+		else if (event.type == SDL_MOUSEBUTTONUP) {
+			shoot = false;
+		}
+	}
 }
 
 void CharacterController::update(float deltaTime) {
@@ -141,7 +141,42 @@ void CharacterController::update(float deltaTime) {
 		}
 	}
 	
+	if (shoot && shootingTimer <= 0) {//If ready to shoot
+		spawnPlayerBullet(glm::vec2(mouseX, mouseY));
+		shootingTimer = shootingCooldown; //Set cooldown
+	}
+
+	if (shootingTimer > 0)
+		shootingTimer -= deltaTime;
+
 	updateAnimation(deltaTime);
+}
+
+void CharacterController::spawnPlayerBullet(glm::vec2& destination) {
+	glm::vec2 direction = glm::normalize(destination - gameObject->getPosition());
+
+	// Linear Bullet test creation code. Move it wherever you need it.
+	auto linearBulletObj = LightOfTheMoon::instance->createGameObject();
+	linearBulletObj->name = "PlayerBullet";
+	linearBulletObj->setPosition(gameObject->getPosition() + direction * bulletOffset);
+
+	auto linearBulletphys = linearBulletObj->addComponent<PhysicsComponent>();
+	linearBulletphys->initCircle(b2_kinematicBody, 1.0f, { linearBulletObj->getPosition().x / LightOfTheMoon::getInstance()->physicsScale, linearBulletObj->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 1);
+	linearBulletphys->fixRotation();
+	linearBulletphys->setSensor(true);
+
+	auto bulletComponent = linearBulletObj->addComponent<BulletComponent>();
+	bulletComponent->initPlayerBullet(10);
+
+	auto bulletAnimator = linearBulletObj->addComponent<AnimatorComponent>();
+	auto spriteAtlas = LightOfTheMoon::getInstance()->getSpriteAtlas();
+	std::vector<sre::Sprite> linearBulletSprites({ spriteAtlas->get("bullet-cowboy-1.png"), spriteAtlas->get("bullet-cowboy-2.png") });
+	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
+	std::shared_ptr<Animation> linearBulletAnimation = std::make_shared<Animation>(linearBulletSprites, 1, true);
+	bulletAnimator->setAnimation(linearBulletAnimation, true);
+
+	auto bulletLinearMovement = linearBulletObj->addComponent<MovementLinearComponent>();
+	bulletLinearMovement->initParameters(direction, bulletSpeed);
 }
 
 void CharacterController::onCollisionStart(PhysicsComponent *comp) {
@@ -157,7 +192,7 @@ void CharacterController::updateAnimation(float deltaTime) {
 
 	//std::cout << "Pos(" << gameObject->getPosition().x << ", " << gameObject->getPosition().y << ") Mouse(" << mouseX << ", " << mouseY << ")" << std::endl;
  
-	float angle = glm::atan((-mouseY - gameObject->getPosition().y), mouseX - gameObject->getPosition().x);
+	float angle = glm::atan((mouseY - gameObject->getPosition().y), mouseX - gameObject->getPosition().x);
 	float angle_deg = glm::degrees(angle);
 	
 	if (angle_deg < -157.5f) {

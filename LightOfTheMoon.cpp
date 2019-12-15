@@ -91,6 +91,10 @@ LightOfTheMoon::LightOfTheMoon()
 	r.startEventLoop();
 }
 
+std::shared_ptr<sre::SpriteAtlas> LightOfTheMoon::getSpriteAtlas() {
+	return spriteAtlas;
+}
+
 void LightOfTheMoon::requestChangeState(GameState state) {
 	requestedState = state;
 }
@@ -166,7 +170,7 @@ void LightOfTheMoon::initLevel() {
 
 	// Create TileMap object
 	currentTileMap.loadSprites(spriteAtlas);
-	currentTileMap.loadMap("Assets/Levels/level0.json");
+	currentTileMap.loadMap("Assets/Levels/level1.json");
 	//currentTileMap.printMap();
 	currentTileMap.generateColliders();
 
@@ -222,6 +226,7 @@ void LightOfTheMoon::initLevel() {
 	spiralBulletAnimator->setAnimation(spiralBulletAnimation, true);
 
 	auto bulletSpiralMovement = spiralBulletObj->addComponent<MovementSpiralComponent>();
+	bulletSpiralMovement->initParameters({ spiralBulletObj->getPosition().x, spiralBulletObj->getPosition().y }, 40.0f, 150.0f, .05f, true);
 	bulletSpiralMovement->initParameters({ spiralBulletObj->getPosition().x, spiralBulletObj->getPosition().y }, 40.0f, 150.0f, .05f, true);
 }
 

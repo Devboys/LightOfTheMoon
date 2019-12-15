@@ -45,6 +45,8 @@ public:
 	void BeginContact(b2Contact* contact) override;
 	void EndContact(b2Contact* contact) override;
 
+	std::shared_ptr<sre::SpriteAtlas> getSpriteAtlas();
+
 	// Delete copy equal 
 	LightOfTheMoon(const LightOfTheMoon&) = delete;
 	LightOfTheMoon& operator=(const LightOfTheMoon&) = delete;
