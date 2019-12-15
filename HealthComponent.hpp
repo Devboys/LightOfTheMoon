@@ -8,6 +8,7 @@
 #pragma once
 #include "Component.hpp"
 
+/*Class with information regarding the health of the GameObject*/
 class HealthComponent : public Component {
 public:
 	explicit HealthComponent(GameObject* gameObject);
@@ -22,6 +23,7 @@ public:
 
 	bool isAlive();
 
+	/*Print current_healt / max_health*/
 	void print();
 
 private:

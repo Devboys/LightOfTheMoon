@@ -84,8 +84,8 @@ private:
 
 	void updatePhysics();
 
-	std::queue<std::shared_ptr<GameObject>> toBeAdded;
-	std::queue<GameObject*> toBeRemoved;
+	std::queue<std::shared_ptr<GameObject>> toBeAdded;//queue that stores the objects that should be added to the scene at the beginning of the next frame
+	std::queue<GameObject*> toBeRemoved;//queue that stores the objects that should be removed from the scene at the beginning of the next frame
 
 	sre::Color backgroundColor;
 	b2World* world = nullptr;
@@ -98,8 +98,8 @@ private:
 
 	TileMap currentTileMap;
 
-	GameState currentState;
-	GameState requestedState;
+	GameState currentState;//The current state of the game
+	GameState requestedState;//The state that the game should transition to in the beginning of the next frame
 
 	friend class PhysicsComponent;
 	friend class CharacterController;

@@ -12,8 +12,11 @@
 
 class BulletPool {
 public:
+	/*Create pool for bullets with a linear movement*/
 	BulletPool* createLinearPool();
+	/*Create pool for bullets with the wave movement*/
 	BulletPool* createWavePool();
+	/*Create pool for bullets with the spiral movement*/
 	BulletPool* createSpiralPool();
 
 	void spawnPlayerLinearBullet(const glm::vec2 & position, const std::vector<sre::Sprite>& sprites, 

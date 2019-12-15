@@ -16,6 +16,7 @@ class TileMap{
 public:
 	explicit TileMap();
 
+	/*Load the tileMap from a json file*/
 	void loadMap(std::string filename);
 	void clearMap();
 
