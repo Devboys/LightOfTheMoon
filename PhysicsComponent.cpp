@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Added a transform reset function for the bullet pool
  * + Alberto Giudice [15/12/19] - Added a method to create a second fixture as sensor
  * + Alberto Giudice [14/12/19] - Improved accuracy of moveTo on circular motions
  * + Francesco Frassineti [11/12/19] - Addeded edge creation

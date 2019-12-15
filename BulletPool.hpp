@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 12/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Class interface decided
  * + Alberto Giudice [15/12/19] - Basic creation
  */
 

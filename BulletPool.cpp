@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 12/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - First Implementation of the three pools creation and the linear player bullet spawn
  * + Alberto Giudice [15/12/19] - Basic creation
  */
 
