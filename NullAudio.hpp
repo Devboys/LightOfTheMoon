@@ -13,5 +13,6 @@ class NullAudio : public IAudioService {
 
 public:
 	virtual void playOneshot(std::string soundName) { /* Do Nothing */ }
+	virtual void playLooped(std::string filename) { /* Do Nothing */ }
 	virtual void stopAll() { /* Do Nothing */ }
 };

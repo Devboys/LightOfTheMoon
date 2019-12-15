@@ -12,6 +12,7 @@ class IAudioService {
 public:
 	virtual ~IAudioService() {}
 	virtual void playOneshot(std::string soundName) = 0;
+	virtual void playLooped(std::string filename) = 0;
 	virtual void stopAll() = 0;
 };
 

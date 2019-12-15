@@ -29,6 +29,12 @@ CharacterController::CharacterController(GameObject *gameObject) : Component(gam
 
 	characterHealth = gameObject->getComponent<HealthComponent>();
 
+
+	auto spriteAtlas = LightOfTheMoon::getInstance()->getSpriteAtlas();
+	linearBulletSprites.push_back(spriteAtlas->get("bullet-cowboy-1.png"));
+	linearBulletSprites.push_back(spriteAtlas->get("bullet-cowboy-2.png"));
+	for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
+
 	bulletPool = new BulletPool();
 	bulletPool->createLinearPool();
 }
@@ -141,7 +147,7 @@ void CharacterController::update(float deltaTime) {
 		if (dash) {
 			//Prepare to dash
 			dash = false;
-
+			AudioLocator::getService()->playOneshot("Assets/Sounds/DashSound.wav");
 			characterPhysics->setLinearVelocity(dashSpeed*movement);
 			dashTimer = dashDuration;
 		}
@@ -153,12 +159,15 @@ void CharacterController::update(float deltaTime) {
 	}
 	
 	if (shoot && shootingTimer <= 0) {//If ready to shoot
-		auto spriteAtlas = LightOfTheMoon::getInstance()->getSpriteAtlas();
-		std::vector<sre::Sprite> linearBulletSprites({ spriteAtlas->get("bullet-cowboy-1.png"), spriteAtlas->get("bullet-cowboy-2.png") });
-		for (auto& s : linearBulletSprites) { s.setScale({ 0.0003f, 0.0003f }); }
+		// calculate the angle to shoot the bullet based on mouse position relative to character
 		glm::vec2 direction = glm::vec2(mouseX, mouseY) - gameObject->getPosition();
-		float directionAngleDeg = (float) std::atan2f(direction.y, direction.x) * 180.0f / M_PI;
+		float directionAngleDeg = std::atan2f(direction.y, direction.x) * 180.0f / M_PI;
+
+		// spawn a linear bullet from the character's pool
 		bulletPool->spawnPlayerLinearBullet(gameObject->getPosition(), linearBulletSprites, 10, directionAngleDeg, bulletSpeed);
+		// play bullet sound
+		AudioLocator::getService()->playOneshot("Assets/Sounds/ShootSound.wav");
+
 		shootingTimer = shootingCooldown; //Set cooldown
 	}
 
@@ -169,9 +178,6 @@ void CharacterController::update(float deltaTime) {
 }
 
 void CharacterController::updateAnimation(float deltaTime) {
-	//TODO Shooting animation
-
-	//std::cout << "Pos(" << gameObject->getPosition().x << ", " << gameObject->getPosition().y << ") Mouse(" << mouseX << ", " << mouseY << ")" << std::endl;
  
 	float angle = glm::atan((mouseY - gameObject->getPosition().y), mouseX - gameObject->getPosition().x);
 	float angle_deg = glm::degrees(angle);

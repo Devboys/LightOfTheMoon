@@ -32,6 +32,15 @@ void GameAudio::playOneshot(std::string filename) {
 
 }
 
+/* 
+ * Play a looped sound by filename
+ */
+void GameAudio::playLooped(std::string filename) {
+
+	Mix_Chunk* sound = AssetLocator::getService()->getSoundAsset(filename);
+	Mix_PlayChannel(-1, sound, -1);
+}
+
 /*
  * Stop all playback
  */

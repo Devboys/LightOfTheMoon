@@ -76,4 +76,6 @@ private:
 	bool down = false;
 	bool dash = false;
 	bool shoot = false;
+
+	std::vector<sre::Sprite> linearBulletSprites;
 };

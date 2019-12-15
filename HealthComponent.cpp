@@ -6,6 +6,7 @@
  */
 
 #include "HealthComponent.hpp"
+#include "AudioLocator.hpp"
 
 HealthComponent::HealthComponent(GameObject* gameObject)
 	: Component(gameObject)
@@ -51,6 +52,9 @@ void HealthComponent::addHealth(int amount) {
 void HealthComponent::removeHealth(int amount) {
 	if (amount < 0)
 		throw "Removing a negative amount of health!";
+
+	if(amount > 0)
+		AudioLocator::getService()->playOneshot("Assets/Sounds/HurtSound.wav");
 
 	current_health -= amount;
 	if (current_health < 0)
