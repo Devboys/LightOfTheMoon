@@ -12,6 +12,7 @@
 #include "sre/Sprite.hpp"
 #include "Animation.hpp"
 
+/*Component able to render Animation clips over time*/
 class AnimatorComponent : public Component {
 public:
 	explicit AnimatorComponent(GameObject* gameObject);
@@ -20,8 +21,10 @@ public:
 
 	void renderSprite(sre::SpriteBatch::SpriteBatchBuilder& spriteBatchBuilder) override;
 
-	
-	void setAnimation(std::shared_ptr<Animation> animation, bool forceOverride);//If you do not set "forceOverride" to true the animator will check if you're trying to set the same animation. If that's the case, the animator will not reassign it
+	/*Sets the current animation
+	*If you do not set "forceOverride" to true the animator will check if you're trying to set the same animation. If that's the case, the animator will not reassign it
+	*/
+	void setAnimation(std::shared_ptr<Animation> animation, bool forceOverride);
 	std::shared_ptr<Animation> getAnimation();
 
 	void setOffset(glm::vec2 offset);

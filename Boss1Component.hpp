@@ -39,7 +39,7 @@ public:
 	void updateAnimation(const float& deltaTime);
 	void update(float deltaTime) override;
 
-	void setPlayer(std::shared_ptr<GameObject> player);
+	void setPlayer(std::shared_ptr<GameObject> player);//Set's the reference to the player, it's needed for the boss to keep looking towards the player
 
 	void setAnimations(std::shared_ptr<Animation> idle_right_anim,
 		std::shared_ptr<Animation> idle_top_right_anim,
@@ -72,7 +72,7 @@ private:
 	std::shared_ptr<Animation> idle_down_anim;
 	std::shared_ptr<Animation> idle_down_right_anim;
 
-	glm::vec2 direction;
+	glm::vec2 direction;/*The direction the boss is currently facing*/
 
 	BulletPool* bulletPool;
 
@@ -85,5 +85,5 @@ private:
 	float shootingCooldownFirstPattern;
 	float shootingCooldownSecondPattern;
 	float shootingCooldownThirdPattern;
-	float healthPercentageThresholds[2]{ 0.66, 0.33 };//For every phase, if the health percentage goes below the threshold switch to the next phase
+	float healthPercentageThresholds[2]{ 2.0f/3.0f, 1 / 3.0f };//For every phase, if the health percentage goes below the threshold switch to the next phase
 };

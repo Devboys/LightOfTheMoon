@@ -17,15 +17,8 @@ public:
 
 	void update(float deltaTime) override;
 
-	// Uncomment to implement a follow camera in the future
-	// void setFollowObject(std::shared_ptr<GameObject> followObject, glm::vec2 offset);
-
 	sre::Camera& getCamera();
 
 private:
 	sre::Camera camera;
-	/* // Uncomment to implement a follow camera in the future
-	std::shared_ptr<GameObject> followObject;
-	glm::vec2 offset;
-	*/ 
 };

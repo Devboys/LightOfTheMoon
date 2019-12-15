@@ -69,7 +69,7 @@ void Boss1Component::update(float deltaTime) {
 	case Boss1Phase::Dead:
 		std::cout << "Boss1 defeated" << std::endl;
 		LightOfTheMoon::getInstance()->destroyGameObject(gameObject);
-		LightOfTheMoon::getInstance()->requestChangeState(GameState::GameOver);
+		LightOfTheMoon::getInstance()->requestChangeState(GameState::Win);
 		break;
 	default:
 		break;

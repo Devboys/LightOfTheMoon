@@ -23,7 +23,6 @@
 #include "GameObject.hpp"
 #include "SpriteComponent.hpp"
 #include "PhysicsComponent.hpp"
-#include "SpriteAnimationComponent.hpp"
 #include "CharacterController.hpp"
 #include "HealthComponent.hpp"
 #include "AudioLocator.hpp"
@@ -119,6 +118,9 @@ void LightOfTheMoon::changeState(GameState state) {
 		break;
 	case GameState::GameOver:
 		initGameOver();
+		break;
+	case GameState::Win:
+		initWin();
 		break;
 	default:
 		break;
@@ -368,6 +370,49 @@ void LightOfTheMoon::initGameOver() {
 
 }
 
+void LightOfTheMoon::initWin() {
+
+	auto camObj = createGameObject();
+	camObj->name = "Camera";
+	camera = camObj->addComponent<CameraComponent>();
+	camObj->setPosition(windowSize * 0.5f);
+
+	std::shared_ptr<sre::SpriteAtlas> uiAtlas = AssetLocator::getService()->getSpriteAtlas("Assets/Sprites/MenuSprites.json");
+
+	//fetch menu sprites
+	auto youWinSprite = uiAtlas->get("YouWin.png");
+	youWinSprite.setScale(glm::vec2(0.001f, 0.001f));
+
+	auto restartTextSprite = uiAtlas->get("EnterRestart.png");
+	restartTextSprite.setScale(glm::vec2(0.001f, 0.001f));
+
+	auto menuTextSprite = uiAtlas->get("BackspaceMenu.png");
+	menuTextSprite.setScale(glm::vec2(0.001f, 0.001f));
+
+	//make menu objects
+	auto gameOverObj = createGameObject();
+	gameOverObj->name = "Title";
+	gameOverObj->position = glm::vec2(0, 0);
+
+	auto spr = gameOverObj->addComponent<SpriteComponent>();
+	spr->setSprite(youWinSprite);
+
+	auto restartTextObj = createGameObject();
+	restartTextObj->name = "RestartText";
+	restartTextObj->position = glm::vec2(0, -(restartTextSprite.getSpriteSize().y * 2) * restartTextSprite.getScale().y);
+
+	spr = restartTextObj->addComponent<SpriteComponent>();
+	spr->setSprite(restartTextSprite);
+
+	auto menuTextObj = createGameObject();
+	menuTextObj->name = "MenuText";
+	menuTextObj->position = glm::vec2(0, -(menuTextSprite.getSpriteSize().y * 3) * menuTextSprite.getScale().y);
+
+	spr = menuTextObj->addComponent<SpriteComponent>();
+	spr->setSprite(menuTextSprite);
+
+}
+
 void LightOfTheMoon::update(float time) {
 	if (requestedState != currentState) {
 		changeState(requestedState); //Change GameState in a safe way
@@ -471,12 +516,12 @@ void LightOfTheMoon::onKey(SDL_Event& event) {
 		
 		//  Add all cases for key presses check here
 		case SDLK_RETURN:
-			if (currentState == GameState::Menu || currentState == GameState::GameOver) {
+			if (currentState == GameState::Menu || currentState == GameState::GameOver || currentState == GameState::Win) {
 				changeState(GameState::Running);
 			}
 			break;
 		case SDLK_BACKSPACE:
-			if (currentState == GameState::GameOver) {
+			if (currentState == GameState::GameOver || currentState == GameState::Win) {
 				changeState(GameState::Menu);
 			}
 			break;

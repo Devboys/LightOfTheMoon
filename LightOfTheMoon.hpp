@@ -22,8 +22,10 @@ class PhysicsComponent;
 
 enum class GameState {
 	Menu,
+	Loading,
 	Running,
-	GameOver
+	GameOver,
+	Win
 };
 
 class LightOfTheMoon : public b2ContactListener {
@@ -59,6 +61,7 @@ private:
 	void initMenu();
 	void initLevel();
 	void initGameOver();
+	void initWin();
 
 	std::shared_ptr<GameObject> initPlayer();
 	std::shared_ptr<GameObject> initBoss(std::shared_ptr<GameObject> player);
@@ -81,8 +84,8 @@ private:
 
 	void updatePhysics();
 
-	std::queue<std::shared_ptr<GameObject>> toBeAdded;
-	std::queue<GameObject*> toBeRemoved;
+	std::queue<std::shared_ptr<GameObject>> toBeAdded;//queue that stores the objects that should be added to the scene at the beginning of the next frame
+	std::queue<GameObject*> toBeRemoved;//queue that stores the objects that should be removed from the scene at the beginning of the next frame
 
 	sre::Color backgroundColor;
 	b2World* world = nullptr;
@@ -95,8 +98,8 @@ private:
 
 	TileMap currentTileMap;
 
-	GameState currentState;
-	GameState requestedState;
+	GameState currentState;//The current state of the game
+	GameState requestedState;//The state that the game should transition to in the beginning of the next frame
 
 	friend class PhysicsComponent;
 	friend class CharacterController;

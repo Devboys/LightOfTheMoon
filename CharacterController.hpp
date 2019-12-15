@@ -38,8 +38,6 @@ public:
 	void onMouse(SDL_Event &event) override;
 
 private:
-	void spawnPlayerBullet(glm::vec2& direction);
-
 	std::shared_ptr<Animation> idle_right_anim;
 	std::shared_ptr<Animation> idle_top_right_anim;
 	std::shared_ptr<Animation> idle_top_anim;
@@ -55,7 +53,7 @@ private:
 
 	BulletPool* bulletPool;
 
-	glm::vec2 direction;
+	glm::vec2 direction;//The direction the player is looking at (based on mouse)
 	float mouseX;
 	float mouseY;
 
@@ -66,9 +64,9 @@ private:
 	float dashTimer; //Keeps track of the time the character has beeen dashing. If dashTimer = 0 the character is not dashing
 
 	float bulletSpeed = 50.0f;
-	float bulletOffset = 0.03f;
-	float shootingCooldown = 1.0 / 8.0;
-	float shootingTimer = 0.0f;
+	float bulletOffset = 0.03f;//Distance between the bullet spawn point and the pivot of the player
+	float shootingCooldown = 1.0 / 8.0;//Time between each shot
+	float shootingTimer = 0.0f;//Remaining time before being able to shoot again
 
     bool left = false;
     bool right = false;

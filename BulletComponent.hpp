@@ -17,7 +17,7 @@ enum class BulletType {
 
 class BulletComponent : public Component {
 public:
-	BulletComponent(GameObject* gameObject); // TODO: move to private when bullet poolig ready
+	BulletComponent(GameObject* gameObject);
 
 	void initPlayerBullet(const int& damage);
 	void initBossBullet(const int& damage);
