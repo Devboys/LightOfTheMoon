@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Added method to deactivate physics simulation on bodies
  * + Alberto Giudice [15/12/19] - Second fixture support
  * + Alberto Giudice [14/12/19] - Added support for bullets (CCD)
  * + Alberto Giudice [05/12/19] - Basic creation
@@ -60,6 +61,8 @@ public:
 	b2Fixture* getSecondFixture();
 
 	const glm::vec2 getSpriteOffset();
+
+	void setActive(const bool& active);
 
 private:
 	// auto update sprite position and rotation based on physics update

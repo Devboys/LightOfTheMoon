@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 12/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Physic and rendering activation only on bullet spawn
  * + Alberto Giudice [15/12/19] - Proper implementation for every bullet type with 100% component reuse
  * + Alberto Giudice [15/12/19] - First Implementation of the three pools creation and the linear player bullet spawn
  * + Alberto Giudice [15/12/19] - Basic creation
@@ -31,6 +32,7 @@ BulletPool* BulletPool::createLinearPool() {
 		phys->setSensor(true);
 		phys->setBullet(true);
 		phys->setAutoUpdate(false);
+		phys->setActive(false);
 		auto bc = obj->addComponent<BulletComponent>();
 		auto animator = obj->addComponent<AnimatorComponent>();
 		auto movement = obj->addComponent<MovementLinearComponent>();
@@ -51,6 +53,7 @@ BulletPool* BulletPool::createWavePool() {
 		phys->setSensor(true);
 		phys->setBullet(true);
 		phys->setAutoUpdate(false);
+		phys->setActive(false);
 		auto bc = obj->addComponent<BulletComponent>();
 		auto animator = obj->addComponent<AnimatorComponent>();
 		auto movement = obj->addComponent<MovementWaveComponent>();
@@ -71,6 +74,7 @@ BulletPool* BulletPool::createSpiralPool() {
 		phys->setSensor(true);
 		phys->setBullet(true);
 		phys->setAutoUpdate(false);
+		phys->setActive(false);
 		auto bc = obj->addComponent<BulletComponent>();
 		auto animator = obj->addComponent<AnimatorComponent>();
 		auto movement = obj->addComponent<MovementSpiralComponent>();
@@ -91,11 +95,13 @@ void BulletPool::spawnPlayerLinearBullet(const glm::vec2& position, const std::v
 		if (!bc->inUse()) {
 			std::shared_ptr<GameObject> bullet = linearBullets[i];
 			bullet->setPosition(position);
+			bullet->setActive(true);
 
 			std::shared_ptr<PhysicsComponent> phys = bullet->getComponent<PhysicsComponent>();
 			assert(phys != nullptr);
 			phys->setPositionAndRotation({ bullet->getPosition().x / LightOfTheMoon::getInstance()->physicsScale,
 									bullet->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
+			phys->setActive(true);
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
 			bc->initPlayerBullet(damage);
@@ -126,11 +132,13 @@ void BulletPool::spawnBossLinearBullet(const glm::vec2& position, const std::vec
 		if (!bc->inUse()) {
 			std::shared_ptr<GameObject> bullet = linearBullets[i];
 			bullet->setPosition(position);
+			bullet->setActive(true);
 
 			std::shared_ptr<PhysicsComponent> phys = bullet->getComponent<PhysicsComponent>();
 			assert(phys != nullptr);
 			phys->setPositionAndRotation({ bullet->getPosition().x / LightOfTheMoon::getInstance()->physicsScale,
 									bullet->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
+			phys->setActive(true);
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
 			bc->initBossBullet(damage);
@@ -161,11 +169,13 @@ void BulletPool::spawnBossWaveBullet(const glm::vec2& position, const std::vecto
 		if (!bc->inUse()) {
 			std::shared_ptr<GameObject> bullet = waveBullets[i];
 			bullet->setPosition(position);
+			bullet->setActive(true);
 
 			std::shared_ptr<PhysicsComponent> phys = bullet->getComponent<PhysicsComponent>();
 			assert(phys != nullptr);
 			phys->setPositionAndRotation({ bullet->getPosition().x / LightOfTheMoon::getInstance()->physicsScale,
 									bullet->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
+			phys->setActive(true);
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
 			bc->initPlayerBullet(damage);
@@ -195,11 +205,13 @@ void BulletPool::spawnBossSpiralBullet(const glm::vec2& position, const std::vec
 		if (!bc->inUse()) {
 			std::shared_ptr<GameObject> bullet = spiralBullets[i];
 			bullet->setPosition(position);
+			bullet->setActive(true);
 
 			std::shared_ptr<PhysicsComponent> phys = bullet->getComponent<PhysicsComponent>();
 			assert(phys != nullptr);
 			phys->setPositionAndRotation({ bullet->getPosition().x / LightOfTheMoon::getInstance()->physicsScale,
 									bullet->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
+			phys->setActive(true);
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
 			bc->initPlayerBullet(damage);

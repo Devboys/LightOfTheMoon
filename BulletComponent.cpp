@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 12/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Deactivate gameObject of bullet on despawn
  * + Alberto Giudice [15/12/19] - Added logic to disappear on wall collision
  * + Alberto Giudice [14/12/19] - Logic implementation
  * + Alberto Giudice [12/12/19] - Basic creation
@@ -70,10 +71,8 @@ void BulletComponent::onCollisionStart(PhysicsComponent* comp) {
 		targetHit = true;
 
 	if (targetHit) {
-		//std::cout << "BULLET DESTROYED" << std::endl;
 		_inUse = false;
+		gameObject->setActive(false);
 		LightOfTheMoon::getInstance()->destroyGameObject(this->gameObject);
 	}
-	
-	//std::cout << comp->getGameObject()->name << std::endl;
 }

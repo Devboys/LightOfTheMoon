@@ -204,3 +204,7 @@ b2Fixture* PhysicsComponent::getSecondFixture() {
 const glm::vec2 PhysicsComponent::getSpriteOffset() {
 	return spriteOffset;
 }
+
+void PhysicsComponent::setActive(const bool& active) {
+	body->SetActive(active);
+}

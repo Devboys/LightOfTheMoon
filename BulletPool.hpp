@@ -29,7 +29,7 @@ public:
 							const float& minVelocity, const float& maxVelocity, const float& radiusExpansionRate, const bool& clockwise = true);
 
 private:
-	static const int POOL_SIZE = 100;
+	static const int POOL_SIZE = 50;
 	std::shared_ptr<GameObject> linearBullets[POOL_SIZE];
 	std::shared_ptr<GameObject> waveBullets[POOL_SIZE];
 	std::shared_ptr<GameObject> spiralBullets[POOL_SIZE];

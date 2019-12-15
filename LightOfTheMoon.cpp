@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [15/12/19] - Deactivate physics on bullets when despawned
  * + Alberto Giudice [15/12/19] - Modified object clearing to support the bullet pool items
  * + Alberto Giudice [15/12/19] - Modified the physics lookup functions to support the second fixture
  * + Alberto Giudice [14/12/19] - Added a test linear/wave/spiral bullet in the direction of the player
@@ -459,6 +460,7 @@ void LightOfTheMoon::update(float time) {
 					auto phys = go->getComponent<PhysicsComponent>();
 					if (phys != nullptr) {
 						phys->setPositionAndRotation({ 2000.0f, 2000.0f }, 0.0f);
+						phys->setActive(false);
 						deregisterPhysicsComponent(phys.get());
 					}
 				}
