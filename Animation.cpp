@@ -22,10 +22,10 @@ std::vector<sre::Sprite> Animation::getSprites() {
 const sre::Sprite Animation::getFrame(float time) {
 	{
 		if (loop) {
-			time = fmod(time, length);
+			time = fmod(time, length);//Loop
 		}
 		else {
-			time = glm::min(time, length);
+			time = glm::min(time, length);//Hold
 		}
 		if (time == length)
 			return sprites[0];

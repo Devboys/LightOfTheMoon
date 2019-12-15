@@ -38,8 +38,6 @@ public:
 	void onMouse(SDL_Event &event) override;
 
 private:
-	void spawnPlayerBullet(glm::vec2& direction);
-
 	std::shared_ptr<Animation> idle_right_anim;
 	std::shared_ptr<Animation> idle_top_right_anim;
 	std::shared_ptr<Animation> idle_top_anim;

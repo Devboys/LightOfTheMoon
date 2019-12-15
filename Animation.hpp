@@ -12,16 +12,16 @@
 #include <string>
 #include "rapidjson/document.h"
 #pragma once
-
+/*Class for an animation clip*/
 class Animation{
 public:
 	explicit Animation(const std::vector<sre::Sprite>& sprites, const float& length, const bool& loop);
 
-	std::vector<sre::Sprite> getSprites();
-	const sre::Sprite getFrame(float time);
+	std::vector<sre::Sprite> getSprites();/*The sequence of sprites*/
+	const sre::Sprite getFrame(float time);/*Returns the frame at that time*/
 
 private:
-	std::vector<sre::Sprite> sprites;
-	float length = 1.0;
-	bool loop = true;
+	std::vector<sre::Sprite> sprites;/*The sequence of sprites*/
+	float length = 1.0;/*The duration of the animation clip*/
+	bool loop = true;/*Does it loop when time > length or does it hold the last frame?*/
 };
