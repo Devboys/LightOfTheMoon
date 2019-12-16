@@ -1,0 +1,76 @@
+{"frames": [
+
+{
+	"filename": "BackspaceMenu.png",
+	"frame": {"x":0,"y":95,"w":823,"h":95},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":823,"h":95},
+	"sourceSize": {"w":823,"h":95}
+},
+{
+	"filename": "EnterRestart.png",
+	"frame": {"x":636,"y":0,"w":701,"h":82},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":701,"h":82},
+	"sourceSize": {"w":701,"h":82}
+},
+{
+	"filename": "EnterStart.png",
+	"frame": {"x":0,"y":0,"w":636,"h":82},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":636,"h":82},
+	"sourceSize": {"w":636,"h":82}
+},
+{
+	"filename": "EscapeQuit.png",
+	"frame": {"x":1337,"y":0,"w":671,"h":95},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":671,"h":95},
+	"sourceSize": {"w":671,"h":95}
+},
+{
+	"filename": "GameOver.png",
+	"frame": {"x":0,"y":225,"w":724,"h":131},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":724,"h":131},
+	"sourceSize": {"w":724,"h":131}
+},
+{
+	"filename": "Loading.png",
+	"frame": {"x":823,"y":95,"w":321,"h":95},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":321,"h":95},
+	"sourceSize": {"w":321,"h":95}
+},
+{
+	"filename": "Title.png",
+	"frame": {"x":724,"y":225,"w":1132,"h":158},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":1132,"h":158},
+	"sourceSize": {"w":1132,"h":158}
+},
+{
+	"filename": "YouWin.png",
+	"frame": {"x":1144,"y":95,"w":568,"h":130},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":568,"h":130},
+	"sourceSize": {"w":568,"h":130}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "MenuSprites.png",
+	"format": "RGBA8888",
+	"size": {"w":2048,"h":512},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:3b7d634516b6cb3db5994092ba43fe83:13b97e39cad5df567273335c225344af:85a0c464fe4e71e4d4d4694b64744bfc$"
+}
+}
