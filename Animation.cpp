@@ -6,7 +6,6 @@
  */
 
 #include <SDL_events.h>
-#include <iostream>
 #include "Animation.hpp"
 
 Animation::Animation(const std::vector<sre::Sprite>& sprites, const float& length, const bool& loop) {
@@ -33,5 +32,3 @@ const sre::Sprite Animation::getFrame(float time) {
 			return sprites[(int)(sprites.size() * time / length)];
 	}
 }
-
-

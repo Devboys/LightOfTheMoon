@@ -15,15 +15,6 @@ file(GLOB LOTM_sources
         "*.h"
         "*.cpp"
         )
-		
-# Add all asset file here (png, json, etc.)
-#set(LOTM_assets
-	# write the name of the files below, including their extension. No quotation marks ("") required. One file per line.
-#	LOTMSprites.png
-#	LOTMSprites.json
-#    level0.json
-#    sound.wav
-#	)
 
 # Visual Leak Detector
 include_directories("C:/Program Files (x86)/Visual Leak Detector/include")
@@ -32,13 +23,6 @@ link_directories("C:/Program Files (x86)/Visual Leak Detector/lib/Win32")
 # Compile cpp files
 add_executable(LOTM ${LOTM_sources})
 target_link_libraries(LOTM ${all_libs} vld)
-
-# copy assets to dest
-#foreach(asset ${LOTM_assets})
-#	file(COPY ${asset} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug)
-#	file(COPY ${asset}  DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Release)
-#	file(COPY ${asset}  DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-#endforeach()
 
 #copy asset folder to binaries
 file(COPY Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug)

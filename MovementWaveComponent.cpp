@@ -16,6 +16,14 @@
 
 MovementWaveComponent::MovementWaveComponent(GameObject* gameObject) : Component(gameObject) {}
 
+/* Initialize the parameters of a wave movement
+ *
+ * @param startingPos : The position the attached gameObject started at
+ * @param directionAngleDeg : direction the attached gameObject will travel to, in degrees
+ * @param velocity : constant speed the attached gameObject should travel at in the above mentioned direction
+ * @param amplitude : height of the peaks in the sin wave generated
+ * @param frequency : number of peaks over time the wave will make
+ */
 void MovementWaveComponent::initParameters(const glm::vec2& startingPos, const float& directionAngleDeg, const float& velocity, const float& amplitude, const float& frequency) {
 	_startingPosition = startingPos;
 	_directionAngleDegrees = directionAngleDeg;

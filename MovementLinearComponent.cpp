@@ -17,6 +17,11 @@
 
 MovementLinearComponent::MovementLinearComponent(GameObject* gameObject) : Component(gameObject) {}
 
+/* Initialize the parameters of a linear movement
+ *
+ * @param directionAngleDeg : direction the attached gameObject will travel to, in degrees
+ * @param velocity : constant speed the attached gameObject should have in its linear trajectory
+ */
 void MovementLinearComponent::initParameters(const float& directionAngleDeg, const float& velocity) {
 	_directionAngleDegrees = directionAngleDeg;
 	_velocity = velocity;

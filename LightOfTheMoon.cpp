@@ -276,6 +276,7 @@ std::shared_ptr<GameObject> LightOfTheMoon::initBoss(std::shared_ptr<GameObject>
 	//< Boss Animation>
 	auto anim = bossObj->addComponent<AnimatorComponent>();
 
+	// Sprites for boss1 first phase
 	vector<Sprite> sprites_right({ spriteAtlas->get("enemy-right.png") });
 	vector<Sprite> sprites_top_right({ spriteAtlas->get("enemy-top-right.png") });
 	vector<Sprite> sprites_top({ spriteAtlas->get("enemy-top.png") });
@@ -293,6 +294,7 @@ std::shared_ptr<GameObject> LightOfTheMoon::initBoss(std::shared_ptr<GameObject>
 	for (auto& s : sprites_down) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
 	for (auto& s : sprites_down_right) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
 
+	// Sprites for boss1 second phase
 	vector<Sprite> sprites_right_2({ spriteAtlas->get("enemy-right-2.png") });
 	vector<Sprite> sprites_top_right_2({ spriteAtlas->get("enemy-top-right-2.png") });
 	vector<Sprite> sprites_top_2({ spriteAtlas->get("enemy-top-2.png") });
@@ -310,6 +312,7 @@ std::shared_ptr<GameObject> LightOfTheMoon::initBoss(std::shared_ptr<GameObject>
 	for (auto& s : sprites_down_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
 	for (auto& s : sprites_down_right_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
 
+	// Sprites for boss1 third phase
 	vector<Sprite> sprites_right_3({ spriteAtlas->get("enemy-right-3.png") });
 	vector<Sprite> sprites_top_right_3({ spriteAtlas->get("enemy-top-right-3.png") });
 	vector<Sprite> sprites_top_3({ spriteAtlas->get("enemy-top-3.png") });
@@ -485,9 +488,10 @@ void LightOfTheMoon::update(float time) {
 		toBeRemoved.pop();
 		for (int i = 0; i < sceneObjects.size(); i++) {
 			if (go == &(*sceneObjects[i])) {//Check between a raw pointer and the raw pointer inside the smart pointer
-				if (go->getComponent<BulletComponent>() != nullptr) {
+				if (go->getComponent<BulletComponent>() != nullptr) { // If object to remove is a bullet, take action for not messing the bullet pool
 					auto phys = go->getComponent<PhysicsComponent>();
 					if (phys != nullptr) {
+						// Deactivate and hide the physics component so that it doesn't mess up with active objects / slow down performance
 						phys->setPositionAndRotation({ 2000.0f, 2000.0f }, 0.0f);
 						phys->setActive(false);
 						deregisterPhysicsComponent(phys.get());
@@ -521,8 +525,6 @@ void LightOfTheMoon::render() {
 		static Inspector profiler;
 		profiler.update();
 		profiler.gui(false);
-
-		// Do the debug draw here
 	}
 
 	auto pos = camera->getGameObject()->getPosition();
@@ -585,11 +587,11 @@ void LightOfTheMoon::onKey(SDL_Event& event) {
 				r.stopEventLoop(); //quit game
 			}
 		case SDLK_m:
-			if (audioOn) {
+			if (audioOn) { // deactivate audio
 				AudioLocator::setService(std::make_shared<NullAudio>());
 				audioOn = false;
 			}
-			else {
+			else { // activate audio
 				AudioLocator::setService(std::make_shared<GameAudio>());
 				AudioLocator::getService()->playLooped("Assets/Sounds/renovation_airtone.wav");
 				audioOn = true;
@@ -667,11 +669,8 @@ void LightOfTheMoon::deregisterPhysicsComponent(PhysicsComponent* r) {
 	auto iter = physicsComponentLookup.find(r->getFixture());
 	if (iter != physicsComponentLookup.end()) {
 		physicsComponentLookup.erase(iter);
-	}/*
-	else {
-		assert(false); // cannot find physics object
-	}*/
-	if (r->getSecondFixture() != nullptr) {
+	}
+	if (r->getSecondFixture() != nullptr) { // needed for objects with collider + sensor (playerObj)
 		auto iter2 = physicsComponentLookup.find(r->getSecondFixture());
 		if (iter2 != physicsComponentLookup.end()) {
 			physicsComponentLookup.erase(iter2);

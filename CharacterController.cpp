@@ -12,7 +12,6 @@
 #define Y_SCALE_FACTOR 0.86602540378f //sqrt(3)/2
 
 #include <SDL_events.h>
-#include <iostream>
 #include "CharacterController.hpp"
 #include "GameObject.hpp"
 #include "PhysicsComponent.hpp"

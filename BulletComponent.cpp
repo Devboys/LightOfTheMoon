@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <iostream>
 #include "BulletComponent.hpp"
 #include "CharacterController.hpp"
 #include "HealthComponent.hpp"
@@ -71,6 +70,6 @@ void BulletComponent::onCollisionStart(PhysicsComponent* comp) {
 	if (targetHit) {
 		_inUse = false;
 		gameObject->setActive(false);
-		LightOfTheMoon::getInstance()->destroyGameObject(this->gameObject);
+		LightOfTheMoon::getInstance()->destroyGameObject(this->gameObject); // this doesn't destroy the object, it just goes back in the bullet pool
 	}
 }

@@ -15,6 +15,14 @@
 
 MovementSpiralComponent::MovementSpiralComponent(GameObject* gameObject) : Component(gameObject) {}
 
+/* Initialize the parameters of a spiral movement
+ *
+ * @param center : The position around which the spiral will rotate
+ * @param minVelocity : minimum angular speed the attached gameObject will reach over time
+ * @param maxVelocity : initial angular speed when the attached gameObject is spawned. Will decrease over time
+ * @param radiusExpansionRate : rate at which the radius of the spiral will increase over time
+ * @param clockwise : true = clockwise rotation, false = counterclockwise rotation
+ */
 void MovementSpiralComponent::initParameters(const glm::vec2& center, const float& minVelocity, const float& maxVelocity, const float& radiusExpansionRate, const bool& clockwise) {
 	_center = center;
 	_radiusExpansionRate = radiusExpansionRate;

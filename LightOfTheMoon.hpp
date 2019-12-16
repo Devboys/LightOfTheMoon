@@ -91,12 +91,12 @@ private:
 	b2World* world = nullptr;
 	void registerPhysicsComponent(PhysicsComponent* r);
 	void deregisterPhysicsComponent(PhysicsComponent* r);
-	void registerSecondPhysicsComponent(PhysicsComponent* r);
+	void registerSecondPhysicsComponent(PhysicsComponent* r); // needed for objects with collider + sensor
 	std::map<b2Fixture*, PhysicsComponent*> physicsComponentLookup;
 	Box2DDebugDraw debugDraw;
 	bool doDebugDraw = false;
 
-	bool audioOn;
+	bool audioOn; // current audio state on/off
 
 	TileMap currentTileMap;
 

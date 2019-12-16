@@ -11,7 +11,6 @@ using namespace glm;
 
 CameraComponent::CameraComponent(GameObject* gameObject)
 	: Component(gameObject){
-
 }
 
 sre::Camera& CameraComponent::getCamera() {
@@ -21,9 +20,3 @@ sre::Camera& CameraComponent::getCamera() {
 void CameraComponent::update(float deltaTime) {
 
 }
-
-/* // Uncomment to implement a follow camera in the future
-void CameraComponent::setFollowObject(std::shared_ptr<GameObject> followObject, glm::vec2 offset) {
-	// TODO: follow the player
-}
-*/

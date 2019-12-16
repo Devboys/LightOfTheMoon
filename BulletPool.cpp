@@ -10,7 +10,6 @@
 
 #pragma once
 
-#include <iostream>
 #include "BulletPool.hpp"
 #include "BulletComponent.hpp"
 #include "PhysicsComponent.hpp"
@@ -20,7 +19,7 @@
 #include "MovementWaveComponent.hpp"
 #include "LightOfTheMoon.hpp"
 
-
+ // Creates a bullet pool of linear bullets of size POOL_SIZE
 BulletPool* BulletPool::createLinearPool() {
 	for (int i = 0; i < POOL_SIZE; i++) {
 		auto obj = std::shared_ptr<GameObject>(new GameObject());
@@ -42,6 +41,7 @@ BulletPool* BulletPool::createLinearPool() {
 	return this;
 }
 
+// Creates a bullet pool of wave bullets of size POOL_SIZE
 BulletPool* BulletPool::createWavePool() {
 	for (int i = 0; i < POOL_SIZE; i++) {
 		auto obj = std::shared_ptr<GameObject>(new GameObject());
@@ -63,6 +63,7 @@ BulletPool* BulletPool::createWavePool() {
 	return this;
 }
 
+// Creates a bullet pool of spiral bullets of size POOL_SIZE
 BulletPool* BulletPool::createSpiralPool() {
 	for (int i = 0; i < POOL_SIZE; i++) {
 		auto obj = std::shared_ptr<GameObject>(new GameObject());
@@ -85,7 +86,14 @@ BulletPool* BulletPool::createSpiralPool() {
 }
 
 
-
+/* Spawns a linear bullet in the scene of type PlayerBullet
+ *
+ * @param position : The position the bullet will spawn in
+ * @param sprites : Vector of sprites that should animate the bullet spawned
+ * @param damage : Amount of damage the bullet should do when hitting a enemy
+ * @param directionAngleDeg : direction the bullet will travel to, in degrees
+ * @param velocity : constant speed the bullet should have in its linear trajectory
+ */
 void BulletPool::spawnPlayerLinearBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites,
 										const int& damage, const float& directionAngleDeg, const float& velocity) {
 	bool spawned = false;
@@ -95,13 +103,13 @@ void BulletPool::spawnPlayerLinearBullet(const glm::vec2& position, const std::v
 		if (!bc->inUse()) {
 			std::shared_ptr<GameObject> bullet = linearBullets[i];
 			bullet->setPosition(position);
-			bullet->setActive(true);
+			bullet->setActive(true); // render this object
 
 			std::shared_ptr<PhysicsComponent> phys = bullet->getComponent<PhysicsComponent>();
 			assert(phys != nullptr);
 			phys->setPositionAndRotation({ bullet->getPosition().x / LightOfTheMoon::getInstance()->physicsScale,
 									bullet->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
-			phys->setActive(true);
+			phys->setActive(true); // reactivate the box2d body to handle collisions again
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
 			bc->initPlayerBullet(damage);
@@ -115,6 +123,7 @@ void BulletPool::spawnPlayerLinearBullet(const glm::vec2& position, const std::v
 			assert(movement != nullptr);
 			movement->initParameters(directionAngleDeg, velocity);
 
+			// add this bullet to the scene and use it
 			LightOfTheMoon::getInstance()->addGameObject(bullet);
 
 			spawned = true;
@@ -122,7 +131,14 @@ void BulletPool::spawnPlayerLinearBullet(const glm::vec2& position, const std::v
 	}
 }
 
-
+/* Spawns a linear bullet in the scene of type BossBullet
+ *
+ * @param position : The position the bullet will spawn in
+ * @param sprites : Vector of sprites that should animate the bullet spawned
+ * @param damage : Amount of damage the bullet should do when hitting the player
+ * @param directionAngleDeg : direction the bullet will travel to, in degrees
+ * @param velocity : constant speed the bullet should have in its linear trajectory
+ */
 void BulletPool::spawnBossLinearBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites,
 										const int& damage, const float& directionAngleDeg, const float& velocity) {
 	bool spawned = false;
@@ -132,13 +148,13 @@ void BulletPool::spawnBossLinearBullet(const glm::vec2& position, const std::vec
 		if (!bc->inUse()) {
 			std::shared_ptr<GameObject> bullet = linearBullets[i];
 			bullet->setPosition(position);
-			bullet->setActive(true);
+			bullet->setActive(true); // render this object
 
 			std::shared_ptr<PhysicsComponent> phys = bullet->getComponent<PhysicsComponent>();
 			assert(phys != nullptr);
 			phys->setPositionAndRotation({ bullet->getPosition().x / LightOfTheMoon::getInstance()->physicsScale,
 									bullet->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
-			phys->setActive(true);
+			phys->setActive(true); // reactivate the box2d body to handle collisions again
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
 			bc->initBossBullet(damage);
@@ -152,6 +168,7 @@ void BulletPool::spawnBossLinearBullet(const glm::vec2& position, const std::vec
 			assert(movement != nullptr);
 			movement->initParameters(directionAngleDeg, velocity);
 
+			// add this bullet to the scene and use it
 			LightOfTheMoon::getInstance()->addGameObject(bullet);
 
 			spawned = true;
@@ -159,7 +176,16 @@ void BulletPool::spawnBossLinearBullet(const glm::vec2& position, const std::vec
 	}
 } 
 
-
+/* Spawns a wave bullet in the scene of type BossBullet
+ *
+ * @param position : The position the bullet will spawn in
+ * @param sprites : Vector of sprites that should animate the bullet spawned
+ * @param damage : Amount of damage the bullet should do when hitting the player
+ * @param directionAngleDeg : direction the bullet will travel to, in degrees
+ * @param velocity : constant speed the bullet should travel at in the above mentioned direction
+ * @param amplitude : height of the peaks in the sin wave generated
+ * @param frequency : number of peaks over time the wave will make
+ */
 void BulletPool::spawnBossWaveBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites, const int& damage,
 										const float& directionAngleDeg, const float& velocity, const float& amplitude, const float& frequency) {
 	bool spawned = false;
@@ -169,13 +195,13 @@ void BulletPool::spawnBossWaveBullet(const glm::vec2& position, const std::vecto
 		if (!bc->inUse()) {
 			std::shared_ptr<GameObject> bullet = waveBullets[i];
 			bullet->setPosition(position);
-			bullet->setActive(true);
+			bullet->setActive(true); // render this object
 
 			std::shared_ptr<PhysicsComponent> phys = bullet->getComponent<PhysicsComponent>();
 			assert(phys != nullptr);
 			phys->setPositionAndRotation({ bullet->getPosition().x / LightOfTheMoon::getInstance()->physicsScale,
 									bullet->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
-			phys->setActive(true);
+			phys->setActive(true); // reactivate the box2d body to handle collisions again
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
 			bc->initBossBullet(damage);
@@ -189,6 +215,7 @@ void BulletPool::spawnBossWaveBullet(const glm::vec2& position, const std::vecto
 			assert(movement != nullptr);
 			movement->initParameters(position, directionAngleDeg, velocity, amplitude, frequency);
 
+			// add this bullet to the scene and use it
 			LightOfTheMoon::getInstance()->addGameObject(bullet);
 
 			spawned = true;
@@ -196,6 +223,16 @@ void BulletPool::spawnBossWaveBullet(const glm::vec2& position, const std::vecto
 	}
 }
 
+/* Spawns a spiral bullet in the scene of type BossBullet
+ *
+ * @param position : The position the bullet will spawn in
+ * @param sprites : Vector of sprites that should animate the bullet spawned
+ * @param damage : Amount of damage the bullet should do when hitting the player
+ * @param minVelocity : minimum angular speed the bullet will reach over time
+ * @param maxVelocity : initial angular speed when the bullet is spawned. Will decrease over time
+ * @param radiusExpansionRate : rate at which the radius of the spiral will increase over time
+ * @param clockwise : true = clockwise rotation, false = counterclockwise rotation
+ */
 void BulletPool::spawnBossSpiralBullet(const glm::vec2& position, const std::vector<sre::Sprite>& sprites, const int& damage,
 										const float& minVelocity, const float& maxVelocity, const float& radiusExpansionRate, const bool& clockwise) {
 	bool spawned = false;
@@ -205,13 +242,13 @@ void BulletPool::spawnBossSpiralBullet(const glm::vec2& position, const std::vec
 		if (!bc->inUse()) {
 			std::shared_ptr<GameObject> bullet = spiralBullets[i];
 			bullet->setPosition(position);
-			bullet->setActive(true);
+			bullet->setActive(true); // render this object
 
 			std::shared_ptr<PhysicsComponent> phys = bullet->getComponent<PhysicsComponent>();
 			assert(phys != nullptr);
 			phys->setPositionAndRotation({ bullet->getPosition().x / LightOfTheMoon::getInstance()->physicsScale,
 									bullet->getPosition().y / LightOfTheMoon::getInstance()->physicsScale }, 0.0f);
-			phys->setActive(true);
+			phys->setActive(true); // reactivate the box2d body to handle collisions again
 			LightOfTheMoon::getInstance()->registerPhysicsComponent(phys.get());
 
 			bc->initBossBullet(damage);
@@ -225,6 +262,7 @@ void BulletPool::spawnBossSpiralBullet(const glm::vec2& position, const std::vec
 			assert(movement != nullptr);
 			movement->initParameters(position, minVelocity, maxVelocity, radiusExpansionRate, clockwise);
 
+			// add this bullet to the scene and use it
 			LightOfTheMoon::getInstance()->addGameObject(bullet);
 
 			spawned = true;

@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 12/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [16/12/19] - Restricted usage of BulletComponent to BulletPool only
  * + Alberto Giudice [13/12/19] - Structure implementation
  * + Alberto Giudice [12/12/19] - Basic creation
  */
@@ -17,8 +18,6 @@ enum class BulletType {
 
 class BulletComponent : public Component {
 public:
-	BulletComponent(GameObject* gameObject);
-
 	void initPlayerBullet(const int& damage);
 	void initBossBullet(const int& damage);
 
@@ -30,7 +29,11 @@ public:
 	void setDamage(const int& amount);
 
 private:
+	BulletComponent(GameObject* gameObject); // only the bullet pool can create new bullets, more safety
 	int _damageAmount;
 	BulletType _type;
 	bool _inUse;
+
+	friend class BulletPool;
+	friend class GameObject;
 };
