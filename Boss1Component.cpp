@@ -183,30 +183,9 @@ void Boss1Component::updatePhase2(const float& deltaTime) {
 		break;
 	case Boss1State::ThirdShotPattern:
 		if (shootingTimer < 0.0f) {
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 0 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 15 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 30 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 45 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 60 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 75 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 90 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 105 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 120 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 135 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 150 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 165 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 180 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 195 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 210 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 225 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 240 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 255 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 270 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 285 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 300 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 315 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 330 + (rand() % 7 - 3), 50.0f);
-			bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, 345 + (rand() % 7 - 3), 50.0f);
+			for (int angle = 0; angle < 360; angle += 15) {
+				bulletPool->spawnBossLinearBullet(curPosition, linearBulletSprites, 10, angle + (rand() % 7 - 3), 50.0f);//Spawn radially
+			}
 			bulletFired = true;
 			shootingTimer = shootingCooldownThirdPattern;
 		}
