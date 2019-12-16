@@ -613,6 +613,7 @@ void LightOfTheMoon::onKey(SDL_Event& event) {
 			if (currentState == GameState::Menu) {
 				r.stopEventLoop(); //quit game
 			}
+			break;
 		case SDLK_m:
 			if (audioOn) { // deactivate audio
 				AudioLocator::setService(std::make_shared<NullAudio>());
