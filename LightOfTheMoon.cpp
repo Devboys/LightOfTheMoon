@@ -367,7 +367,7 @@ std::shared_ptr<GameObject> LightOfTheMoon::initBoss(std::shared_ptr<GameObject>
 	phys->fixRotation();
 
 	auto health = bossObj->addComponent<HealthComponent>();
-	float bossHealthAmount = 100;
+	float bossHealthAmount = 500;
 	health->setMaxHealth(bossHealthAmount);
 	health->setCurrentHealth(bossHealthAmount);
 
