@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [16/12/19] - Added sprites for different boss phases
  * + Alberto Giudice [15/12/19] - Deactivate physics on bullets when despawned
  * + Alberto Giudice [15/12/19] - Modified object clearing to support the bullet pool items
  * + Alberto Giudice [15/12/19] - Modified the physics lookup functions to support the second fixture
@@ -288,16 +289,66 @@ std::shared_ptr<GameObject> LightOfTheMoon::initBoss(std::shared_ptr<GameObject>
 	for (auto& s : sprites_down) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
 	for (auto& s : sprites_down_right) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
 
-	std::shared_ptr<Animation> enemy_idle_right_anim = std::make_shared<Animation>(sprites_right, 1, true);
-	std::shared_ptr<Animation> enemy_idle_top_right_anim = std::make_shared<Animation>(sprites_top_right, 1, true);
-	std::shared_ptr<Animation> enemy_idle_top_anim = std::make_shared<Animation>(sprites_top, 1, true);
-	std::shared_ptr<Animation> enemy_idle_top_left_anim = std::make_shared<Animation>(sprites_top_left, 1, true);
-	std::shared_ptr<Animation> enemy_idle_left_anim = std::make_shared<Animation>(sprites_left, 1, true);
-	std::shared_ptr<Animation> enemy_idle_down_left_anim = std::make_shared<Animation>(sprites_down_left, 1, true);
-	std::shared_ptr<Animation> enemy_idle_down_anim = std::make_shared<Animation>(sprites_down, 1, true);
-	std::shared_ptr<Animation> enemy_idle_down_right_anim = std::make_shared<Animation>(sprites_down_right, 1, true);
+	vector<Sprite> sprites_right_2({ spriteAtlas->get("enemy-right-2.png") });
+	vector<Sprite> sprites_top_right_2({ spriteAtlas->get("enemy-top-right-2.png") });
+	vector<Sprite> sprites_top_2({ spriteAtlas->get("enemy-top-2.png") });
+	vector<Sprite> sprites_top_left_2({ spriteAtlas->get("enemy-top-left-2.png") });
+	vector<Sprite> sprites_left_2({ spriteAtlas->get("enemy-left-2.png") });
+	vector<Sprite> sprites_down_left_2({ spriteAtlas->get("enemy-down-left-2.png") });
+	vector<Sprite> sprites_down_2({ spriteAtlas->get("enemy-down-2.png") });
+	vector<Sprite> sprites_down_right_2({ spriteAtlas->get("enemy-down-right-2.png") });
+	for (auto& s : sprites_right_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_top_right_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_top_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_top_left_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_left_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_down_left_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_down_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_down_right_2) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
 
-	anim->setAnimation(enemy_idle_down_anim, true); //Set initial animation
+	vector<Sprite> sprites_right_3({ spriteAtlas->get("enemy-right-3.png") });
+	vector<Sprite> sprites_top_right_3({ spriteAtlas->get("enemy-top-right-3.png") });
+	vector<Sprite> sprites_top_3({ spriteAtlas->get("enemy-top-3.png") });
+	vector<Sprite> sprites_top_left_3({ spriteAtlas->get("enemy-top-left-3.png") });
+	vector<Sprite> sprites_left_3({ spriteAtlas->get("enemy-left-3.png") });
+	vector<Sprite> sprites_down_left_3({ spriteAtlas->get("enemy-down-left-3.png") });
+	vector<Sprite> sprites_down_3({ spriteAtlas->get("enemy-down-3.png") });
+	vector<Sprite> sprites_down_right_3({ spriteAtlas->get("enemy-down-right-3.png") });
+	for (auto& s : sprites_right_3) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_top_right_3) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_top_3) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_top_left_3) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_left_3) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_down_left_3) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_down_3) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+	for (auto& s : sprites_down_right_3) { s.setScale({ BOSS_SPRITE_SCALE, BOSS_SPRITE_SCALE }); }
+
+	std::shared_ptr<Animation> enemy_idle_right_anim[3] = { std::make_shared<Animation>(sprites_right, 1, true), 
+															std::make_shared<Animation>(sprites_right_2, 1, true), 
+															std::make_shared<Animation>(sprites_right_3, 1, true) };
+	std::shared_ptr<Animation> enemy_idle_top_right_anim[3] = { std::make_shared<Animation>(sprites_top_right, 1, true),
+															std::make_shared<Animation>(sprites_top_right_2, 1, true),
+															std::make_shared<Animation>(sprites_top_right_3, 1, true) };
+	std::shared_ptr<Animation> enemy_idle_top_anim[3] = { std::make_shared<Animation>(sprites_top, 1, true),
+															std::make_shared<Animation>(sprites_top_2, 1, true),
+															std::make_shared<Animation>(sprites_top_3, 1, true) };
+	std::shared_ptr<Animation> enemy_idle_top_left_anim[3] = { std::make_shared<Animation>(sprites_top_left, 1, true),
+															std::make_shared<Animation>(sprites_top_left_2, 1, true),
+															std::make_shared<Animation>(sprites_top_left_3, 1, true) };
+	std::shared_ptr<Animation> enemy_idle_left_anim[3] = { std::make_shared<Animation>(sprites_left, 1, true),
+															std::make_shared<Animation>(sprites_left_2, 1, true),
+															std::make_shared<Animation>(sprites_left_3, 1, true) };
+	std::shared_ptr<Animation> enemy_idle_down_left_anim[3] = { std::make_shared<Animation>(sprites_down_left, 1, true),
+															std::make_shared<Animation>(sprites_down_left_2, 1, true),
+															std::make_shared<Animation>(sprites_down_left_3, 1, true) };
+	std::shared_ptr<Animation> enemy_idle_down_anim[3] = { std::make_shared<Animation>(sprites_down, 1, true),
+															std::make_shared<Animation>(sprites_down_2, 1, true),
+															std::make_shared<Animation>(sprites_down_3, 1, true) };
+	std::shared_ptr<Animation> enemy_idle_down_right_anim[3] = { std::make_shared<Animation>(sprites_down_right, 1, true),
+															std::make_shared<Animation>(sprites_down_2, 1, true),
+															std::make_shared<Animation>(sprites_down_3, 1, true) };
+
+	anim->setAnimation(enemy_idle_down_anim[0], true); //Set initial animation
 	//</Boss Animation>
 
 	auto phys = bossObj->addComponent<PhysicsComponent>();
@@ -306,7 +357,7 @@ std::shared_ptr<GameObject> LightOfTheMoon::initBoss(std::shared_ptr<GameObject>
 	phys->fixRotation();
 
 	auto health = bossObj->addComponent<HealthComponent>();
-	float bossHealthAmount = 60;
+	float bossHealthAmount = 1500;
 	health->setMaxHealth(bossHealthAmount);
 	health->setCurrentHealth(bossHealthAmount);
 

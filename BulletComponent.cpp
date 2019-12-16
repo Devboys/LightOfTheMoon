@@ -16,7 +16,7 @@
 #include "HealthComponent.hpp"
 #include "LightOfTheMoon.hpp"
 #include "PhysicsComponent.hpp"
-#include "Boss1Component.hpp"
+#include "BossComponent.hpp"
 
 BulletComponent::BulletComponent(GameObject* gameObject) : Component(gameObject), _inUse(false) {}
 
@@ -47,11 +47,10 @@ void BulletComponent::setDamage(const int& amount) {
 void BulletComponent::onCollisionStart(PhysicsComponent* comp) {
 	bool targetHit = false;
 	if (_type == BulletType::PlayerBullet) {
-		if (comp->getGameObject()->getComponent<Boss1Component>() != nullptr) {
+		if (comp->getGameObject()->getComponent<BossComponent>() != nullptr) {
 			std::shared_ptr<HealthComponent> bossHealth = comp->getGameObject()->getComponent<HealthComponent>();
 			if (bossHealth != nullptr) {
 				bossHealth->removeHealth(_damageAmount);
-				std::cout << "CURR BOSS HEALTH: " << bossHealth->getCurrentHealth() << std::endl;
 			}
 			targetHit = true;
 		}
@@ -61,7 +60,6 @@ void BulletComponent::onCollisionStart(PhysicsComponent* comp) {
 			std::shared_ptr<HealthComponent> playerHealth = comp->getGameObject()->getComponent<HealthComponent>();
 			if (playerHealth != nullptr) {
 				playerHealth->removeHealth(_damageAmount);
-				std::cout << "CURR PLAYER HEALTH: " << playerHealth->getCurrentHealth() << std::endl;
 			}
 			targetHit = true;
 		}
