@@ -96,6 +96,8 @@ private:
 	Box2DDebugDraw debugDraw;
 	bool doDebugDraw = false;
 
+	bool audioOn;
+
 	TileMap currentTileMap;
 
 	GameState currentState;//The current state of the game

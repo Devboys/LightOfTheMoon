@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [16/12/19] - Implemented muting audio with M key press
  * + Alberto Giudice [16/12/19] - Added sprites for different boss phases
  * + Alberto Giudice [15/12/19] - Deactivate physics on bullets when despawned
  * + Alberto Giudice [15/12/19] - Modified object clearing to support the bullet pool items
@@ -28,6 +29,7 @@
 #include "HealthComponent.hpp"
 #include "AudioLocator.hpp"
 #include "GameAudio.hpp"
+#include "NullAudio.hpp"
 #include "AssetLocator.hpp"
 #include "GameAssetManager.hpp"
 #include "BulletComponent.hpp"
@@ -73,6 +75,8 @@ LightOfTheMoon::LightOfTheMoon()
 
 	//Provide basic services
 	AudioLocator::setService(std::make_shared<GameAudio>());
+	if (AudioLocator::getService() != nullptr)
+		audioOn = true;
 	AssetLocator::setService(std::make_shared<GameAssetManager>());
 
 	changeState(GameState::Menu);
@@ -580,6 +584,17 @@ void LightOfTheMoon::onKey(SDL_Event& event) {
 			if (currentState == GameState::Menu) {
 				r.stopEventLoop(); //quit game
 			}
+		case SDLK_m:
+			if (audioOn) {
+				AudioLocator::setService(std::make_shared<NullAudio>());
+				audioOn = false;
+			}
+			else {
+				AudioLocator::setService(std::make_shared<GameAudio>());
+				AudioLocator::getService()->playLooped("Assets/Sounds/renovation_airtone.wav");
+				audioOn = true;
+			}
+			break;
 		case SDLK_q:
 			// Press 'Q' for physics debug
 			doDebugDraw = !doDebugDraw;
