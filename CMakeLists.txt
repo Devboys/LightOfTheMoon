@@ -16,13 +16,9 @@ file(GLOB LOTM_sources
         "*.cpp"
         )
 
-# Visual Leak Detector
-include_directories("C:/Program Files (x86)/Visual Leak Detector/include")
-link_directories("C:/Program Files (x86)/Visual Leak Detector/lib/Win32")
-
 # Compile cpp files
 add_executable(LOTM ${LOTM_sources})
-target_link_libraries(LOTM ${all_libs} vld)
+target_link_libraries(LOTM ${all_libs})
 
 #copy asset folder to binaries
 file(COPY Assets DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug)

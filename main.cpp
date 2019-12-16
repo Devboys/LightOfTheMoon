@@ -6,7 +6,6 @@
  * + Alberto Giudice [07/11/19] - vld implementation
  */
 
-#include <vld.h>
 #include "LightOfTheMoon.hpp"
 
 int main(int argc, char** argv) {
