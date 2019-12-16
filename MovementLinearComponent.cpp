@@ -33,10 +33,7 @@ void MovementLinearComponent::initParameters(const float& directionAngleDeg, con
 }
 
 void MovementLinearComponent::update(float deltaTime) {
-	glm::vec2 newPos = gameObject->getPosition();
-	newPos.x += _velocity * std::cos(_directionAngleDegrees * M_PI / 180) * deltaTime * LightOfTheMoon::physicsScale;
-	newPos.y += _velocity * std::sin(_directionAngleDegrees * M_PI / 180) * deltaTime * LightOfTheMoon::physicsScale;
-	gameObject->setPosition(newPos);
+
 }
 
 const float MovementLinearComponent::getDirectionDeg() {

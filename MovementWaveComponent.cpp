@@ -57,7 +57,7 @@ void MovementWaveComponent::update(float deltaTime) {
 	// move position based on the sin wave function
 	newPos.x += _totalTime * _velocity;
 	newPos.y += _amplitude * std::sin(_frequency * _totalTime);
-
+	
 	// position rotation by the required degrees, pivoting on the starting position
 	float newPosX = newPos.x;
 	float newPosY = newPos.y;
@@ -66,12 +66,7 @@ void MovementWaveComponent::update(float deltaTime) {
 	newPos.y = _startingPosition.y + std::sin(_directionAngleDegrees * M_PI / 180) * (newPosX - (float)_startingPosition.x) 
 				+ std::cos(_directionAngleDegrees * M_PI / 180) * (newPosY - (float)_startingPosition.y);
 
-	// set the position of the bullet gameObject to the new position
-	gameObject->setPosition(newPos);
-
-	if (phys != nullptr) {
-		phys->moveTo(newPos/LightOfTheMoon::physicsScale);
-	}
+	phys->moveTo(newPos / LightOfTheMoon::physicsScale);
 
 	// Increase total time elapsed counter
 	_totalTime += deltaTime;

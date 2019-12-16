@@ -32,10 +32,6 @@ PhysicsComponent::~PhysicsComponent() {
 		if (body != nullptr && fixture != nullptr) {
 			body->DestroyFixture(fixture);
 			fixture = nullptr;
-			if (secondFixture != nullptr) {
-				body->DestroyFixture(secondFixture);
-				secondFixture = nullptr;
-			}
 		}
 		if (world != nullptr && body != nullptr) {
 			world->DestroyBody(body);
@@ -133,19 +129,6 @@ void PhysicsComponent::initEdge(b2BodyType type, glm::vec2 center, glm::vec2 v1,
 }
 
 
-void PhysicsComponent::initSensorBox(glm::vec2 size, glm::vec2 center, float density, glm::vec2 offset) {
-	polygon = new b2PolygonShape();
-	polygon->SetAsBox(size.x, size.y, {offset.x, offset.y}, 0);
-	b2FixtureDef fxD;
-	fxD.userData = (void*)"Box";
-	fxD.shape = polygon;
-	fxD.density = density;
-	fxD.isSensor = true;
-	secondFixture = body->CreateFixture(&fxD);
-	spriteOffset = offset;
-	LightOfTheMoon::getInstance()->registerSecondPhysicsComponent(this);
-}
-
 bool PhysicsComponent::isSensor() {
 	return fixture->IsSensor();
 }
@@ -194,14 +177,6 @@ b2Body* PhysicsComponent::getBody() {
 
 b2Fixture* PhysicsComponent::getFixture() {
 	return fixture;
-}
-
-b2Fixture* PhysicsComponent::getSecondFixture() {
-	return secondFixture;
-}
-
-const glm::vec2 PhysicsComponent::getSpriteOffset() {
-	return spriteOffset;
 }
 
 void PhysicsComponent::setActive(const bool& active) {
