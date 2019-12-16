@@ -2,6 +2,7 @@
  * Created by Alberto Giudice on 05/12/2019.
  * LIST OF EDITS (reverse chronological order - add last on top):
  * +
+ * + Alberto Giudice [16/12/19] - Simple GUI to display player and boss HP during game time
  * + Alberto Giudice [16/12/19] - Implemented muting audio with M key press
  * + Alberto Giudice [16/12/19] - Added sprites for different boss phases
  * + Alberto Giudice [15/12/19] - Deactivate physics on bullets when despawned
@@ -108,6 +109,8 @@ void LightOfTheMoon::requestChangeState(GameState state) {
 
 void LightOfTheMoon::changeState(GameState state) {
 	//clear previous state
+	player = nullptr;
+	boss = nullptr;
 	sceneObjects.clear();
 	initPhysics();
 	currentTileMap.clearMap();
@@ -198,10 +201,10 @@ void LightOfTheMoon::initLevel() {
 	currentTileMap.generateColliders();
 
 	//PLAYER
-	auto player = initPlayer();
+	player = initPlayer();
 
 	//BOSS
-	auto boss = initBoss(player);
+	boss = initBoss(player);
 }
 
 std::shared_ptr<GameObject> LightOfTheMoon::initPlayer() {
@@ -547,6 +550,30 @@ void LightOfTheMoon::render() {
 		world->DrawDebugData();
 		rp.drawLines(debugDraw.getLines());
 		debugDraw.clear();
+	}
+
+	// Render the current HP of player and boss in a GUI if the game is running
+	if (currentState == GameState::Running) {
+		ImGui::SetNextWindowPos(ImVec2((Renderer::instance->getWindowSize().x - 250.0f) * 0.5f, 50.0f), ImGuiSetCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(250.0f, 70), ImGuiSetCond_Always);
+		ImGui::Begin("", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+		if (player != nullptr) {
+			std::shared_ptr<HealthComponent> playerHealth = player->getComponent<HealthComponent>();
+			if (playerHealth != nullptr) {
+				float currentPlayerHealthPercentage = (float)playerHealth->getCurrentHealth() / (float)playerHealth->getMaxHealth();
+				ImGui::ProgressBar(currentPlayerHealthPercentage, ImVec2(150.0f, 2), "Player Bar");
+				ImGui::LabelText("Player HP", "%i / 100", (int)(currentPlayerHealthPercentage * 100.0f));
+			}
+		}
+		if (boss != nullptr) {
+			std::shared_ptr<HealthComponent> bossHealth = boss->getComponent<HealthComponent>();
+			if (bossHealth != nullptr) {
+				float currentBossHealthPercentage = (float)bossHealth->getCurrentHealth() / (float)bossHealth->getMaxHealth();
+				ImGui::ProgressBar(currentBossHealthPercentage, ImVec2(150.0f, 2), "Player Bar");
+				ImGui::LabelText("Boss HP", "%i / 10000", (int)(currentBossHealthPercentage * 10000.0f));
+			}
+		}
+		ImGui::End();
 	}
 }
 

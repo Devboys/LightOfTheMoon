@@ -98,6 +98,9 @@ private:
 
 	bool audioOn; // current audio state on/off
 
+	std::shared_ptr<GameObject> player;
+	std::shared_ptr<GameObject> boss;
+
 	TileMap currentTileMap;
 
 	GameState currentState;//The current state of the game
