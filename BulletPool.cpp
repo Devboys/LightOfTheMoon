@@ -48,11 +48,11 @@ BulletPool* BulletPool::createWavePool() {
 		obj->name = "WaveBullet";
 		obj->setPosition({ 2000, 2000 });
 		auto phys = obj->addComponent<PhysicsComponent>();
-		phys->initCircle(b2_dynamicBody, 1.0f, { obj->getPosition().x / LightOfTheMoon::physicsScale, obj->getPosition().y / LightOfTheMoon::physicsScale }, 1, false);
+		phys->initCircle(b2_kinematicBody, 1.0f, { obj->getPosition().x / LightOfTheMoon::physicsScale, obj->getPosition().y / LightOfTheMoon::physicsScale }, 1, false);
 		phys->fixRotation();
 		phys->setSensor(true);
 		phys->setBullet(true);
-		phys->setAutoUpdate(false);
+		phys->setAutoUpdate(true);
 		phys->setActive(false);
 		auto bc = obj->addComponent<BulletComponent>();
 		auto animator = obj->addComponent<AnimatorComponent>();
@@ -70,11 +70,11 @@ BulletPool* BulletPool::createSpiralPool() {
 		obj->name = "SpiralBullet";
 		obj->setPosition({ 2000, 2000 });
 		auto phys = obj->addComponent<PhysicsComponent>();
-		phys->initCircle(b2_dynamicBody, 1.0f, { obj->getPosition().x / LightOfTheMoon::physicsScale, obj->getPosition().y / LightOfTheMoon::physicsScale }, 1, false);
+		phys->initCircle(b2_kinematicBody, 1.0f, { obj->getPosition().x / LightOfTheMoon::physicsScale, obj->getPosition().y / LightOfTheMoon::physicsScale }, 1, false);
 		phys->fixRotation();
 		phys->setSensor(true);
 		phys->setBullet(true);
-		phys->setAutoUpdate(false);
+		phys->setAutoUpdate(true);
 		phys->setActive(false);
 		auto bc = obj->addComponent<BulletComponent>();
 		auto animator = obj->addComponent<AnimatorComponent>();
