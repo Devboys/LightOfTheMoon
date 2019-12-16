@@ -247,8 +247,8 @@ std::shared_ptr<GameObject> LightOfTheMoon::initPlayer() {
 	//</Player Animation>
 
 	auto phys = playerObj->addComponent<PhysicsComponent>();
-	phys->initCircle(b2_dynamicBody, 2.0f, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y / physicsScale }, 1);
-	phys->initSensorBox({ 2.0f, 4.5f }, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y  / physicsScale }, 1, { 0.0f, 0.025f / physicsScale });
+	//phys->initCircle(b2_dynamicBody, 2.0f, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y / physicsScale }, 1);
+	phys->initBox(b2_kinematicBody, { 2.0f, 4.5f }, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y  / physicsScale }, 1);
 	phys->fixRotation();
 
 	auto characterHealth = playerObj->addComponent <HealthComponent>();
@@ -367,7 +367,7 @@ std::shared_ptr<GameObject> LightOfTheMoon::initBoss(std::shared_ptr<GameObject>
 	phys->fixRotation();
 
 	auto health = bossObj->addComponent<HealthComponent>();
-	float bossHealthAmount = 1500;
+	float bossHealthAmount = 100;
 	health->setMaxHealth(bossHealthAmount);
 	health->setCurrentHealth(bossHealthAmount);
 
@@ -562,7 +562,7 @@ void LightOfTheMoon::render() {
 			if (playerHealth != nullptr) {
 				float currentPlayerHealthPercentage = (float)playerHealth->getCurrentHealth() / (float)playerHealth->getMaxHealth();
 				ImGui::ProgressBar(currentPlayerHealthPercentage, ImVec2(150.0f, 2), "Player Bar");
-				ImGui::LabelText("Player HP", "%i / 100", (int)(currentPlayerHealthPercentage * 100.0f));
+				ImGui::LabelText("Player HP", "%i / %i", playerHealth->getCurrentHealth(), playerHealth->getMaxHealth());
 			}
 		}
 		if (boss != nullptr) {
@@ -570,7 +570,7 @@ void LightOfTheMoon::render() {
 			if (bossHealth != nullptr) {
 				float currentBossHealthPercentage = (float)bossHealth->getCurrentHealth() / (float)bossHealth->getMaxHealth();
 				ImGui::ProgressBar(currentBossHealthPercentage, ImVec2(150.0f, 2), "Player Bar");
-				ImGui::LabelText("Boss HP", "%i / 10000", (int)(currentBossHealthPercentage * 10000.0f));
+				ImGui::LabelText("Boss HP", "%i / %i", bossHealth->getCurrentHealth(), bossHealth->getMaxHealth());
 			}
 		}
 		ImGui::End();
@@ -666,7 +666,7 @@ void LightOfTheMoon::updatePhysics() {
 		auto position = physicsComponent->getBody()->GetPosition();
 		float angle = physicsComponent->getBody()->GetAngle();
 		auto gameObject = physicsComponent->getGameObject();
-		gameObject->setPosition(glm::vec2((position.x + physicsComponent->getSpriteOffset().x) * physicsScale, (position.y + physicsComponent->getSpriteOffset().y) * physicsScale));
+		gameObject->setPosition(glm::vec2((position.x) * physicsScale, (position.y) * physicsScale));
 		gameObject->setRotation(angle);
 	}
 }
@@ -697,20 +697,10 @@ void LightOfTheMoon::deregisterPhysicsComponent(PhysicsComponent* r) {
 	if (iter != physicsComponentLookup.end()) {
 		physicsComponentLookup.erase(iter);
 	}
-	if (r->getSecondFixture() != nullptr) { // needed for objects with collider + sensor (playerObj)
-		auto iter2 = physicsComponentLookup.find(r->getSecondFixture());
-		if (iter2 != physicsComponentLookup.end()) {
-			physicsComponentLookup.erase(iter2);
-		}
-	}
 }
 
 void LightOfTheMoon::registerPhysicsComponent(PhysicsComponent* r) {
 	physicsComponentLookup[r->getFixture()] = r;
-}
-
-void LightOfTheMoon::registerSecondPhysicsComponent(PhysicsComponent* r) {
-	physicsComponentLookup[r->getSecondFixture()] = r;
 }
 
 void LightOfTheMoon::handleContact(b2Contact* contact, bool begin) {

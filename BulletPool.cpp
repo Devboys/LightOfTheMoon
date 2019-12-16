@@ -30,7 +30,7 @@ BulletPool* BulletPool::createLinearPool() {
 		phys->fixRotation();
 		phys->setSensor(true);
 		phys->setBullet(true);
-		phys->setAutoUpdate(false);
+		phys->setAutoUpdate(true);
 		phys->setActive(false);
 		auto bc = obj->addComponent<BulletComponent>();
 		auto animator = obj->addComponent<AnimatorComponent>();
