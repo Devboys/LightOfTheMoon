@@ -248,7 +248,7 @@ std::shared_ptr<GameObject> LightOfTheMoon::initPlayer() {
 
 	auto phys = playerObj->addComponent<PhysicsComponent>();
 	//phys->initCircle(b2_dynamicBody, 2.0f, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y / physicsScale }, 1);
-	phys->initBox(b2_kinematicBody, { 2.0f, 4.5f }, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y  / physicsScale }, 1);
+	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f }, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y  / physicsScale }, 1);
 	phys->fixRotation();
 
 	auto characterHealth = playerObj->addComponent <HealthComponent>();
