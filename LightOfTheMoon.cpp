@@ -246,9 +246,9 @@ std::shared_ptr<GameObject> LightOfTheMoon::initPlayer() {
 
 	//</Player Animation>
 
-	auto phys = playerObj->addComponent<PhysicsComponent>();
-	//phys->initCircle(b2_dynamicBody, 2.0f, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y / physicsScale }, 1);
-	phys->initBox(b2_dynamicBody, { 2.0f, 4.5f }, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y  / physicsScale }, 1);
+	auto phys = playerObj->addComponent<PhysicsComponent>(); 
+	phys->initCircle(b2_dynamicBody, 2.0f, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y / physicsScale }, 1);
+	phys->initSensorBox({ 2.0f, 4.5f }, { playerObj->getPosition().x / physicsScale, playerObj->getPosition().y / physicsScale }, 0, { 0.0f, 0.025f / physicsScale });
 	phys->fixRotation();
 
 	auto characterHealth = playerObj->addComponent <HealthComponent>();
@@ -667,7 +667,7 @@ void LightOfTheMoon::updatePhysics() {
 		auto position = physicsComponent->getBody()->GetPosition();
 		float angle = physicsComponent->getBody()->GetAngle();
 		auto gameObject = physicsComponent->getGameObject();
-		gameObject->setPosition(glm::vec2((position.x) * physicsScale, (position.y) * physicsScale));
+		gameObject->setPosition(glm::vec2((position.x + physicsComponent->getSpriteOffset().x) * physicsScale, (position.y + physicsComponent->getSpriteOffset().y) * physicsScale));
 		gameObject->setRotation(angle);
 	}
 }
@@ -698,10 +698,20 @@ void LightOfTheMoon::deregisterPhysicsComponent(PhysicsComponent* r) {
 	if (iter != physicsComponentLookup.end()) {
 		physicsComponentLookup.erase(iter);
 	}
+	if (r->getSecondFixture() != nullptr) { // needed for objects with collider + sensor (playerObj)
+		auto iter2 = physicsComponentLookup.find(r->getSecondFixture());
+		if (iter2 != physicsComponentLookup.end()) {
+			physicsComponentLookup.erase(iter2);
+		}
+	}
 }
 
 void LightOfTheMoon::registerPhysicsComponent(PhysicsComponent* r) {
 	physicsComponentLookup[r->getFixture()] = r;
+}
+
+void LightOfTheMoon::registerSecondPhysicsComponent(PhysicsComponent* r) {
+	physicsComponentLookup[r->getSecondFixture()] = r;
 }
 
 void LightOfTheMoon::handleContact(b2Contact* contact, bool begin) {

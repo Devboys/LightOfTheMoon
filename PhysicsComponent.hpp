@@ -25,6 +25,8 @@ public:
 	void initBox(b2BodyType type, glm::vec2 size, glm::vec2 center, float density, const bool& registerComponent = true);
 	void initEdge(b2BodyType type, glm::vec2 center, glm::vec2 v1, glm::vec2 v2, const bool& registerComponent = true);
 
+	void initSensorBox(glm::vec2 size, glm::vec2 center, float density, glm::vec2 offset = { 0,0 });
+
 	void addForce(glm::vec2 force);     // Force gradually affects the velocity over time
 	void addImpulse(glm::vec2 force);   // Instantly affects velocity
 
@@ -55,7 +57,9 @@ public:
 	void setAutoUpdate(bool autoUpdate);
 
 	b2Body* getBody();
-	b2Fixture* getFixture();
+	b2Fixture* getFixture(); b2Fixture* getSecondFixture();
+
+	const glm::vec2 getSpriteOffset();
 
 	void setActive(const bool& active);
 
@@ -68,7 +72,9 @@ private:
 	b2Body* body = nullptr;
 	b2Shape::Type shapeType;
 	b2Fixture* fixture = nullptr;
+	b2Fixture* secondFixture = nullptr;
 	b2BodyType rbType;
 	std::vector<PhysicsComponent*> collidingBodies;
 	b2World* world = nullptr;
+	glm::vec2 spriteOffset;
 };

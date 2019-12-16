@@ -201,7 +201,6 @@ void Boss1Component::updatePhase2(const float& deltaTime) {
 
 void Boss1Component::updatePhase3(const float& deltaTime) {
 	if (!bossHealth->isAlive()) {
-		bossHealth->print();
 		_phase = BossPhase::Dead;
 		_state = BossState::Idle;
 	}
