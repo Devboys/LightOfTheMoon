@@ -58,20 +58,16 @@ void MovementSpiralComponent::update(float deltaTime) {
 		rotDirection = -1;
 
 	// Change rotation of the object, tangent to the next position on the spiral
-	float oldRot = gameObject->getRotation();
-	float newRot = std::fmod((oldRot + rotDirection * _velocity * deltaTime), 360.0f);
-	gameObject->setRotation(newRot);
+	float oldRot = _rotation;
+	_rotation = std::fmod((oldRot + rotDirection * _velocity * deltaTime), 360.0f);
 
 	// Calculate new position with increased radius
 	glm::vec2 newPos = _center;
-	newPos.x += std::sin(newRot * M_PI / 180.0f) * _radius;
-	newPos.y += std::cos(newRot * M_PI / 180.0f) * _radius;
-	gameObject->setPosition(newPos);
+	newPos.x += std::sin(_rotation * M_PI / 180.0f) * _radius;
+	newPos.y += std::cos(_rotation * M_PI / 180.0f) * _radius;
 
 	// Set the position of the bullet gameObject to the new position
-	if (phys != nullptr) {
-		phys->moveTo(newPos / LightOfTheMoon::physicsScale);
-	}
+	phys->moveTo(newPos / LightOfTheMoon::physicsScale);
 
 	// Decrease velocity until minVelocity is reached, to prevent crazy speed on big radius values
 	if(_velocity > _minVelocity)

@@ -35,5 +35,6 @@ private:
 	float _velocityDampFactor;
 	bool _clockwise;
 	float _totalTime;
+	float _rotation = 0;
 	std::shared_ptr<PhysicsComponent> phys;
 };
