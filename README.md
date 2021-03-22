@@ -1,5 +1,6 @@
 # Codename: Light Of The Moon
 Sprite-based isometric bullet hell arena boss battle game, made in SimpleRenderEngine as a student project for the Game Programming course at ITU (2019).
+This repository was migrated from the ITU enterprise account
 
 
 ## Controls
